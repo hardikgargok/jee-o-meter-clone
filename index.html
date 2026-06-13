@@ -1,0 +1,3258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="A focused JEE Main and Advanced preparation dashboard for tracking chapters, study sessions, mock tests, mistakes, and revision notes.">
+<meta name="theme-color" content="#070a11">
+<meta name="color-scheme" content="dark">
+<meta property="og:title" content="StudyMeter">
+<meta property="og:description" content="Track your complete JEE Main and Advanced preparation in one focused dashboard.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x2='1' y2='1'%3E%3Cstop stop-color='%235b9ef9'/%3E%3Cstop offset='1' stop-color='%23a78bfa'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='16' fill='%230f1420'/%3E%3Cpath d='M13 20c0-6 5-10 13-10 5 0 9 1 12 4l-5 7c-2-2-5-3-8-3-2 0-4 1-4 3 0 5 18 2 18 15 0 7-6 11-15 11-6 0-12-2-15-6l6-7c3 3 6 5 10 5 3 0 5-1 5-3 0-5-17-2-17-16Zm30-9h10l5 13 5-13h10v36h-9V27l-6 15-6-15v20h-9V11Z' transform='scale(.78)' fill='url(%23g)'/%3E%3C/svg%3E">
+<title>StudyMeter | Main & Advanced Tracker</title>
+<style>
+  :root {
+    --bg: #080b12;
+    --bg2: #0f1219;
+    --bg3: #161b27;
+    --bg4: #1e2333;
+    --bg5: #252b3d;
+    --border: rgba(255,255,255,0.07);
+    --border2: rgba(255,255,255,0.13);
+    --border3: rgba(255,255,255,0.22);
+    --text: #eceef5;
+    --text2: #8a90a6;
+    --text3: #4e5468;
+    --phy: #5b9ef9;
+    --phy-dim: #132240;
+    --phy-glow: rgba(91,158,249,0.18);
+    --chem: #34d399;
+    --chem-dim: #0a2e1f;
+    --chem-glow: rgba(52,211,153,0.18);
+    --math: #fb923c;
+    --math-dim: #2e1508;
+    --math-glow: rgba(251,146,60,0.18);
+    --accent: #a78bfa;
+    --accent2: #7c3aed;
+    --danger: #fb7185;
+    --success: #34d399;
+    --warn: #fbbf24;
+    --gold: #f59e0b;
+    --radius: 10px;
+    --radius-lg: 16px;
+    --radius-xl: 22px;
+    --font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    --glow-phy: 0 0 20px rgba(91,158,249,0.12);
+    --glow-chem: 0 0 20px rgba(52,211,153,0.12);
+    --glow-math: 0 0 20px rgba(251,146,60,0.12);
+    --glow-accent: 0 0 20px rgba(167,139,250,0.15);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font);
+    font-size: 14px;
+    line-height: 1.6;
+    min-height: 100vh;
+    background-image:
+      radial-gradient(ellipse 80% 50% at 20% 0%, rgba(91,158,249,0.06) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 40% at 80% 100%, rgba(167,139,250,0.06) 0%, transparent 60%),
+      linear-gradient(180deg, rgba(255,255,255,0.01) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.01) 1px, transparent 1px);
+    background-size: 100% 100%, 100% 100%, 40px 40px, 40px 40px;
+  }
+
+  /* ── LOGIN SCREEN ── */
+  #login-screen {
+    position: fixed;
+    inset: 0;
+    background: var(--bg);
+    background-image:
+      radial-gradient(ellipse 70% 60% at 30% 20%, rgba(91,158,249,0.1) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 40% at 70% 80%, rgba(167,139,250,0.1) 0%, transparent 60%),
+      linear-gradient(180deg, rgba(255,255,255,0.015) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+    background-size: 100% 100%, 100% 100%, 36px 36px, 36px 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+  }
+
+  #login-screen.hidden { display: none; }
+
+  .login-box {
+    background: rgba(15,18,25,0.9);
+    border: 0.5px solid var(--border2);
+    border-radius: var(--radius-xl);
+    padding: 40px 44px;
+    width: 420px;
+    max-width: 95vw;
+    backdrop-filter: blur(20px);
+    box-shadow: 0 40px 80px rgba(0,0,0,0.5), 0 0 0 0.5px rgba(255,255,255,0.05) inset;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .login-box::before {
+    content: '';
+    position: absolute;
+    top: -60px; left: -60px;
+    width: 200px; height: 200px;
+    background: radial-gradient(circle, rgba(91,158,249,0.12), transparent 70%);
+    pointer-events: none;
+  }
+
+  .login-box::after {
+    content: '';
+    position: absolute;
+    bottom: -60px; right: -60px;
+    width: 200px; height: 200px;
+    background: radial-gradient(circle, rgba(167,139,250,0.12), transparent 70%);
+    pointer-events: none;
+  }
+
+  .login-logo {
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -1px;
+    background: linear-gradient(135deg, var(--phy) 0%, var(--accent) 60%, #e879f9 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 4px;
+  }
+
+  .login-tagline {
+    font-size: 13px;
+    color: var(--text3);
+    margin-bottom: 32px;
+  }
+
+  .login-field label {
+    display: block;
+    font-size: 11px;
+    color: var(--text3);
+    text-transform: uppercase;
+    letter-spacing: 0.7px;
+    margin-bottom: 7px;
+  }
+
+  .login-input {
+    width: 100%;
+    background: var(--bg3);
+    border: 0.5px solid var(--border2);
+    border-radius: 10px;
+    color: var(--text);
+    font-family: var(--font);
+    font-size: 15px;
+    padding: 12px 14px;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    margin-bottom: 10px;
+  }
+
+  .login-input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(167,139,250,0.12);
+  }
+
+  .login-btn {
+    width: 100%;
+    background: linear-gradient(135deg, var(--accent2), var(--accent));
+    border: none;
+    border-radius: 10px;
+    color: #fff;
+    font-family: var(--font);
+    font-size: 14px;
+    font-weight: 600;
+    padding: 13px;
+    cursor: pointer;
+    margin-top: 8px;
+    transition: opacity 0.15s, transform 0.15s;
+    letter-spacing: 0.2px;
+  }
+
+  .login-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+  .login-btn:active { transform: translateY(0); }
+
+  .login-users-list {
+    margin-top: 20px;
+    border-top: 0.5px solid var(--border);
+    padding-top: 16px;
+  }
+
+  .login-users-label {
+    font-size: 11px;
+    color: var(--text3);
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    margin-bottom: 10px;
+  }
+
+  .user-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    background: var(--bg4);
+    border: 0.5px solid var(--border2);
+    border-radius: 20px;
+    padding: 5px 12px 5px 8px;
+    font-size: 12px;
+    color: var(--text2);
+    cursor: pointer;
+    margin: 3px 4px 3px 0;
+    transition: all 0.15s;
+  }
+
+  .user-chip:hover { background: var(--bg5); color: var(--text); border-color: var(--border3); }
+
+  .user-avatar-sm {
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px;
+    font-weight: 600;
+    color: #fff;
+  }
+
+  /* ── User pill in header ── */
+  .user-pill {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    background: var(--bg3);
+    border: 0.5px solid var(--border);
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-size: 12px;
+    color: var(--text2);
+  }
+
+  .user-pill:hover { border-color: var(--border2); color: var(--text); }
+
+  .user-avatar {
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    color: #fff;
+  }
+
+  /* ── Layout ── */
+  .shell { display: flex; min-height: 100vh; }
+
+  .sidebar {
+    width: 250px;
+    flex-shrink: 0;
+    background: rgba(10,13,20,0.95);
+    border-right: 0.5px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 0; left: 0; bottom: 0;
+    z-index: 100;
+    overflow-y: auto;
+    backdrop-filter: blur(20px);
+  }
+
+  .sidebar-logo {
+    padding: 20px 18px 14px;
+    border-bottom: 0.5px solid var(--border);
+  }
+
+  .sidebar-logo .title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+    letter-spacing: -0.3px;
+  }
+
+  .sidebar-logo .sub {
+    font-size: 11px;
+    color: var(--text3);
+    margin-top: 2px;
+  }
+
+  .attempt-badge {
+    display: inline-block;
+    margin-top: 8px;
+    background: linear-gradient(90deg, var(--accent2), var(--accent));
+    color: #fff;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 20px;
+    letter-spacing: 0.4px;
+    box-shadow: 0 0 12px rgba(167,139,250,0.3);
+  }
+
+  /* Exam selector dropdown */
+  .exam-selector {
+    margin-top: 12px;
+    width: 100%;
+  }
+  .exam-select {
+    width: 100%;
+    background: var(--bg4);
+    border: 0.5px solid var(--border2);
+    border-radius: 8px;
+    color: var(--text);
+    font-family: var(--font);
+    font-size: 12px;
+    padding: 8px 10px;
+    cursor: pointer;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  .exam-select:hover { border-color: var(--border3); }
+  .exam-select:focus { border-color: var(--accent); }
+
+  .nav-section {
+    padding: 10px 10px 4px;
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--text3);
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+  }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 8px 14px;
+    border-radius: 8px;
+    margin: 1px 8px;
+    cursor: pointer;
+    color: var(--text2);
+    font-size: 13px;
+    transition: all 0.15s;
+    text-decoration: none;
+    position: relative;
+  }
+
+  .nav-item:hover { background: var(--bg3); color: var(--text); }
+  .nav-item.active {
+    background: linear-gradient(90deg, rgba(167,139,250,0.12), rgba(167,139,250,0.04));
+    color: var(--text);
+    font-weight: 500;
+    border: 0.5px solid rgba(167,139,250,0.15);
+  }
+  .nav-item.active::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 20%; bottom: 20%;
+    width: 2px;
+    background: var(--accent);
+    border-radius: 0 2px 2px 0;
+  }
+
+  .nav-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .dot-phy { background: var(--phy); }
+  .dot-chem { background: var(--chem); }
+  .dot-math { background: var(--math); }
+  .dot-dash { background: var(--accent); }
+
+  .sidebar-bottom {
+    margin-top: auto;
+    padding: 14px;
+    border-top: 0.5px solid var(--border);
+  }
+
+  .days-left-box {
+    background: linear-gradient(135deg, rgba(124,58,237,0.15), rgba(91,158,249,0.1));
+    border: 0.5px solid rgba(167,139,250,0.2);
+    border-radius: var(--radius-lg);
+    padding: 14px 12px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .days-left-box::before {
+    content: '';
+    position: absolute;
+    top: -30px; left: 50%;
+    transform: translateX(-50%);
+    width: 100px; height: 60px;
+    background: radial-gradient(circle, rgba(167,139,250,0.15), transparent 70%);
+  }
+
+  .days-num {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--warn);
+    line-height: 1;
+  }
+
+  .days-label {
+    font-size: 11px;
+    color: var(--text3);
+    margin-top: 3px;
+  }
+
+  .main {
+    margin-left: 250px;
+    flex: 1;
+    padding: 28px 36px;
+    max-width: calc(100vw - 250px);
+  }
+
+  /* ── Pages ── */
+  .page { display: none; }
+  .page.active { display: block; }
+
+  /* ── Header ── */
+  .page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+  }
+
+  .page-title {
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: -0.5px;
+  }
+
+  .page-subtitle {
+    font-size: 13px;
+    color: var(--text2);
+    margin-top: 2px;
+  }
+
+  /* ── Cards ── */
+  .card {
+    background: rgba(15,18,25,0.8);
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 18px 20px;
+    backdrop-filter: blur(10px);
+  }
+
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+
+  .stat-card {
+    background: linear-gradient(135deg, var(--bg3) 0%, var(--bg2) 100%);
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 16px 18px;
+    transition: border-color 0.15s, box-shadow 0.15s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+  }
+
+  .stat-card:hover { border-color: var(--border2); }
+
+  .stat-label {
+    font-size: 11px;
+    color: var(--text3);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+  }
+
+  .stat-value {
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 1;
+  }
+
+  .stat-sub {
+    font-size: 11px;
+    color: var(--text3);
+    margin-top: 4px;
+  }
+
+  /* ── Progress Bar ── */
+  .prog-bar {
+    height: 6px;
+    background: var(--bg4);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-top: 8px;
+  }
+
+  @keyframes shimmer {
+    0% { background-position: -200% center; }
+    100% { background-position: 200% center; }
+  }
+
+  .prog-fill {
+    height: 100%;
+    border-radius: 10px;
+    transition: width 0.4s ease;
+    background-size: 200% auto;
+  }
+
+  .fill-phy  { background: linear-gradient(90deg, #3a7ef0, #5b9ef9, #7fbdff, #5b9ef9); background-size: 200% auto; animation: shimmer 3s linear infinite; }
+  .fill-chem { background: linear-gradient(90deg, #16a875, #34d399, #6ee7b7, #34d399); background-size: 200% auto; animation: shimmer 3s linear infinite; }
+  .fill-math { background: linear-gradient(90deg, #ea6010, #fb923c, #fdba74, #fb923c); background-size: 200% auto; animation: shimmer 3s linear infinite; }
+  .fill-accent { background: linear-gradient(90deg, #7c3aed, #a78bfa, #c4b5fd, #a78bfa); background-size: 200% auto; animation: shimmer 3s linear infinite; }
+
+  /* ── Subject Colors ── */
+  .c-phy { color: var(--phy); }
+  .c-chem { color: var(--chem); }
+  .c-math { color: var(--math); }
+
+  /* fill colors defined above with shimmer */
+
+  /* ── Chapter Table ── */
+  .chapter-list { display: flex; flex-direction: column; gap: 8px; }
+
+  .chapter-row {
+    background: linear-gradient(135deg, var(--bg3) 0%, var(--bg2) 100%);
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius);
+    padding: 12px 16px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 12px;
+    align-items: center;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s, box-shadow 0.15s;
+    position: relative;
+  }
+
+  .chapter-row:hover { border-color: var(--border2); box-shadow: 0 2px 12px rgba(0,0,0,0.2); }
+  .chapter-row.expanded { border-color: var(--border2); }
+
+  .chapter-name {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text);
+  }
+
+  .chapter-meta {
+    font-size: 12px;
+    color: var(--text3);
+    margin-top: 3px;
+    display: flex;
+    gap: 12px;
+  }
+
+  .chapter-badges {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    flex-shrink: 0;
+  }
+
+  .badge {
+    font-size: 11px;
+    font-weight: 500;
+    padding: 2px 8px;
+    border-radius: 20px;
+  }
+
+  .badge-done { background: rgba(74,222,128,0.12); color: var(--success); }
+  .badge-partial { background: rgba(251,191,36,0.12); color: var(--warn); }
+  .badge-pending { background: rgba(255,255,255,0.06); color: var(--text3); }
+  .badge-high { background: rgba(248,113,113,0.12); color: var(--danger); font-size: 10px; }
+
+  /* ── Chapter Detail ── */
+  .chapter-detail {
+    display: none;
+    background: var(--bg2);
+    border: 0.5px solid var(--border2);
+    border-radius: var(--radius);
+    padding: 16px 18px;
+    margin-top: 4px;
+  }
+
+  .chapter-detail.open { display: block; }
+
+  .detail-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+
+  .detail-field label {
+    display: block;
+    font-size: 11px;
+    color: var(--text3);
+    margin-bottom: 5px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .detail-field input,
+  .detail-field select,
+  .detail-field textarea {
+    width: 100%;
+    background: var(--bg4);
+    border: 0.5px solid var(--border);
+    border-radius: 7px;
+    color: var(--text);
+    font-family: var(--font);
+    font-size: 13px;
+    padding: 7px 10px;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+
+  .detail-field input:focus,
+  .detail-field select:focus,
+  .detail-field textarea:focus {
+    border-color: var(--border2);
+  }
+
+  .detail-field input[type="number"] { appearance: textfield; }
+  .detail-field input[type="range"] {
+    padding: 0;
+    height: 4px;
+    cursor: pointer;
+    accent-color: var(--accent);
+  }
+
+  .detail-field textarea { resize: vertical; min-height: 60px; }
+
+  .save-btn {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 18px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: opacity 0.15s;
+  }
+
+  .save-btn:hover { opacity: 0.85; }
+
+  .save-feedback {
+    font-size: 12px;
+    color: var(--success);
+    margin-left: 10px;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .save-feedback.show { opacity: 1; }
+
+  /* ── Topic subtags ── */
+  .topics-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 10px;
+  }
+
+  .topic-chip {
+    background: var(--bg4);
+    border: 0.5px solid var(--border);
+    border-radius: 20px;
+    padding: 3px 10px;
+    font-size: 11px;
+    color: var(--text2);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .topic-chip:hover { border-color: var(--border2); color: var(--text); }
+  .topic-chip.done { background: rgba(74,222,128,0.1); border-color: rgba(74,222,128,0.3); color: var(--success); }
+
+  /* ── Tabs ── */
+  .tabs {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 20px;
+    border-bottom: 0.5px solid var(--border);
+    padding-bottom: 0;
+  }
+
+  .tab-btn {
+    padding: 8px 16px;
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    color: var(--text2);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    margin-bottom: -0.5px;
+    transition: all 0.15s;
+    font-family: var(--font);
+  }
+
+  .tab-btn:hover { color: var(--text); }
+  .tab-btn.active { color: var(--text); border-bottom-color: var(--accent); }
+  .tab-btn.active.phy { border-bottom-color: var(--phy); color: var(--phy); }
+  .tab-btn.active.chem { border-bottom-color: var(--chem); color: var(--chem); }
+  .tab-btn.active.math { border-bottom-color: var(--math); color: var(--math); }
+
+  /* ── Dashboard grid ── */
+  .dash-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  .subject-overview {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+
+  .subj-card {
+    border-radius: var(--radius-xl);
+    padding: 20px;
+    border: 0.5px solid var(--border);
+    cursor: pointer;
+    transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .subj-card:hover { transform: translateY(-2px); }
+  .subj-card.phy {
+    background: linear-gradient(135deg, rgba(19,34,64,0.9) 0%, rgba(10,13,20,0.7) 100%);
+    border-color: rgba(91,158,249,0.2);
+  }
+  .subj-card.phy:hover { border-color: rgba(91,158,249,0.4); box-shadow: var(--glow-phy); }
+  .subj-card.chem {
+    background: linear-gradient(135deg, rgba(10,46,31,0.9) 0%, rgba(10,13,20,0.7) 100%);
+    border-color: rgba(52,211,153,0.2);
+  }
+  .subj-card.chem:hover { border-color: rgba(52,211,153,0.4); box-shadow: var(--glow-chem); }
+  .subj-card.math {
+    background: linear-gradient(135deg, rgba(46,21,8,0.9) 0%, rgba(10,13,20,0.7) 100%);
+    border-color: rgba(251,146,60,0.2);
+  }
+  .subj-card.math:hover { border-color: rgba(251,146,60,0.4); box-shadow: var(--glow-math); }
+
+  .subj-icon {
+    font-size: 22px;
+    margin-bottom: 10px;
+  }
+
+  .subj-name {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+
+  .subj-stats {
+    font-size: 12px;
+    color: var(--text2);
+    line-height: 1.8;
+  }
+
+  /* ── Circular Progress ── */
+  .circ-wrap {
+    display: flex;
+    justify-content: center;
+    margin: 8px 0;
+  }
+
+  svg.circ { transform: rotate(-90deg); }
+
+  /* ── Daily Log ── */
+  .log-entry {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 0.5px solid var(--border);
+  }
+
+  .log-entry:last-child { border-bottom: none; }
+
+  .log-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    margin-top: 6px;
+    flex-shrink: 0;
+  }
+
+  .log-time { font-size: 11px; color: var(--text3); min-width: 80px; }
+  .log-text { font-size: 13px; color: var(--text2); }
+  .log-text strong { color: var(--text); font-weight: 500; }
+
+  /* ── Mock Test Section ── */
+  .mock-card {
+    background: var(--bg3);
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px 16px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 12px;
+    align-items: center;
+  }
+
+  .mock-scores {
+    display: flex;
+    gap: 16px;
+  }
+
+  .score-pill {
+    text-align: center;
+  }
+
+  .score-pill .num {
+    font-size: 18px;
+    font-weight: 600;
+  }
+
+  .score-pill .lbl {
+    font-size: 10px;
+    color: var(--text3);
+    text-transform: uppercase;
+  }
+
+  /* ── Formula / Notes ── */
+  .notes-area {
+    width: 100%;
+    background: var(--bg3);
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius);
+    color: var(--text);
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+    padding: 14px;
+    resize: vertical;
+    min-height: 120px;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+
+  .notes-area:focus { border-color: var(--border2); }
+
+  /* ── Btn styles ── */
+  .btn-sm {
+    background: var(--bg4);
+    border: 0.5px solid var(--border);
+    border-radius: 7px;
+    color: var(--text2);
+    font-size: 12px;
+    padding: 5px 12px;
+    cursor: pointer;
+    font-family: var(--font);
+    transition: all 0.15s;
+  }
+
+  .btn-sm:hover { background: var(--bg3); color: var(--text); border-color: var(--border2); }
+
+  .btn-primary {
+    background: var(--accent);
+    border: none;
+    border-radius: 8px;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 8px 20px;
+    cursor: pointer;
+    font-family: var(--font);
+    transition: opacity 0.15s;
+  }
+
+  .btn-primary:hover { opacity: 0.85; }
+
+  /* ── Modal ── */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 200;
+    display: none;
+  }
+
+  .modal-overlay.open { display: flex; }
+
+  .modal {
+    background: rgba(12,15,22,0.97);
+    border: 0.5px solid var(--border2);
+    border-radius: var(--radius-xl);
+    padding: 28px;
+    width: 500px;
+    max-width: 95vw;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 40px 80px rgba(0,0,0,0.6), 0 0 0 0.5px rgba(255,255,255,0.04) inset;
+    backdrop-filter: blur(20px);
+  }
+
+  .modal-title {
+    font-size: 17px;
+    font-weight: 600;
+    margin-bottom: 18px;
+  }
+
+  .modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+  }
+
+  /* ── Section headings ── */
+  .section-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text2);
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .section-line {
+    flex: 1;
+    height: 0.5px;
+    background: var(--border);
+  }
+
+  /* ── Scrollbar ── */
+  ::-webkit-scrollbar { width: 5px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--bg4); border-radius: 10px; }
+
+  /* ── Filter row ── */
+  .filter-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .filter-btn {
+    background: var(--bg3);
+    border: 0.5px solid var(--border);
+    border-radius: 20px;
+    color: var(--text2);
+    font-size: 12px;
+    padding: 4px 12px;
+    cursor: pointer;
+    font-family: var(--font);
+    transition: all 0.15s;
+  }
+
+  .filter-btn:hover, .filter-btn.active {
+    background: var(--bg4);
+    color: var(--text);
+    border-color: var(--border2);
+  }
+
+  /* ── Mini progress chart ── */
+  .week-chart {
+    display: flex;
+    gap: 4px;
+    align-items: flex-end;
+    height: 40px;
+    margin-top: 8px;
+  }
+
+  .week-bar {
+    flex: 1;
+    background: var(--bg4);
+    border-radius: 3px 3px 0 0;
+    min-height: 4px;
+    transition: height 0.3s;
+    position: relative;
+  }
+
+  .week-bar:hover::after {
+    content: attr(data-val);
+    position: absolute;
+    bottom: calc(100% + 4px);
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 10px;
+    color: var(--text2);
+    white-space: nowrap;
+  }
+
+  @media (max-width: 900px) {
+    .sidebar { display: none; }
+    .main { margin-left: 0; max-width: 100vw; padding: 16px; }
+    .subject-overview { grid-template-columns: 1fr; }
+    .dash-grid { grid-template-columns: 1fr; }
+  }
+
+  /* ── Input group ── */
+  .input-group {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+
+  .input-group input {
+    flex: 1;
+    background: var(--bg4);
+    border: 0.5px solid var(--border);
+    border-radius: 7px;
+    color: var(--text);
+    font-family: var(--font);
+    font-size: 13px;
+    padding: 7px 10px;
+    outline: none;
+  }
+
+  .input-group input:focus { border-color: var(--border2); }
+
+  .status-select {
+    background: var(--bg4);
+    border: 0.5px solid var(--border);
+    border-radius: 7px;
+    color: var(--text);
+    font-family: var(--font);
+    font-size: 12px;
+    padding: 4px 8px;
+    outline: none;
+    cursor: pointer;
+  }
+
+  .status-select option { background: var(--bg3); }
+
+  /* ── Mistake type chips ── */
+  .mtype-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: var(--bg4);
+    border: 0.5px solid var(--border);
+    border-radius: 20px;
+    padding: 5px 13px;
+    font-size: 12px;
+    color: var(--text2);
+    cursor: pointer;
+    transition: all 0.15s;
+    user-select: none;
+  }
+
+  .mtype-chip:hover { border-color: var(--border2); color: var(--text); }
+  .mtype-chip.selected { background: rgba(167,139,250,0.15); border-color: rgba(167,139,250,0.5); color: var(--accent); }
+
+  /* ── Test log card ── */
+  .tl-card {
+    background: var(--bg3);
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 18px 20px;
+    margin-bottom: 10px;
+    transition: border-color 0.15s;
+  }
+
+  .tl-card:hover { border-color: var(--border2); }
+
+  .tl-card-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 14px;
+    gap: 12px;
+  }
+
+  .tl-subject-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+
+  .tl-subj-block {
+    background: var(--bg2);
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius);
+    padding: 10px 12px;
+  }
+
+  .tl-subj-name {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+  }
+
+  .tl-cwl {
+    display: flex;
+    gap: 10px;
+  }
+
+  .tl-cwl-item {
+    text-align: center;
+    flex: 1;
+  }
+
+  .tl-cwl-num {
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 1;
+  }
+
+  .tl-cwl-lbl {
+    font-size: 10px;
+    color: var(--text3);
+    margin-top: 2px;
+  }
+
+  .tl-mistake-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-top: 10px;
+  }
+
+  .tl-mistake-tag {
+    font-size: 11px;
+    padding: 2px 9px;
+    border-radius: 20px;
+    background: rgba(167,139,250,0.1);
+    color: var(--accent);
+    border: 0.5px solid rgba(167,139,250,0.3);
+  }
+
+  .tl-mistake-list {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .tl-mistake-item {
+    font-size: 12px;
+    color: var(--text2);
+    display: flex;
+    align-items: flex-start;
+    gap: 7px;
+  }
+
+  .tl-mistake-num {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--danger);
+    background: rgba(248,113,113,0.1);
+    border-radius: 50%;
+    width: 16px; height: 16px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  /* ── Accuracy bar ── */
+  .acc-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+
+  .acc-label { font-size: 12px; color: var(--text2); min-width: 80px; }
+
+  .acc-bar-wrap {
+    flex: 1;
+    background: var(--bg4);
+    border-radius: 10px;
+    height: 8px;
+    overflow: hidden;
+  }
+
+  .acc-bar-fill {
+    height: 100%;
+    border-radius: 10px;
+    transition: width 0.5s ease;
+  }
+
+  .acc-pct { font-size: 12px; color: var(--text2); min-width: 36px; text-align: right; }
+
+  /* Product polish */
+  :root {
+    --bg: #070a11;
+    --bg2: #0c1019;
+    --bg3: #121827;
+    --bg4: #1a2234;
+    --bg5: #222d42;
+    --text: #f4f6fb;
+    --text2: #a1a9bd;
+    --text3: #667087;
+    --border: rgba(255,255,255,0.08);
+    --border2: rgba(255,255,255,0.15);
+    --shadow-lg: 0 24px 70px rgba(0,0,0,0.34);
+  }
+
+  html { scroll-behavior: smooth; }
+  body { overflow-x: hidden; }
+  button, input, select, textarea { font: inherit; }
+  button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible, [tabindex]:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  .sidebar { width: 272px; }
+  .main {
+    margin-left: 272px;
+    max-width: calc(100vw - 272px);
+    padding: 34px clamp(24px, 3vw, 52px) 52px;
+  }
+  .page { max-width: 1420px; margin: 0 auto; animation: pageIn .28s ease; }
+  @keyframes pageIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: none; } }
+  .page-title { font-size: clamp(24px, 2.2vw, 32px); font-weight: 750; }
+  .page-subtitle { font-size: 13px; max-width: 720px; }
+  .card, .stat-card, .chapter-row, .mock-card, .tl-card {
+    box-shadow: 0 12px 32px rgba(0,0,0,0.12);
+  }
+  .card { border-color: var(--border); }
+  .stat-card { min-height: 116px; display: flex; flex-direction: column; justify-content: center; }
+  .stat-card:hover { transform: translateY(-2px); box-shadow: 0 16px 34px rgba(0,0,0,.22); }
+  .stat-value { font-size: 28px; letter-spacing: -.5px; }
+  .btn-primary, .login-btn {
+    background: linear-gradient(135deg, #7c3aed, #a78bfa 62%, #c084fc);
+    box-shadow: 0 9px 24px rgba(124,58,237,.25);
+    min-height: 40px;
+  }
+  .btn-primary:hover, .login-btn:hover { opacity: 1; transform: translateY(-1px); filter: brightness(1.08); }
+  .btn-sm { min-height: 34px; }
+  .sidebar-logo { padding: 22px 18px 16px; }
+  .nav-item { min-height: 42px; margin: 2px 10px; padding: 9px 13px; border: 1px solid transparent; }
+  .nav-item.active { border-color: rgba(167,139,250,.18); }
+  .tabs { overflow-x: auto; scrollbar-width: none; }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tab-btn { white-space: nowrap; }
+
+  .dashboard-hero {
+    display: grid;
+    grid-template-columns: 1.35fr .65fr;
+    gap: 18px;
+    padding: clamp(22px, 3vw, 34px);
+    margin-bottom: 22px;
+    border: 1px solid rgba(167,139,250,.2);
+    border-radius: 24px;
+    background:
+      radial-gradient(circle at 12% 10%, rgba(91,158,249,.16), transparent 35%),
+      radial-gradient(circle at 88% 90%, rgba(167,139,250,.17), transparent 40%),
+      linear-gradient(135deg, rgba(20,27,43,.96), rgba(10,13,22,.94));
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+    position: relative;
+  }
+  .hero-eyebrow { color: var(--accent); font-size: 11px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; }
+  .hero-title { margin-top: 8px; font-size: clamp(25px, 3vw, 38px); line-height: 1.15; letter-spacing: -1.2px; }
+  .hero-copy { margin-top: 10px; color: var(--text2); max-width: 620px; }
+  .quick-actions { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 22px; }
+  .quick-action {
+    border: 1px solid var(--border2);
+    background: rgba(255,255,255,.045);
+    color: var(--text);
+    border-radius: 10px;
+    padding: 9px 13px;
+    cursor: pointer;
+    transition: .18s ease;
+  }
+  .quick-action:hover { background: rgba(255,255,255,.09); transform: translateY(-1px); }
+  .hero-progress { display: grid; place-items: center; min-height: 190px; }
+  .progress-ring {
+    --progress: 0;
+    width: 154px; height: 154px; border-radius: 50%;
+    display: grid; place-items: center;
+    background: conic-gradient(var(--accent) calc(var(--progress) * 1%), rgba(255,255,255,.08) 0);
+    position: relative;
+    box-shadow: 0 0 42px rgba(167,139,250,.16);
+  }
+  .progress-ring::before {
+    content: ''; position: absolute; inset: 11px; border-radius: inherit;
+    background: #0e1421; border: 1px solid var(--border);
+  }
+  .progress-ring-content { position: relative; z-index: 1; text-align: center; }
+  .progress-ring-value { font-size: 31px; font-weight: 800; line-height: 1; }
+  .progress-ring-label { color: var(--text3); font-size: 10px; text-transform: uppercase; letter-spacing: .8px; margin-top: 5px; }
+
+  .subject-toolbar {
+    display: flex; gap: 10px; align-items: center; justify-content: space-between;
+    margin: -4px 0 18px;
+  }
+  .search-wrap { position: relative; flex: 1; max-width: 420px; }
+  .search-wrap::before { content: '⌕'; position: absolute; left: 13px; top: 50%; transform: translateY(-50%); color: var(--text3); font-size: 20px; }
+  .chapter-search {
+    width: 100%; min-height: 42px; padding: 9px 13px 9px 40px;
+    background: var(--bg3); color: var(--text); border: 1px solid var(--border);
+    border-radius: 11px; outline: none;
+  }
+  .chapter-search:focus { border-color: rgba(167,139,250,.55); box-shadow: 0 0 0 3px rgba(167,139,250,.1); }
+  .search-count { color: var(--text3); font-size: 12px; white-space: nowrap; }
+  .empty-state { padding: 46px 20px; text-align: center; color: var(--text3); border: 1px dashed var(--border2); border-radius: 16px; }
+  .empty-icon { font-size: 27px; margin-bottom: 8px; }
+
+  .mobile-topbar {
+    display: none; position: sticky; top: 0; z-index: 90; height: 62px;
+    align-items: center; justify-content: space-between; padding: 0 15px;
+    background: rgba(7,10,17,.88); border-bottom: 1px solid var(--border);
+    backdrop-filter: blur(18px);
+  }
+  .mobile-brand { font-weight: 750; background: linear-gradient(90deg,var(--phy),var(--accent)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+  .icon-btn {
+    width: 40px; height: 40px; display: grid; place-items: center; border-radius: 10px;
+    border: 1px solid var(--border); background: var(--bg3); color: var(--text); cursor: pointer;
+  }
+  .sidebar-backdrop { display: none; position: fixed; inset: 0; z-index: 99; background: rgba(0,0,0,.62); backdrop-filter: blur(2px); }
+  .sidebar-tools { padding: 8px 10px 4px; display: grid; grid-template-columns: 1fr 1fr; gap: 7px; }
+  .tool-btn {
+    min-height: 36px; border: 1px solid var(--border); background: var(--bg3); color: var(--text2);
+    border-radius: 9px; cursor: pointer; font-size: 11px;
+  }
+  .tool-btn:hover { color: var(--text); border-color: var(--border2); }
+
+  .toast-stack { position: fixed; right: 22px; bottom: 22px; z-index: 1200; display: grid; gap: 9px; pointer-events: none; }
+  .toast {
+    min-width: 230px; max-width: 360px; padding: 12px 14px; border-radius: 12px;
+    color: var(--text); background: rgba(18,24,39,.96); border: 1px solid var(--border2);
+    box-shadow: var(--shadow-lg); animation: toastIn .22s ease; font-size: 13px;
+  }
+  .toast.success { border-color: rgba(52,211,153,.4); }
+  .toast.error { border-color: rgba(251,113,133,.5); }
+  @keyframes toastIn { from { opacity: 0; transform: translateY(8px); } }
+  .field-error { border-color: var(--danger) !important; box-shadow: 0 0 0 3px rgba(251,113,133,.1) !important; }
+  .save-status { font-size: 11px; color: var(--success); margin-top: 8px; min-height: 18px; }
+
+  @media (max-width: 1100px) {
+    .dash-grid { grid-template-columns: 1fr; }
+    .dashboard-hero { grid-template-columns: 1fr .55fr; }
+  }
+  @media (max-width: 900px) {
+    .mobile-topbar { display: flex; }
+    .sidebar {
+      display: flex; width: min(310px, 88vw); transform: translateX(-102%);
+      transition: transform .25s ease; box-shadow: 24px 0 70px rgba(0,0,0,.48);
+    }
+    .sidebar.open { transform: translateX(0); }
+    .sidebar-backdrop.open { display: block; }
+    .main { margin-left: 0; max-width: 100vw; padding: 18px 15px 42px; }
+    .dashboard-hero { grid-template-columns: 1fr; }
+    .hero-progress { min-height: 160px; }
+    .subject-toolbar { align-items: stretch; flex-direction: column; }
+    .search-wrap { max-width: none; }
+  }
+  @media (max-width: 620px) {
+    .page-header { align-items: flex-start; gap: 14px; }
+    .page-header .btn-primary { flex-shrink: 0; padding-inline: 13px; }
+    .subject-overview { gap: 10px; }
+    .stat-grid { grid-template-columns: repeat(2, minmax(0,1fr)); gap: 9px; }
+    .stat-card { min-height: 102px; padding: 14px; }
+    .stat-value { font-size: 24px; }
+    .chapter-row { grid-template-columns: 1fr; }
+    .chapter-badges { justify-content: flex-start; }
+    .chapter-meta { flex-wrap: wrap; gap: 5px 10px; }
+    .mock-card, .tl-card-header { grid-template-columns: 1fr; flex-direction: column; }
+    .mock-scores, .tl-subject-row { display: grid; grid-template-columns: repeat(2,1fr); width: 100%; }
+    .modal { max-width: calc(100vw - 18px); padding: 20px 16px; border-radius: 18px; }
+    .toast-stack { left: 12px; right: 12px; bottom: 12px; }
+    .toast { min-width: 0; max-width: none; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+  }
+</style>
+</head>
+<body>
+<div class="mobile-topbar" id="mobile-topbar">
+  <button class="icon-btn" onclick="toggleSidebar()" aria-label="Open navigation">☰</button>
+  <div class="mobile-brand">StudyMeter</div>
+  <button class="icon-btn" onclick="openLogModal()" aria-label="Log study session">＋</button>
+</div>
+<div class="sidebar-backdrop" id="sidebar-backdrop" onclick="closeSidebar()"></div>
+<div class="toast-stack" id="toast-stack" aria-live="polite"></div>
+<input type="file" id="import-file" accept="application/json" style="display:none" onchange="importUserData(event)">
+
+<!-- ── LOGIN SCREEN ── -->
+<div id="login-screen">
+  <div class="login-box">
+    <div class="login-logo">StudyMeter</div>
+    <div class="login-tagline">Your personal JEE Main & Advanced preparation tracker</div>
+
+    <div class="login-field">
+      <label>Your name / username</label>
+      <input class="login-input" type="text" id="login-name" placeholder="Enter your name to begin…" maxlength="30"
+        onkeydown="if(event.key==='Enter') doLogin()">
+    </div>
+    <button class="login-btn" onclick="doLogin()">Start Tracking →</button>
+
+    <div class="login-users-list" id="existing-users-section" style="display:none">
+      <div class="login-users-label">Continue as</div>
+      <div id="existing-users"></div>
+    </div>
+  </div>
+</div>
+
+<div class="shell" id="main-shell" style="display:none">
+
+<!-- ── SIDEBAR ── -->
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <div class="title" style="font-size:17px;letter-spacing:-0.5px;background:linear-gradient(90deg,var(--phy),var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent">StudyMeter</div>
+    <div class="sub" id="exam-name-display">JEE Main S1 2027</div>
+    <div class="exam-selector">
+      <select id="exam-selector" class="exam-select" onchange="changeExam()">
+        <option value="mains1">🎯 JEE Main S1 (21 Jan 2027)</option>
+        <option value="mains2">🎯 JEE Main S2 (1 Apr 2027)</option>
+        <option value="advanced">⚡ JEE Advanced (16 May 2027)</option>
+      </select>
+    </div>
+    <div style="margin-top:10px;display:flex;align-items:center;gap:8px;cursor:pointer" onclick="switchUser()" title="Switch user">
+      <div class="user-avatar" id="sidebar-avatar" style="background:var(--accent2);width:22px;height:22px;font-size:10px">?</div>
+      <span style="font-size:12px;color:var(--text2)" id="sidebar-username">—</span>
+      <span style="font-size:10px;color:var(--text3);margin-left:auto">switch</span>
+    </div>
+  </div>
+
+  <div class="nav-section">Overview</div>
+  <a class="nav-item active" onclick="showPage('dashboard')">
+    <span class="nav-dot dot-dash"></span> Dashboard
+  </a>
+  <a class="nav-item" onclick="showPage('mock-tests')">
+    <span class="nav-dot" style="background:var(--warn)"></span> Mock Tests
+  </a>
+  <a class="nav-item" onclick="showPage('test-log')" style="">
+    <span class="nav-dot" style="background:var(--danger)"></span> Test Log
+  </a>
+  <a class="nav-item" onclick="showPage('study-log')">
+    <span class="nav-dot" style="background:var(--accent)"></span> Study Log
+  </a>
+  <a class="nav-item" onclick="showPage('formula-bank')">
+    <span class="nav-dot" style="background:var(--text3)"></span> Formula Bank
+  </a>
+
+  <div class="nav-section">Subjects</div>
+  <a class="nav-item" onclick="showPage('physics')">
+    <span class="nav-dot dot-phy"></span> Physics
+  </a>
+  <a class="nav-item" onclick="showPage('chemistry')">
+    <span class="nav-dot dot-chem"></span> Chemistry
+  </a>
+  <a class="nav-item" onclick="showPage('mathematics')">
+    <span class="nav-dot dot-math"></span> Mathematics
+  </a>
+
+  <div class="nav-section">Your Data</div>
+  <div class="sidebar-tools">
+    <button class="tool-btn" onclick="exportUserData()">Export</button>
+    <button class="tool-btn" onclick="document.getElementById('import-file').click()">Import</button>
+  </div>
+
+  <div class="sidebar-bottom">
+    <div class="days-left-box">
+      <div style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:0.6px;margin-bottom:8px" id="countdown-label">days to JEE Main</div>
+      <div class="days-num" id="days-remaining">—</div>
+      <div class="days-label">days remaining</div>
+      <div style="margin-top:10px;height:3px;background:var(--bg4);border-radius:10px;overflow:hidden">
+        <div id="cd-progbar" style="height:100%;background:linear-gradient(90deg,var(--phy),var(--accent));border-radius:10px;transition:width 1s linear;width:0%"></div>
+      </div>
+      <div style="font-size:10px;color:var(--text3);margin-top:5px" id="cd-pct-label">0% of prep time used</div>
+
+      <!-- Today's study window -->
+      <div style="margin-top:12px;padding-top:10px;border-top:0.5px solid rgba(255,255,255,0.06)">
+        <div style="font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:5px">Today's study time left</div>
+        <div style="font-size:18px;font-weight:700;color:var(--warn)" id="today-left">—</div>
+        <div style="font-size:9px;color:var(--text3);margin-top:1px">until midnight</div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- ── MAIN ── -->
+<main class="main">
+
+  <!-- ═══════════════ DASHBOARD ═══════════════ -->
+  <div class="page active" id="page-dashboard">
+    <div class="page-header">
+      <div>
+        <div class="page-title">Dashboard</div>
+        <div class="page-subtitle" id="dashboard-subtitle">JEE Main S1 2027 — Your complete preparation overview</div>
+      </div>
+      <button class="btn-primary" onclick="openLogModal()">+ Log Today</button>
+    </div>
+
+    <section class="dashboard-hero">
+      <div>
+        <div class="hero-eyebrow">Your preparation command center</div>
+        <h1 class="hero-title" id="hero-greeting">Keep the momentum going.</h1>
+        <p class="hero-copy" id="hero-copy">Small, consistent sessions compound into exam-day confidence. Log today's work and keep your syllabus moving.</p>
+        <div class="quick-actions">
+          <button class="quick-action" onclick="openLogModal()">＋ Log study</button>
+          <button class="quick-action" onclick="showPage('test-log')">⌁ Analyze test</button>
+          <button class="quick-action" onclick="showPage('formula-bank')">✦ Open notes</button>
+        </div>
+      </div>
+      <div class="hero-progress">
+        <div class="progress-ring" id="overall-progress-ring">
+          <div class="progress-ring-content">
+            <div class="progress-ring-value" id="overall-progress-value">0%</div>
+            <div class="progress-ring-label">Syllabus complete</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Subject overview cards -->
+    <div class="subject-overview">
+      <div class="subj-card phy" onclick="showPage('physics')">
+        <div class="subj-icon">⚡</div>
+        <div class="subj-name c-phy">Physics</div>
+        <div id="phy-overview" class="subj-stats">Loading…</div>
+        <div class="prog-bar" style="margin-top:10px">
+          <div class="prog-fill fill-phy" id="phy-prog" style="width:0%"></div>
+        </div>
+      </div>
+      <div class="subj-card chem" onclick="showPage('chemistry')">
+        <div class="subj-icon">🧪</div>
+        <div class="subj-name c-chem">Chemistry</div>
+        <div id="chem-overview" class="subj-stats">Loading…</div>
+        <div class="prog-bar" style="margin-top:10px">
+          <div class="prog-fill fill-chem" id="chem-prog" style="width:0%"></div>
+        </div>
+      </div>
+      <div class="subj-card math" onclick="showPage('mathematics')">
+        <div class="subj-icon">∑</div>
+        <div class="subj-name c-math">Mathematics</div>
+        <div id="math-overview" class="subj-stats">Loading…</div>
+        <div class="prog-bar" style="margin-top:10px">
+          <div class="prog-fill fill-math" id="math-prog" style="width:0%"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dash-grid">
+      <!-- Stats -->
+      <div>
+        <div class="section-title">Total Progress <span class="section-line"></span></div>
+        <div class="stat-grid">
+          <div class="stat-card">
+            <div class="stat-label">Qs Solved</div>
+            <div class="stat-value" id="total-qs">0</div>
+            <div class="stat-sub">All subjects</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">PYQs Done</div>
+            <div class="stat-value" id="total-pyq">0</div>
+            <div class="stat-sub">Past year qs</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Lectures Seen</div>
+            <div class="stat-value" id="total-lec">0</div>
+            <div class="stat-sub">Video/class</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Revision Hrs</div>
+            <div class="stat-value" id="total-rev">0</div>
+            <div class="stat-sub">Total hours</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Chapters Done</div>
+            <div class="stat-value" id="ch-done">0</div>
+            <div class="stat-sub">of 75 total</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Mock Tests</div>
+            <div class="stat-value" id="mock-count">0</div>
+            <div class="stat-sub">Attempted</div>
+          </div>
+        </div>
+
+        <div class="section-title">Weekly Study (hrs) <span class="section-line"></span></div>
+        <div class="card">
+          <div class="week-chart" id="week-chart"></div>
+          <div style="display:flex;justify-content:space-between;margin-top:6px" id="week-labels"></div>
+        </div>
+      </div>
+
+      <!-- Recent log -->
+      <div>
+        <div class="section-title">Recent Activity <span class="section-line"></span></div>
+        <div class="card" style="max-height:350px;overflow-y:auto">
+          <div id="recent-log">
+            <div style="color:var(--text3);font-size:13px;text-align:center;padding:24px 0">No activity logged yet</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════ PHYSICS PAGE ═══════════════ -->
+  <div class="page" id="page-physics">
+    <div class="page-header">
+      <div>
+        <div class="page-title c-phy">Physics</div>
+        <div class="page-subtitle">Mechanics · Thermodynamics · Electrodynamics · Modern Physics · Optics</div>
+      </div>
+      <div id="phy-header-stats" style="display:flex;gap:16px;align-items:center"></div>
+    </div>
+    <div class="tabs" id="phy-tabs">
+      <button class="tab-btn active phy" onclick="switchPhyTab('all',this)">All Chapters</button>
+      <button class="tab-btn" onclick="switchPhyTab('Mechanics',this)">Mechanics</button>
+      <button class="tab-btn" onclick="switchPhyTab('Thermodynamics',this)">Thermo & Waves</button>
+      <button class="tab-btn" onclick="switchPhyTab('Electrodynamics',this)">Electrodynamics</button>
+      <button class="tab-btn" onclick="switchPhyTab('Modern Physics',this)">Modern Physics</button>
+      <button class="tab-btn" onclick="switchPhyTab('Optics',this)">Optics</button>
+    </div>
+    <div class="subject-toolbar">
+      <div class="search-wrap"><input class="chapter-search" id="physics-search" type="search" placeholder="Search chapters or topics..." oninput="searchSubject('physics', this.value)"></div>
+      <div class="search-count" id="physics-search-count"></div>
+    </div>
+    <div class="chapter-list" id="phy-list"></div>
+  </div>
+
+  <!-- ═══════════════ CHEMISTRY PAGE ═══════════════ -->
+  <div class="page" id="page-chemistry">
+    <div class="page-header">
+      <div>
+        <div class="page-title c-chem">Chemistry</div>
+        <div class="page-subtitle">Physical · Organic · Inorganic</div>
+      </div>
+      <div id="chem-header-stats" style="display:flex;gap:16px;align-items:center"></div>
+    </div>
+    <div class="tabs">
+      <button class="tab-btn active chem" onclick="switchChemTab('all',this)">All Chapters</button>
+      <button class="tab-btn" onclick="switchChemTab('Physical',this)">Physical</button>
+      <button class="tab-btn" onclick="switchChemTab('Organic',this)">Organic</button>
+      <button class="tab-btn" onclick="switchChemTab('Inorganic',this)">Inorganic</button>
+    </div>
+    <div class="subject-toolbar">
+      <div class="search-wrap"><input class="chapter-search" id="chemistry-search" type="search" placeholder="Search chapters or topics..." oninput="searchSubject('chemistry', this.value)"></div>
+      <div class="search-count" id="chemistry-search-count"></div>
+    </div>
+    <div class="chapter-list" id="chem-list"></div>
+  </div>
+
+  <!-- ═══════════════ MATHEMATICS PAGE ═══════════════ -->
+  <div class="page" id="page-mathematics">
+    <div class="page-header">
+      <div>
+        <div class="page-title c-math">Mathematics</div>
+        <div class="page-subtitle">Algebra · Calculus · Coordinate Geometry · Trigonometry</div>
+      </div>
+      <div id="math-header-stats" style="display:flex;gap:16px;align-items:center"></div>
+    </div>
+    <div class="tabs">
+      <button class="tab-btn active math" onclick="switchMathTab('all',this)">All Chapters</button>
+      <button class="tab-btn" onclick="switchMathTab('Algebra',this)">Algebra</button>
+      <button class="tab-btn" onclick="switchMathTab('Calculus',this)">Calculus</button>
+      <button class="tab-btn" onclick="switchMathTab('Coordinate',this)">Coord. Geo</button>
+      <button class="tab-btn" onclick="switchMathTab('Trigonometry',this)">Trigonometry</button>
+      <button class="tab-btn" onclick="switchMathTab('Vectors',this)">Vectors & 3D</button>
+    </div>
+    <div class="subject-toolbar">
+      <div class="search-wrap"><input class="chapter-search" id="mathematics-search" type="search" placeholder="Search chapters or topics..." oninput="searchSubject('mathematics', this.value)"></div>
+      <div class="search-count" id="mathematics-search-count"></div>
+    </div>
+    <div class="chapter-list" id="math-list"></div>
+  </div>
+
+  <!-- ═══════════════ MOCK TESTS ═══════════════ -->
+  <div class="page" id="page-mock-tests">
+    <div class="page-header">
+      <div>
+        <div class="page-title">Mock Tests</div>
+        <div class="page-subtitle">Track your full-length test performance</div>
+      </div>
+      <button class="btn-primary" onclick="openMockModal()">+ Add Test</button>
+    </div>
+
+    <div class="stat-grid" style="margin-bottom:24px">
+      <div class="stat-card">
+        <div class="stat-label">Best Score</div>
+        <div class="stat-value" id="best-score" style="color:var(--success)">—</div>
+        <div class="stat-sub">out of 300</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Average Score</div>
+        <div class="stat-value" id="avg-score">—</div>
+        <div class="stat-sub">all tests</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Tests Taken</div>
+        <div class="stat-value" id="mock-total">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Best Physics</div>
+        <div class="stat-value c-phy" id="best-phy">—</div>
+        <div class="stat-sub">out of 100</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Best Chemistry</div>
+        <div class="stat-value c-chem" id="best-chem">—</div>
+        <div class="stat-sub">out of 100</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Best Maths</div>
+        <div class="stat-value c-math" id="best-math">—</div>
+        <div class="stat-sub">out of 100</div>
+      </div>
+    </div>
+
+    <div class="section-title">Test History <span class="section-line"></span></div>
+    <div id="mock-list" class="chapter-list"></div>
+  </div>
+
+  <!-- ═══════════════ STUDY LOG ═══════════════ -->
+  <div class="page" id="page-study-log">
+    <div class="page-header">
+      <div>
+        <div class="page-title">Study Log</div>
+        <div class="page-subtitle">Day-by-day study sessions</div>
+      </div>
+      <button class="btn-primary" onclick="openLogModal()">+ Log Session</button>
+    </div>
+
+    <div class="stat-grid" style="margin-bottom:24px">
+      <div class="stat-card">
+        <div class="stat-label">Total Hours</div>
+        <div class="stat-value" id="log-total-hrs">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Streak</div>
+        <div class="stat-value" id="log-streak" style="color:var(--warn)">0</div>
+        <div class="stat-sub">days in a row</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Days Studied</div>
+        <div class="stat-value" id="log-days">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Avg hrs/day</div>
+        <div class="stat-value" id="log-avg">0</div>
+      </div>
+    </div>
+
+    <div id="study-log-entries" class="chapter-list"></div>
+  </div>
+
+  <!-- ═══════════════ TEST LOG ═══════════════ -->
+  <div class="page" id="page-test-log">
+    <div class="page-header">
+      <div>
+        <div class="page-title" style="display:flex;align-items:center;gap:10px">
+          <span style="background:rgba(248,113,113,0.15);color:var(--danger);border-radius:8px;padding:2px 10px;font-size:14px;font-weight:600">📋 Test Log</span>
+        </div>
+        <div class="page-subtitle">Post-test analysis — correct, wrong, left, mistakes, and patterns</div>
+      </div>
+      <button class="btn-primary" onclick="openTestLogModal()" style="background:var(--danger)">+ Add Test Entry</button>
+    </div>
+
+    <!-- Summary stats -->
+    <div class="stat-grid" style="margin-bottom:24px">
+      <div class="stat-card">
+        <div class="stat-label">Tests Logged</div>
+        <div class="stat-value" id="tl-count">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Best Score</div>
+        <div class="stat-value" id="tl-best" style="color:var(--success)">—</div>
+        <div class="stat-sub">out of 300</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Avg Score</div>
+        <div class="stat-value" id="tl-avg">—</div>
+        <div class="stat-sub">all tests</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Total Correct</div>
+        <div class="stat-value" id="tl-correct" style="color:var(--success)">0</div>
+        <div class="stat-sub">across all tests</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Total Wrong</div>
+        <div class="stat-value" id="tl-wrong" style="color:var(--danger)">0</div>
+        <div class="stat-sub">negative marks</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Total Left</div>
+        <div class="stat-value" id="tl-left" style="color:var(--text3)">0</div>
+        <div class="stat-sub">unattempted</div>
+      </div>
+    </div>
+
+    <!-- Mistake type breakdown -->
+    <div class="dash-grid" style="margin-bottom:24px">
+      <div>
+        <div class="section-title">Mistake Pattern Breakdown <span class="section-line"></span></div>
+        <div class="card" style="padding:16px 20px">
+          <div id="tl-mistake-bars">
+            <div style="color:var(--text3);font-size:13px;text-align:center;padding:20px 0">Log tests to see your mistake patterns</div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="section-title">Subject Accuracy <span class="section-line"></span></div>
+        <div class="card" style="padding:16px 20px">
+          <div id="tl-accuracy-bars">
+            <div style="color:var(--text3);font-size:13px;text-align:center;padding:20px 0">—</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-title">All Test Entries <span class="section-line"></span></div>
+    <div id="test-log-list" class="chapter-list"></div>
+  </div>
+
+  <!-- ═══════════════ FORMULA BANK ═══════════════ -->
+  <div class="page" id="page-formula-bank">
+    <div class="page-header">
+      <div>
+        <div class="page-title">Formula Bank</div>
+        <div class="page-subtitle">Your personal notes and formulae for each subject</div>
+      </div>
+    </div>
+
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchFormulaTab('phy', this)">Physics</button>
+      <button class="tab-btn" onclick="switchFormulaTab('chem', this)">Chemistry</button>
+      <button class="tab-btn" onclick="switchFormulaTab('math', this)">Mathematics</button>
+      <button class="tab-btn" onclick="switchFormulaTab('gen', this)">General Notes</button>
+    </div>
+
+    <div id="formula-phy" class="formula-section">
+      <div class="section-title">Physics Formulae & Notes <span class="section-line"></span></div>
+      <textarea class="notes-area" id="notes-phy" placeholder="Write your physics formulae, tricks, and notes here..." rows="18"
+        oninput="saveNotes('phy')"></textarea>
+      <div class="save-status" id="notes-status-phy"></div>
+    </div>
+    <div id="formula-chem" class="formula-section" style="display:none">
+      <div class="section-title">Chemistry Notes <span class="section-line"></span></div>
+      <textarea class="notes-area" id="notes-chem" placeholder="Write your chemistry reactions, mnemonics, and notes here..." rows="18"
+        oninput="saveNotes('chem')"></textarea>
+      <div class="save-status" id="notes-status-chem"></div>
+    </div>
+    <div id="formula-math" class="formula-section" style="display:none">
+      <div class="section-title">Mathematics Formulae <span class="section-line"></span></div>
+      <textarea class="notes-area" id="notes-math" placeholder="Write your maths formulae, identities, and shortcuts here..." rows="18"
+        oninput="saveNotes('math')"></textarea>
+      <div class="save-status" id="notes-status-math"></div>
+    </div>
+    <div id="formula-gen" class="formula-section" style="display:none">
+      <div class="section-title">General Notes & Reminders <span class="section-line"></span></div>
+      <textarea class="notes-area" id="notes-gen" placeholder="Exam tips, schedule, reminders, exam strategy..." rows="18"
+        oninput="saveNotes('gen')"></textarea>
+      <div class="save-status" id="notes-status-gen"></div>
+    </div>
+  </div>
+
+</main>
+</div>
+
+<!-- ── TEST LOG MODAL ── -->
+<div class="modal-overlay" id="test-log-modal">
+  <div class="modal" style="width:620px">
+    <div class="modal-title" style="display:flex;align-items:center;gap:10px">
+      <span style="background:rgba(248,113,113,0.12);color:var(--danger);border-radius:8px;padding:3px 12px;font-size:13px">📋</span>
+      Add Test Entry
+    </div>
+
+    <!-- Basic info -->
+    <div class="detail-grid" style="margin-bottom:4px">
+      <div class="detail-field">
+        <label>Test Name</label>
+        <input type="text" id="tl-name" placeholder="e.g. Allen FLT 5, NTA Mock 3…">
+      </div>
+      <div class="detail-field">
+        <label>Date</label>
+        <input type="date" id="tl-date">
+      </div>
+    </div>
+
+    <div class="detail-field" style="margin-bottom:16px">
+      <label>Score (auto-calculated: +4 correct, −1 wrong)</label>
+      <div style="background:var(--bg4);border:0.5px solid var(--border);border-radius:7px;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px" id="tl-score-display">
+        <span style="font-size:22px;font-weight:700;color:var(--accent)">0 / 300</span>
+        <span style="font-size:12px;color:var(--text3)" id="tl-score-breakdown">P: 0 &nbsp;·&nbsp; C: 0 &nbsp;·&nbsp; M: 0</span>
+      </div>
+    </div>
+
+    <!-- Per-subject question breakdown -->
+    <div style="font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:0.6px;margin-bottom:10px">Question Breakdown (Total = 25 per subject)</div>
+
+    <!-- Physics -->
+    <div style="background:var(--bg3);border:0.5px solid var(--border);border-radius:var(--radius);padding:14px 16px;margin-bottom:8px">
+      <div style="font-size:13px;font-weight:600;color:var(--phy);margin-bottom:10px;display:flex;align-items:center;gap:6px">⚡ Physics</div>
+      <div class="detail-grid">
+        <div class="detail-field">
+          <label style="color:var(--success)">✓ Correct</label>
+          <input type="number" id="tl-phy-c" min="0" max="25" placeholder="0" oninput="recalcScore()">
+        </div>
+        <div class="detail-field">
+          <label style="color:var(--danger)">✗ Wrong</label>
+          <input type="number" id="tl-phy-w" min="0" max="25" placeholder="0" oninput="recalcScore()">
+        </div>
+        <div class="detail-field">
+          <label style="color:var(--text3)">— Left</label>
+          <input type="number" id="tl-phy-l" min="0" max="25" placeholder="0" oninput="recalcScore()">
+        </div>
+      </div>
+    </div>
+
+    <!-- Chemistry -->
+    <div style="background:var(--bg3);border:0.5px solid var(--border);border-radius:var(--radius);padding:14px 16px;margin-bottom:8px">
+      <div style="font-size:13px;font-weight:600;color:var(--chem);margin-bottom:10px">🧪 Chemistry</div>
+      <div class="detail-grid">
+        <div class="detail-field">
+          <label style="color:var(--success)">✓ Correct</label>
+          <input type="number" id="tl-chem-c" min="0" max="25" placeholder="0" oninput="recalcScore()">
+        </div>
+        <div class="detail-field">
+          <label style="color:var(--danger)">✗ Wrong</label>
+          <input type="number" id="tl-chem-w" min="0" max="25" placeholder="0" oninput="recalcScore()">
+        </div>
+        <div class="detail-field">
+          <label style="color:var(--text3)">— Left</label>
+          <input type="number" id="tl-chem-l" min="0" max="25" placeholder="0" oninput="recalcScore()">
+        </div>
+      </div>
+    </div>
+
+    <!-- Maths -->
+    <div style="background:var(--bg3);border:0.5px solid var(--border);border-radius:var(--radius);padding:14px 16px;margin-bottom:16px">
+      <div style="font-size:13px;font-weight:600;color:var(--math);margin-bottom:10px">∑ Mathematics</div>
+      <div class="detail-grid">
+        <div class="detail-field">
+          <label style="color:var(--success)">✓ Correct</label>
+          <input type="number" id="tl-math-c" min="0" max="25" placeholder="0" oninput="recalcScore()">
+        </div>
+        <div class="detail-field">
+          <label style="color:var(--danger)">✗ Wrong</label>
+          <input type="number" id="tl-math-w" min="0" max="25" placeholder="0" oninput="recalcScore()">
+        </div>
+        <div class="detail-field">
+          <label style="color:var(--text3)">— Left</label>
+          <input type="number" id="tl-math-l" min="0" max="25" placeholder="0" oninput="recalcScore()">
+        </div>
+      </div>
+    </div>
+
+    <!-- Top 3 Mistakes -->
+    <div style="font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:0.6px;margin-bottom:10px">Top 3 Mistakes</div>
+    <div class="detail-field" style="margin-bottom:8px">
+      <label>Mistake 1</label>
+      <input type="text" id="tl-m1" placeholder="e.g. Missed sign in integration, forgot to check SN2 conditions…">
+    </div>
+    <div class="detail-field" style="margin-bottom:8px">
+      <label>Mistake 2</label>
+      <input type="text" id="tl-m2" placeholder="">
+    </div>
+    <div class="detail-field" style="margin-bottom:16px">
+      <label>Mistake 3</label>
+      <input type="text" id="tl-m3" placeholder="">
+    </div>
+
+    <!-- Mistake type checkboxes -->
+    <div style="font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:0.6px;margin-bottom:10px">Mistake Types (select all that apply)</div>
+    <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px" id="tl-mistake-types">
+      <label class="mtype-chip" data-val="Concept issue">
+        <input type="checkbox" value="Concept issue" style="display:none"> Concept issue
+      </label>
+      <label class="mtype-chip" data-val="Calculation issue">
+        <input type="checkbox" value="Calculation issue" style="display:none"> Calculation issue
+      </label>
+      <label class="mtype-chip" data-val="Silly mistake">
+        <input type="checkbox" value="Silly mistake" style="display:none"> Silly mistake
+      </label>
+      <label class="mtype-chip" data-val="Time management">
+        <input type="checkbox" value="Time management" style="display:none"> Time management
+      </label>
+      <label class="mtype-chip" data-val="Question selection">
+        <input type="checkbox" value="Question selection" style="display:none"> Question selection
+      </label>
+    </div>
+
+    <!-- Extra notes -->
+    <div class="detail-field" style="margin-bottom:4px">
+      <label>Additional Notes / What to improve</label>
+      <textarea id="tl-extra" placeholder="What will you do differently next time? Any chapters to revisit?" style="width:100%;background:var(--bg4);border:0.5px solid var(--border);border-radius:7px;color:var(--text);font-family:var(--font);font-size:13px;padding:8px 10px;outline:none;resize:vertical;min-height:70px"></textarea>
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn-sm" onclick="closeTestLogModal()">Cancel</button>
+      <button class="btn-primary" onclick="saveTestLog()">Save Test Entry</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── ADD TEST MODAL ── -->
+<div class="modal-overlay" id="mock-modal">
+  <div class="modal">
+    <div class="modal-title">Add Mock Test</div>
+    <div class="detail-grid">
+      <div class="detail-field">
+        <label>Test Name / Source</label>
+        <input type="text" id="mock-name" placeholder="e.g. Allen Full Test 3">
+      </div>
+      <div class="detail-field">
+        <label>Date</label>
+        <input type="date" id="mock-date">
+      </div>
+    </div>
+    <div class="detail-grid">
+      <div class="detail-field">
+        <label>Physics Score (out of 100)</label>
+        <input type="number" id="mock-phy" min="0" max="100" placeholder="0">
+      </div>
+      <div class="detail-field">
+        <label>Chemistry Score (out of 100)</label>
+        <input type="number" id="mock-chem" min="0" max="100" placeholder="0">
+      </div>
+      <div class="detail-field">
+        <label>Maths Score (out of 100)</label>
+        <input type="number" id="mock-math" min="0" max="100" placeholder="0">
+      </div>
+    </div>
+    <div class="detail-field" style="margin-top:8px">
+      <label>Observations / Analysis</label>
+      <textarea placeholder="What went wrong? What topics to revisit?" style="width:100%;background:var(--bg4);border:0.5px solid var(--border);border-radius:7px;color:var(--text);font-family:var(--font);font-size:13px;padding:8px 10px;outline:none;resize:vertical;min-height:70px" id="mock-notes"></textarea>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-sm" onclick="closeMockModal()">Cancel</button>
+      <button class="btn-primary" onclick="saveMockTest()">Save Test</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── LOG SESSION MODAL ── -->
+<div class="modal-overlay" id="log-modal">
+  <div class="modal">
+    <div class="modal-title">Log Study Session</div>
+    <div class="detail-grid">
+      <div class="detail-field">
+        <label>Date</label>
+        <input type="date" id="log-date">
+      </div>
+      <div class="detail-field">
+        <label>Subject</label>
+        <select id="log-subject">
+          <option value="Physics">Physics</option>
+          <option value="Chemistry">Chemistry</option>
+          <option value="Mathematics">Mathematics</option>
+          <option value="Mixed">Mixed/Revision</option>
+        </select>
+      </div>
+    </div>
+    <div class="detail-grid">
+      <div class="detail-field">
+        <label>Hours Studied</label>
+        <input type="number" id="log-hours" min="0" max="24" step="0.5" placeholder="2.5">
+      </div>
+      <div class="detail-field">
+        <label>Questions Solved</label>
+        <input type="number" id="log-qs" min="0" placeholder="0">
+      </div>
+    </div>
+    <div class="detail-field" style="margin-top:8px">
+      <label>Topics Covered</label>
+      <input type="text" id="log-topics" placeholder="e.g. Rotational Motion, Kinematics...">
+    </div>
+    <div class="detail-field" style="margin-top:8px">
+      <label>Notes / Reflection</label>
+      <textarea id="log-reflection" placeholder="How did the session go?" style="width:100%;background:var(--bg4);border:0.5px solid var(--border);border-radius:7px;color:var(--text);font-family:var(--font);font-size:13px;padding:8px 10px;outline:none;resize:vertical;min-height:60px"></textarea>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-sm" onclick="closeLogModal()">Cancel</button>
+      <button class="btn-primary" onclick="saveLogEntry()">Save Session</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ════════════════════════════════════════
+// DATA — Full JEE Main Syllabus
+// ════════════════════════════════════════
+
+const SYLLABUS = {
+  physics: [
+    // Mechanics
+    { id:'phy1', name:'Kinematics', unit:'Mechanics', high:true, topics:['Motion in 1D','Motion in 2D','Projectile Motion','Relative Velocity','Graphs of Motion'] },
+    { id:'phy2', name:'Laws of Motion', unit:'Mechanics', high:true, topics:['Newton\'s Laws','Free Body Diagrams','Friction','Pseudo Force','Pulley Systems'] },
+    { id:'phy3', name:'Work, Energy & Power', unit:'Mechanics', high:true, topics:['Work-Energy Theorem','Conservative Forces','Potential Energy','Power','Collisions'] },
+    { id:'phy4', name:'Rotational Motion', unit:'Mechanics', high:true, topics:['Moment of Inertia','Torque','Angular Momentum','Rolling Motion','Parallel Axis Theorem'] },
+    { id:'phy5', name:'Gravitation', unit:'Mechanics', high:false, topics:['Universal Law','Orbital Velocity','Escape Velocity','Kepler\'s Laws','Satellites'] },
+    { id:'phy6', name:'Properties of Solids & Fluids', unit:'Mechanics', high:false, topics:['Stress & Strain','Viscosity','Bernoulli\'s Theorem','Surface Tension','Elasticity'] },
+    // Thermo
+    { id:'phy7', name:'Thermodynamics', unit:'Thermodynamics', high:true, topics:['Laws of Thermodynamics','Carnot Engine','Entropy','PV Diagrams','Efficiency'] },
+    { id:'phy8', name:'Kinetic Theory of Gases', unit:'Thermodynamics', high:false, topics:['Maxwell Distribution','Mean Free Path','Degrees of Freedom','RMS Velocity'] },
+    { id:'phy9', name:'Oscillations (SHM)', unit:'Thermodynamics', high:false, topics:['Simple Harmonic Motion','Spring-Mass','Pendulum','Damped Oscillations'] },
+    { id:'phy10', name:'Waves & Sound', unit:'Thermodynamics', high:false, topics:['Wave Equation','Superposition','Resonance','Doppler Effect','Beats'] },
+    // Electro
+    { id:'phy11', name:'Electrostatics', unit:'Electrodynamics', high:true, topics:['Coulomb\'s Law','Electric Field','Gauss\'s Law','Potential','Capacitors'] },
+    { id:'phy12', name:'Current Electricity', unit:'Electrodynamics', high:true, topics:['Ohm\'s Law','Kirchhoff\'s Laws','Wheatstone Bridge','Potentiometer','Cells in Circuits'] },
+    { id:'phy13', name:'Magnetic Effects of Current', unit:'Electrodynamics', high:true, topics:['Biot-Savart Law','Ampere\'s Law','Force on Current','Solenoid','Cyclotron'] },
+    { id:'phy14', name:'EMI & Alternating Current', unit:'Electrodynamics', high:true, topics:['Faraday\'s Laws','Lenz\'s Law','Inductance','AC Circuits','Transformer'] },
+    { id:'phy15', name:'Electromagnetic Waves', unit:'Electrodynamics', high:false, topics:['Maxwell\'s Equations','EM Spectrum','Properties of EM Waves'] },
+    // Modern
+    { id:'phy16', name:'Dual Nature of Matter', unit:'Modern Physics', high:false, topics:['Photoelectric Effect','de Broglie Wavelength','Davisson-Germer'] },
+    { id:'phy17', name:'Atoms & Nuclei', unit:'Modern Physics', high:true, topics:['Bohr Model','Hydrogen Spectrum','Radioactivity','Nuclear Reactions','Binding Energy'] },
+    { id:'phy18', name:'Semiconductor Devices', unit:'Modern Physics', high:false, topics:['p-n Junction','Transistor','Logic Gates','Rectifier'] },
+    // Optics
+    { id:'phy19', name:'Ray Optics', unit:'Optics', high:true, topics:['Reflection','Refraction','Lenses','Mirrors','Optical Instruments','Total Internal Reflection'] },
+    { id:'phy20', name:'Wave Optics', unit:'Optics', high:true, topics:['Interference','Diffraction','Polarisation','YDSE','Single Slit'] },
+    { id:'phy21', name:'Units & Measurement', unit:'Mechanics', high:false, topics:['Dimensional Analysis','Error Analysis','Significant Figures'] },
+  ],
+  chemistry: [
+    // Physical
+    { id:'ch1', name:'Basic Concepts of Chemistry', unit:'Physical', high:false, topics:['Mole Concept','Stoichiometry','Limiting Reagent','Empirical Formula'] },
+    { id:'ch2', name:'Atomic Structure', unit:'Physical', high:false, topics:['Bohr Model','Quantum Numbers','Orbitals','Electronic Configuration','de Broglie'] },
+    { id:'ch3', name:'Chemical Bonding', unit:'Physical', high:true, topics:['VSEPR Theory','Hybridisation','MOT','Ionic Bonding','Coordinate Bond','Resonance'] },
+    { id:'ch4', name:'States of Matter', unit:'Physical', high:false, topics:['Ideal Gas Laws','van der Waals','Kinetic Theory','Liquefaction'] },
+    { id:'ch5', name:'Thermodynamics (Chem)', unit:'Physical', high:true, topics:['Enthalpy','Entropy','Gibbs Energy','Hess\'s Law','Spontaneity'] },
+    { id:'ch6', name:'Chemical Equilibrium', unit:'Physical', high:true, topics:['Le Chatelier','Kp & Kc','Degree of Dissociation','Buffer Solutions','Ionic Equilibrium'] },
+    { id:'ch7', name:'Redox Reactions', unit:'Physical', high:false, topics:['Oxidation Number','Balancing Redox','Disproportionation'] },
+    { id:'ch8', name:'Electrochemistry', unit:'Physical', high:true, topics:['Electrochemical Cells','EMF','Nernst Equation','Electrolysis','Conductance'] },
+    { id:'ch9', name:'Chemical Kinetics', unit:'Physical', high:true, topics:['Rate Laws','Order of Reaction','Activation Energy','Arrhenius Equation','Half-Life'] },
+    { id:'ch10', name:'Surface Chemistry', unit:'Physical', high:false, topics:['Adsorption','Colloids','Emulsions','Catalysis'] },
+    { id:'ch11', name:'Solutions', unit:'Physical', high:true, topics:['Molality','Molarity','Colligative Properties','Osmosis','Raoult\'s Law'] },
+    // Organic
+    { id:'ch12', name:'Basic Organic Chemistry', unit:'Organic', high:true, topics:['IUPAC Nomenclature','Isomerism','Reaction Intermediates','Inductive Effect','Resonance'] },
+    { id:'ch13', name:'Hydrocarbons', unit:'Organic', high:true, topics:['Alkanes','Alkenes','Alkynes','Benzene','Aromaticity','Combustion','Reactions'] },
+    { id:'ch14', name:'Haloalkanes & Haloarenes', unit:'Organic', high:false, topics:['SN1 & SN2','Elimination','Grignard Reagent','DDT'] },
+    { id:'ch15', name:'Alcohols, Phenols & Ethers', unit:'Organic', high:false, topics:['Preparation','Chemical Properties','Lucas Test','Kolbe Reaction'] },
+    { id:'ch16', name:'Aldehydes, Ketones & Acids', unit:'Organic', high:true, topics:['Nucleophilic Addition','Aldol Condensation','Cannizzaro','Carboxylic Acids','Esters'] },
+    { id:'ch17', name:'Amines & N-Compounds', unit:'Organic', high:false, topics:['Classification','Basicity','Diazonium Salts','Coupling Reactions'] },
+    { id:'ch18', name:'Biomolecules', unit:'Organic', high:false, topics:['Carbohydrates','Proteins','Nucleic Acids','Enzymes','Vitamins'] },
+    { id:'ch19', name:'Polymers', unit:'Organic', high:false, topics:['Addition Polymers','Condensation Polymers','Natural Rubber','Nylon','Bakelite'] },
+    { id:'ch20', name:'Chemistry in Everyday Life', unit:'Organic', high:false, topics:['Drugs','Preservatives','Detergents','Dyes'] },
+    // Inorganic
+    { id:'ch21', name:'Classification of Elements (Periodic Table)', unit:'Inorganic', high:false, topics:['Periodic Trends','Ionisation Energy','Electronegativity','Atomic Radius'] },
+    { id:'ch22', name:'General Principles of Metallurgy', unit:'Inorganic', high:true, topics:['Ores & Minerals','Concentration','Reduction','Refining','Ellingham Diagram'] },
+    { id:'ch23', name:'s-Block Elements', unit:'Inorganic', high:false, topics:['Alkali Metals','Alkaline Earth Metals','Na & Ca Compounds','Anomalous Behaviour'] },
+    { id:'ch24', name:'p-Block Elements', unit:'Inorganic', high:true, topics:['Group 13-18','Oxoacids','Interhalogen Compounds','Noble Gases','XeF Compounds'] },
+    { id:'ch25', name:'d & f-Block Elements', unit:'Inorganic', high:true, topics:['Transition Metals','Variable Oxidation States','Magnetic Properties','Lanthanide Contraction'] },
+    { id:'ch26', name:'Coordination Compounds', unit:'Inorganic', high:true, topics:['IUPAC Naming','CFT','Isomerism','EAN Rule','Spectrochemical Series','Organometallics'] },
+    { id:'ch27', name:'Environmental Chemistry', unit:'Inorganic', high:false, topics:['Greenhouse Effect','Ozone Depletion','Pollution','BOD','Smog'] },
+    { id:'ch28', name:'Hydrogen', unit:'Inorganic', high:false, topics:['Isotopes','Hydrogen Peroxide','Heavy Water','Industrial Preparation'] },
+  ],
+  mathematics: [
+    // Algebra
+    { id:'m1', name:'Complex Numbers', unit:'Algebra', high:true, topics:['Argand Plane','Modulus & Argument','De Moivre\'s Theorem','Cube Roots of Unity','Locus Problems'] },
+    { id:'m2', name:'Quadratic Equations', unit:'Algebra', high:true, topics:['Nature of Roots','Sum & Product','Condition for Roots','Graph of Quadratic','Inequalities'] },
+    { id:'m3', name:'Matrices & Determinants', unit:'Algebra', high:true, topics:['Types of Matrices','Operations','Inverse','Determinant','Cramer\'s Rule','Rank'] },
+    { id:'m4', name:'Permutations & Combinations', unit:'Algebra', high:false, topics:['Fundamental Theorem','Circular Permutation','Selection','Multinomial','Derangement'] },
+    { id:'m5', name:'Binomial Theorem', unit:'Algebra', high:false, topics:['General Term','Middle Term','Binomial Coefficients','Applications','Multinomial'] },
+    { id:'m6', name:'Sequence & Series', unit:'Algebra', high:true, topics:['AP, GP, HP','Sum of n Terms','AM-GM Inequality','AGP','Special Series'] },
+    { id:'m7', name:'Mathematical Induction', unit:'Algebra', high:false, topics:['Principle of Induction','First Principle','Steps','Examples'] },
+    { id:'m8', name:'Sets, Relations & Functions', unit:'Algebra', high:false, topics:['Types of Sets','Relations','Domain & Range','Types of Functions','Composition'] },
+    // Calculus
+    { id:'m9', name:'Limits & Continuity', unit:'Calculus', high:true, topics:['L\'Hôpital Rule','Standard Limits','Sandwhich Theorem','Continuity','Types of Discontinuity'] },
+    { id:'m10', name:'Differentiation', unit:'Calculus', high:true, topics:['Chain Rule','Product & Quotient Rule','Implicit Differentiation','Logarithmic Diff','Higher Derivatives'] },
+    { id:'m11', name:'Application of Derivatives', unit:'Calculus', high:true, topics:['Tangent & Normal','Rate of Change','Maxima & Minima','Rolle\'s Theorem','LMVT'] },
+    { id:'m12', name:'Indefinite Integration', unit:'Calculus', high:true, topics:['Standard Integrals','Substitution','By Parts','Partial Fractions','Special Forms'] },
+    { id:'m13', name:'Definite Integration', unit:'Calculus', high:true, topics:['Properties','Newton-Leibniz','Even-Odd Functions','Area Under Curve','King\'s Rule'] },
+    { id:'m14', name:'Differential Equations', unit:'Calculus', high:false, topics:['Variable Separable','Homogeneous','Linear DE','Bernoulli Equation','Applications'] },
+    // Coordinate Geometry
+    { id:'m15', name:'Straight Lines', unit:'Coordinate', high:true, topics:['Slope Forms','Distance Point-Line','Angle Between Lines','Family of Lines','Locus'] },
+    { id:'m16', name:'Circles', unit:'Coordinate', high:true, topics:['General Equation','Tangent & Normal','Chord of Contact','Power of Point','Radical Axis'] },
+    { id:'m17', name:'Parabola', unit:'Coordinate', high:true, topics:['Standard Forms','Tangent','Normal','Chord','Focus-Directrix','Applications'] },
+    { id:'m18', name:'Ellipse', unit:'Coordinate', high:true, topics:['Standard Form','Eccentricity','Tangent & Normal','Focal Chord','Parametric Form'] },
+    { id:'m19', name:'Hyperbola', unit:'Coordinate', high:true, topics:['Standard Form','Asymptotes','Conjugate Hyperbola','Rectangular Hyperbola'] },
+    // Trigonometry
+    { id:'m20', name:'Trigonometric Functions', unit:'Trigonometry', high:true, topics:['Basic Identities','Compound Angles','Multiple Angles','Sub-Multiple Angles','Transformation'] },
+    { id:'m21', name:'Trigonometric Equations', unit:'Trigonometry', high:true, topics:['General Solution','Principal Value','Systems of Equations'] },
+    { id:'m22', name:'Inverse Trigonometry', unit:'Trigonometry', high:false, topics:['Domain & Range','Properties','Identities','Equations'] },
+    { id:'m23', name:'Properties of Triangles', unit:'Trigonometry', high:false, topics:['Sine Rule','Cosine Rule','Projection Formula','Half-Angle','Circumradius','Inradius'] },
+    // Vectors & 3D
+    { id:'m24', name:'Vector Algebra', unit:'Vectors', high:true, topics:['Dot Product','Cross Product','Scalar Triple Product','Vector Triple Product','Coplanarity'] },
+    { id:'m25', name:'3D Geometry', unit:'Vectors', high:true, topics:['Direction Cosines','Equation of Line','Equation of Plane','Angle Between','Distance Formulas','Skew Lines'] },
+    { id:'m26', name:'Probability & Statistics', unit:'Algebra', high:true, topics:['Conditional Probability','Bayes Theorem','Random Variable','Binomial Distribution','Mean & Variance'] },
+  ]
+};
+
+// ════════════════════════════════════════
+// PER-USER STORAGE
+// ════════════════════════════════════════
+
+let currentUser = null;
+let store = {};
+
+const USER_REGISTRY_KEY = 'studymeter_users_registry';
+const LAST_USER_KEY = 'studymeter_last_user';
+const USER_COLORS = ['#5b9ef9','#34d399','#fb923c','#a78bfa','#fb7185','#fbbf24','#e879f9','#22d3ee'];
+const subjectSearch = { physics: '', chemistry: '', mathematics: '' };
+let notesSaveTimer = null;
+
+function escapeHtml(value) {
+  return String(value ?? '').replace(/[&<>"']/g, char => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;'
+  })[char]);
+}
+
+function showToast(message, type = 'success') {
+  const stack = document.getElementById('toast-stack');
+  if (!stack) return;
+  const toast = document.createElement('div');
+  toast.className = `toast ${type}`;
+  toast.textContent = message;
+  stack.appendChild(toast);
+  setTimeout(() => {
+    toast.style.opacity = '0';
+    toast.style.transform = 'translateY(8px)';
+    setTimeout(() => toast.remove(), 220);
+  }, 2600);
+}
+
+function toggleSidebar() {
+  document.querySelector('.sidebar')?.classList.toggle('open');
+  document.getElementById('sidebar-backdrop')?.classList.toggle('open');
+}
+
+function closeSidebar() {
+  document.querySelector('.sidebar')?.classList.remove('open');
+  document.getElementById('sidebar-backdrop')?.classList.remove('open');
+}
+
+function markInvalid(element, message) {
+  if (!element) return false;
+  element.classList.add('field-error');
+  element.focus();
+  showToast(message, 'error');
+  setTimeout(() => element.classList.remove('field-error'), 2200);
+  return false;
+}
+
+function clampNumber(value, min, max) {
+  return Math.min(max, Math.max(min, Number(value) || 0));
+}
+
+function localDateKey(date = new Date()) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
+// Exam dates mapping
+const EXAM_DATES = {
+  mains1: new Date('2027-01-21T09:30:00+05:30'),
+  mains2: new Date('2027-04-01T09:30:00+05:30'),
+  advanced: new Date('2027-05-16T09:30:00+05:30')
+};
+
+let currentExam = 'mains1'; // mains1, mains2, advanced
+let currentExamDate = EXAM_DATES.mains1;
+
+function getUserKey(username) {
+  return 'studymeter_user_' + username.toLowerCase().replace(/\s+/g,'_');
+}
+
+function migrateLegacyStorage() {
+  const legacyPrefix = ['j', 'e', 'e'].join('');
+  const legacyRegistryKey = legacyPrefix + '_users_registry';
+  const legacyLastUserKey = legacyPrefix + '_last_user';
+  if (!localStorage.getItem(USER_REGISTRY_KEY) && localStorage.getItem(legacyRegistryKey)) {
+    localStorage.setItem(USER_REGISTRY_KEY, localStorage.getItem(legacyRegistryKey));
+  }
+  if (!localStorage.getItem(LAST_USER_KEY) && localStorage.getItem(legacyLastUserKey)) {
+    localStorage.setItem(LAST_USER_KEY, localStorage.getItem(legacyLastUserKey));
+  }
+  getUserRegistry().forEach(username => {
+    const newKey = getUserKey(username);
+    const oldKey = legacyPrefix + '_user_' + username.toLowerCase().replace(/\s+/g, '_');
+    if (!localStorage.getItem(newKey) && localStorage.getItem(oldKey)) {
+      localStorage.setItem(newKey, localStorage.getItem(oldKey));
+    }
+  });
+}
+
+function getAvatarColor(username) {
+  let hash = 0;
+  for (let i = 0; i < username.length; i++) hash = username.charCodeAt(i) + ((hash << 5) - hash);
+  return USER_COLORS[Math.abs(hash) % USER_COLORS.length];
+}
+
+function getInitials(name) {
+  return name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
+}
+
+function getUserRegistry() {
+  try {
+    const r = localStorage.getItem(USER_REGISTRY_KEY);
+    return r ? JSON.parse(r) : [];
+  } catch(e) { return []; }
+}
+
+function addToRegistry(username) {
+  const reg = getUserRegistry();
+  if (!reg.includes(username)) { reg.push(username); localStorage.setItem(USER_REGISTRY_KEY, JSON.stringify(reg)); }
+}
+
+function doLogin() {
+  const name = document.getElementById('login-name').value.trim();
+  if (!name) { document.getElementById('login-name').focus(); return; }
+  loginAs(name);
+}
+
+function loginAs(name) {
+  currentUser = name;
+  addToRegistry(name);
+  localStorage.setItem(LAST_USER_KEY, name);
+  loadAll();
+  updateUserUI();
+  document.getElementById('login-screen').classList.add('hidden');
+  document.getElementById('main-shell').style.display = 'flex';
+  const savedExam = store.settings?.exam;
+  if (savedExam && EXAM_DATES[savedExam]) {
+    currentExam = savedExam;
+    currentExamDate = EXAM_DATES[savedExam];
+    document.getElementById('exam-selector').value = savedExam;
+    changeExam(false);
+  }
+  updateDaysRemaining();
+  renderDashboard();
+  showToast(`Welcome, ${name}`);
+}
+
+function switchUser() {
+  if (!confirm('Switch user? Your data is saved.')) return;
+  currentUser = null;
+  store = {};
+  document.getElementById('login-screen').classList.remove('hidden');
+  document.getElementById('main-shell').style.display = 'none';
+  document.getElementById('login-name').value = '';
+  renderExistingUsers();
+}
+
+function updateUserUI() {
+  const initials = getInitials(currentUser);
+  const color = getAvatarColor(currentUser);
+  document.getElementById('sidebar-avatar').textContent = initials;
+  document.getElementById('sidebar-avatar').style.background = color;
+  document.getElementById('sidebar-username').textContent = currentUser;
+}
+
+function renderExistingUsers() {
+  const reg = getUserRegistry();
+  const section = document.getElementById('existing-users-section');
+  const container = document.getElementById('existing-users');
+  if (!reg.length) { section.style.display = 'none'; return; }
+  section.style.display = 'block';
+  container.innerHTML = '';
+  reg.forEach(username => {
+    const button = document.createElement('button');
+    button.className = 'user-chip';
+    button.type = 'button';
+    const avatar = document.createElement('span');
+    avatar.className = 'user-avatar-sm';
+    avatar.style.background = getAvatarColor(username);
+    avatar.textContent = getInitials(username);
+    button.append(avatar, document.createTextNode(username));
+    button.addEventListener('click', () => loginAs(username));
+    container.appendChild(button);
+  });
+}
+
+function saveAll() {
+  if (!currentUser) return;
+  try { localStorage.setItem(getUserKey(currentUser), JSON.stringify(store)); } catch(e) {}
+}
+
+function exportUserData() {
+  if (!currentUser) return;
+  const payload = {
+    app: 'StudyMeter',
+    version: 2,
+    exportedAt: new Date().toISOString(),
+    username: currentUser,
+    data: store
+  };
+  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = `studymeter-${currentUser.toLowerCase().replace(/[^a-z0-9]+/g, '-')}-backup.json`;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  URL.revokeObjectURL(url);
+  showToast('Backup exported');
+}
+
+function importUserData(event) {
+  const file = event.target.files?.[0];
+  event.target.value = '';
+  if (!file || !currentUser) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    try {
+      const payload = JSON.parse(reader.result);
+      const imported = payload?.data;
+      if (!imported || typeof imported !== 'object' || Array.isArray(imported)) throw new Error('Invalid backup');
+      if (!confirm('Replace the current user data with this backup?')) return;
+      store = imported;
+      if (!store.chapters) store.chapters = {};
+      if (!store.mocks) store.mocks = [];
+      if (!store.logs) store.logs = [];
+      if (!store.testLogs) store.testLogs = [];
+      if (!store.notes) store.notes = { phy:'', chem:'', math:'', gen:'' };
+      if (!store.settings) store.settings = {};
+      saveAll();
+      renderDashboard();
+      showToast('Backup restored');
+    } catch (error) {
+      showToast('That file is not a valid StudyMeter backup', 'error');
+    }
+  };
+  reader.readAsText(file);
+}
+
+function loadAll() {
+  store = {};
+  if (!currentUser) return;
+  try {
+    const s = localStorage.getItem(getUserKey(currentUser));
+    if (s) store = JSON.parse(s);
+  } catch(e) {}
+  if (!store.chapters)  store.chapters  = {};
+  if (!store.mocks)     store.mocks     = [];
+  if (!store.logs)      store.logs      = [];
+  if (!store.testLogs)  store.testLogs  = [];
+  if (!store.notes)     store.notes     = { phy:'', chem:'', math:'', gen:'' };
+  if (!store.settings)  store.settings  = {};
+}
+
+function getChapter(id) {
+  if (!store.chapters[id]) {
+    store.chapters[id] = {
+      status: 'pending',
+      qs_solved: 0,
+      pyq_solved: 0,
+      lectures: 0,
+      revision_hrs: 0,
+      revision_count: 0,
+      confidence: 3,
+      notes: '',
+      topics_done: []
+    };
+  }
+  return store.chapters[id];
+}
+
+// ════════════════════════════════════════
+// EXAM SELECTOR
+// ════════════════════════════════════════
+
+function changeExam(announce = true) {
+  const select = document.getElementById('exam-selector');
+  currentExam = select.value;
+  currentExamDate = EXAM_DATES[currentExam];
+  
+  // Update display texts
+  let examName = '';
+  let shortName = '';
+  if (currentExam === 'mains1') { examName = 'JEE Main S1 2027'; shortName = 'JEE Main S1'; }
+  else if (currentExam === 'mains2') { examName = 'JEE Main S2 2027'; shortName = 'JEE Main S2'; }
+  else { examName = 'JEE Advanced 2027'; shortName = 'JEE Advanced'; }
+  
+  document.getElementById('exam-name-display').innerHTML = examName;
+  document.getElementById('countdown-label').innerHTML = `days to ${shortName}`;
+  document.getElementById('dashboard-subtitle').innerHTML = `${examName} — Your complete preparation overview`;
+  
+  if (store.settings) {
+    store.settings.exam = currentExam;
+    saveAll();
+  }
+  updateDaysRemaining();
+  if (announce) showToast(`${examName} selected`);
+}
+
+function updateDaysRemaining() {
+  const now = new Date();
+  const diff = currentExamDate - now;
+
+  if (diff <= 0) {
+    document.getElementById('days-remaining').textContent = '0';
+    document.getElementById('cd-pct-label').textContent = 'Exam day! All the best! 🎯';
+    document.getElementById('cd-progbar').style.width = '100%';
+    const todayEl = document.getElementById('today-left');
+    if (todayEl) todayEl.textContent = '0h 00m';
+    return;
+  }
+
+  const totalSecs = Math.floor(diff / 1000);
+  const days = Math.floor(totalSecs / 86400);
+
+  document.getElementById('days-remaining').textContent = days;
+
+  // Prep time progress (assuming preparation started 1 year before exam)
+  const PREP_START = new Date(currentExamDate);
+  PREP_START.setDate(PREP_START.getDate() - 365);
+  const totalPrep = currentExamDate - PREP_START;
+  const elapsed = now - PREP_START;
+  const pct = Math.min(100, Math.max(0, Math.round(elapsed / totalPrep * 100)));
+  document.getElementById('cd-progbar').style.width = pct + '%';
+  document.getElementById('cd-pct-label').textContent = pct + '% of prep time used';
+
+  // Today's study time left until midnight (local)
+  const midnight = new Date();
+  midnight.setHours(23, 59, 59, 999);
+  const todayDiff = midnight - now;
+  const tHrs  = Math.floor(todayDiff / 3600000);
+  const tMins = Math.floor((todayDiff % 3600000) / 60000);
+  const todayEl = document.getElementById('today-left');
+  if (todayEl) todayEl.textContent = tHrs + 'h ' + String(tMins).padStart(2,'0') + 'm';
+}
+
+// ════════════════════════════════════════
+// NAVIGATION
+// ════════════════════════════════════════
+
+function showPage(name) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('page-' + name).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n => {
+    if (n.getAttribute('onclick') && n.getAttribute('onclick').includes(name)) n.classList.add('active');
+  });
+
+  if (name === 'dashboard') renderDashboard();
+  if (name === 'physics') renderSubject('physics', null);
+  if (name === 'chemistry') renderSubject('chemistry', null);
+  if (name === 'mathematics') renderSubject('mathematics', null);
+  if (name === 'mock-tests') renderMocks();
+  if (name === 'study-log') renderStudyLog();
+  if (name === 'test-log') renderTestLog();
+  if (name === 'formula-bank') loadNotes();
+  closeSidebar();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ════════════════════════════════════════
+// DASHBOARD
+// ════════════════════════════════════════
+
+function renderDashboard() {
+  const subjects = ['physics','chemistry','mathematics'];
+  const ids = { physics: SYLLABUS.physics.map(c=>c.id), chemistry: SYLLABUS.chemistry.map(c=>c.id), mathematics: SYLLABUS.mathematics.map(c=>c.id) };
+  const colors = { physics: 'phy', chemistry: 'chem', mathematics: 'math' };
+
+  let totalQs=0, totalPyq=0, totalLec=0, totalRev=0, totalDone=0;
+
+  subjects.forEach(subj => {
+    const cids = ids[subj];
+    let qs=0, pyq=0, lec=0, rev=0, done=0;
+    cids.forEach(id => {
+      const c = store.chapters[id] || {};
+      qs += (c.qs_solved||0);
+      pyq += (c.pyq_solved||0);
+      lec += (c.lectures||0);
+      rev += (c.revision_hrs||0);
+      if (c.status==='done') done++;
+    });
+    totalQs+=qs; totalPyq+=pyq; totalLec+=lec; totalRev+=rev; totalDone+=done;
+    const pct = Math.round(done/cids.length*100);
+    document.getElementById(colors[subj]+'-overview').innerHTML =
+      `${done}/${cids.length} chapters &nbsp;·&nbsp; ${qs} Qs &nbsp;·&nbsp; ${pyq} PYQs`;
+    document.getElementById(colors[subj]+'-prog').style.width = pct+'%';
+  });
+
+  document.getElementById('total-qs').textContent = totalQs;
+  document.getElementById('total-pyq').textContent = totalPyq;
+  document.getElementById('total-lec').textContent = totalLec;
+  document.getElementById('total-rev').textContent = totalRev.toFixed(1);
+  document.getElementById('ch-done').textContent = totalDone;
+  document.getElementById('mock-count').textContent = (store.mocks||[]).length;
+
+  const totalChapters = subjects.reduce((sum, subject) => sum + ids[subject].length, 0);
+  const overallPct = Math.round(totalDone / totalChapters * 100);
+  const ring = document.getElementById('overall-progress-ring');
+  if (ring) ring.style.setProperty('--progress', overallPct);
+  document.getElementById('overall-progress-value').textContent = `${overallPct}%`;
+  const firstName = (currentUser || 'Student').split(' ')[0];
+  const hour = new Date().getHours();
+  const greeting = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
+  document.getElementById('hero-greeting').textContent = `${greeting}, ${firstName}.`;
+  const today = localDateKey();
+  const todayHours = (store.logs || []).filter(log => log.date === today).reduce((sum, log) => sum + (Number(log.hours) || 0), 0);
+  document.getElementById('hero-copy').textContent = todayHours
+    ? `You have logged ${todayHours.toFixed(1)} hours today. Keep the streak alive with one focused next step.`
+    : `You are ${overallPct}% through the syllabus. Log today's first focused session and build momentum.`;
+
+  renderWeekChart();
+  renderRecentLog();
+}
+
+function renderWeekChart() {
+  const chart = document.getElementById('week-chart');
+  const labels = document.getElementById('week-labels');
+  const days = [];
+  for (let i=6; i>=0; i--) {
+    const d = new Date();
+    d.setDate(d.getDate()-i);
+    days.push(localDateKey(d));
+  }
+  const dayNames = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  let maxHrs = 1;
+  const hrs = days.map(date => {
+    const total = (store.logs||[]).filter(l=>l.date===date).reduce((s,l)=>s+(l.hours||0),0);
+    if (total>maxHrs) maxHrs=total;
+    return total;
+  });
+
+  chart.innerHTML = hrs.map((h,i) => {
+    const pct = Math.round(h/maxHrs*100);
+    const colors = ['var(--phy)','var(--chem)','var(--math)','var(--accent)','var(--phy)','var(--chem)','var(--math)'];
+    return `<div class="week-bar" data-val="${h}h" style="height:${Math.max(pct,5)}%;background:${h>0?colors[i]:'var(--bg4)'}"></div>`;
+  }).join('');
+  labels.innerHTML = days.map((d,i)=>`<span style="font-size:10px;color:var(--text3)">${dayNames[new Date(d+'T00:00:00').getDay()]}</span>`).join('');
+}
+
+function renderRecentLog() {
+  const el = document.getElementById('recent-log');
+  const logs = [...(store.logs||[])].sort((a,b)=>b.date.localeCompare(a.date)).slice(0,10);
+  if (!logs.length) {
+    el.innerHTML = '<div style="color:var(--text3);font-size:13px;text-align:center;padding:24px 0">No activity logged yet</div>';
+    return;
+  }
+  const subjColor = { Physics:'var(--phy)', Chemistry:'var(--chem)', Mathematics:'var(--math)', Mixed:'var(--accent)' };
+  el.innerHTML = logs.map(l=>`
+    <div class="log-entry">
+      <div class="log-dot" style="background:${subjColor[l.subject]||'var(--accent)'}"></div>
+      <div>
+        <div class="log-time">${l.date}</div>
+        <div class="log-text"><strong>${l.subject}</strong> · ${l.hours}h · ${l.qs||0} Qs</div>
+        ${l.topics ? `<div style="font-size:11px;color:var(--text3);margin-top:2px">${escapeHtml(l.topics)}</div>` : ''}
+      </div>
+    </div>
+  `).join('');
+}
+
+// ════════════════════════════════════════
+// SUBJECT PAGES (simplified - same as original but with proper handlers)
+// ════════════════════════════════════════
+
+let currentFilter = { physics: null, chemistry: null, mathematics: null };
+
+function switchPhyTab(unit, btn) {
+  document.querySelectorAll('#phy-tabs .tab-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  currentFilter.physics = unit === 'all' ? null : unit;
+  renderSubject('physics', currentFilter.physics);
+}
+
+function switchChemTab(unit, btn) {
+  btn.closest('.tabs').querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  currentFilter.chemistry = unit === 'all' ? null : unit;
+  renderSubject('chemistry', currentFilter.chemistry);
+}
+
+function switchMathTab(unit, btn) {
+  btn.closest('.tabs').querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  currentFilter.mathematics = unit === 'all' ? null : unit;
+  renderSubject('mathematics', currentFilter.mathematics);
+}
+
+function searchSubject(subject, query) {
+  subjectSearch[subject] = query.trim().toLowerCase();
+  renderSubject(subject, currentFilter[subject]);
+}
+
+function renderSubject(subj, filter) {
+  const query = subjectSearch[subj];
+  const chapters = SYLLABUS[subj].filter(chapter => {
+    const matchesUnit = !filter || chapter.unit === filter;
+    const searchable = `${chapter.name} ${chapter.unit} ${chapter.topics.join(' ')}`.toLowerCase();
+    return matchesUnit && (!query || searchable.includes(query));
+  });
+  const listEl = document.getElementById(subj === 'physics' ? 'phy-list' : subj === 'chemistry' ? 'chem-list' : 'math-list');
+  const colMap = { physics:'phy', chemistry:'chem', mathematics:'math' };
+  const col = colMap[subj];
+  const allCh = SYLLABUS[subj];
+  let totalQs = 0, totalPyq = 0, done = 0;
+
+  allCh.forEach(chapter => {
+    const data = store.chapters[chapter.id] || {};
+    totalQs += data.qs_solved || 0;
+    totalPyq += data.pyq_solved || 0;
+    if (data.status === 'done') done++;
+  });
+
+  const statsEl = document.getElementById(col + '-header-stats');
+  if (statsEl) {
+    statsEl.innerHTML = `
+      <div><div style="font-size:20px;font-weight:600;color:var(--${col})">${done}/${allCh.length}</div><div style="font-size:11px">chapters done</div></div>
+      <div><div style="font-size:20px;font-weight:600">${totalQs}</div><div style="font-size:11px">Qs solved</div></div>
+      <div><div style="font-size:20px;font-weight:600">${totalPyq}</div><div style="font-size:11px">PYQs done</div></div>`;
+  }
+
+  const countEl = document.getElementById(`${subj}-search-count`);
+  if (countEl) countEl.textContent = `${chapters.length} chapter${chapters.length === 1 ? '' : 's'}`;
+  if (!chapters.length) {
+    listEl.innerHTML = '<div class="empty-state"><div class="empty-icon">⌕</div><div>No matching chapters or topics.</div></div>';
+    return;
+  }
+
+  listEl.innerHTML = chapters.map(chapter => {
+    const data = getChapter(chapter.id);
+    const statusBadge = data.status === 'done'
+      ? '<span class="badge badge-done">Done</span>'
+      : data.status === 'partial'
+        ? '<span class="badge badge-partial">In Progress</span>'
+        : '<span class="badge badge-pending">Pending</span>';
+    const highBadge = chapter.high ? '<span class="badge badge-high">High Wt.</span>' : '';
+    const topicsDone = (data.topics_done || []).length;
+    const pct = chapter.topics.length ? Math.round(topicsDone / chapter.topics.length * 100) : 0;
+    const stars = '★'.repeat(data.confidence || 0) + '☆'.repeat(5 - (data.confidence || 0));
+    const topicMarkup = chapter.topics.map(topic => {
+      const encodedTopic = encodeURIComponent(topic);
+      const isDone = (data.topics_done || []).includes(topic) ? 'done' : '';
+      return `<button type="button" class="topic-chip ${isDone}" onclick="toggleTopic('${chapter.id}',decodeURIComponent('${encodedTopic}'),this)">${escapeHtml(topic)}</button>`;
+    }).join('');
+
+    return `
+      <div>
+        <div class="chapter-row" role="button" tabindex="0" onclick="toggleChapter('${chapter.id}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleChapter('${chapter.id}')}">
+          <div>
+            <div class="chapter-name">${escapeHtml(chapter.name)} <span style="font-size:11px;color:var(--text3);font-weight:400;margin-left:8px">${escapeHtml(chapter.unit)}</span></div>
+            <div class="chapter-meta">
+              <span>${data.qs_solved || 0} Qs solved</span><span>${data.pyq_solved || 0} PYQs</span>
+              <span>${data.lectures || 0} lectures</span><span>${data.revision_hrs || 0}h revision</span>
+              <span>${data.revision_count || 0}x revised</span><span style="color:var(--warn)">${stars}</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;margin-top:6px">
+              <div class="prog-bar" style="width:160px"><div class="prog-fill fill-${col}" style="width:${pct}%"></div></div>
+              <span style="font-size:11px;color:var(--text3)">${topicsDone}/${chapter.topics.length} topics</span>
+            </div>
+          </div>
+          <div class="chapter-badges">${highBadge}${statusBadge}</div>
+        </div>
+        <div class="chapter-detail" id="detail-${chapter.id}">
+          <div class="detail-grid">
+            <div class="detail-field"><label>Status</label><select onchange="updateChapter('${chapter.id}','status',this.value)"><option value="pending" ${data.status === 'pending' ? 'selected' : ''}>Pending</option><option value="partial" ${data.status === 'partial' ? 'selected' : ''}>In Progress</option><option value="done" ${data.status === 'done' ? 'selected' : ''}>Done ✓</option></select></div>
+            <div class="detail-field"><label>Questions Solved</label><input type="number" min="0" value="${data.qs_solved || 0}" oninput="updateChapter('${chapter.id}','qs_solved',+this.value)"></div>
+            <div class="detail-field"><label>PYQs Solved</label><input type="number" min="0" value="${data.pyq_solved || 0}" oninput="updateChapter('${chapter.id}','pyq_solved',+this.value)"></div>
+            <div class="detail-field"><label>Lectures Watched</label><input type="number" min="0" value="${data.lectures || 0}" oninput="updateChapter('${chapter.id}','lectures',+this.value)"></div>
+            <div class="detail-field"><label>Revision Hours</label><input type="number" min="0" step="0.5" value="${data.revision_hrs || 0}" oninput="updateChapter('${chapter.id}','revision_hrs',+this.value)"></div>
+            <div class="detail-field"><label>Revision Count</label><input type="number" min="0" value="${data.revision_count || 0}" oninput="updateChapter('${chapter.id}','revision_count',+this.value)"></div>
+          </div>
+          <div class="detail-field"><label id="conf-label-${chapter.id}">Confidence (1–5): ${data.confidence || 3}/5</label><input type="range" min="1" max="5" step="1" value="${data.confidence || 3}" oninput="updateChapterConf('${chapter.id}',+this.value,document.getElementById('conf-label-${chapter.id}'))"></div>
+          <div class="detail-field"><label>Notes / Weak Points</label><textarea oninput="updateChapter('${chapter.id}','notes',this.value)">${escapeHtml(data.notes || '')}</textarea></div>
+          <div><div style="font-size:11px;color:var(--text3);text-transform:uppercase;margin-bottom:8px">Topics — click to mark done (${topicsDone}/${chapter.topics.length})</div><div class="topics-row">${topicMarkup}</div></div>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function toggleChapter(id) {
+  const el = document.getElementById('detail-'+id);
+  if (el) el.classList.toggle('open');
+}
+
+function updateChapter(id, field, val) {
+  const c = getChapter(id);
+  c[field] = val;
+  saveAll();
+}
+
+function updateChapterConf(id, val, labelEl) {
+  const c = getChapter(id);
+  c.confidence = val;
+  if (labelEl) labelEl.textContent = `Confidence (1–5): ${val}/5`;
+  saveAll();
+}
+
+function toggleTopic(id, topic, el) {
+  const c = getChapter(id);
+  if (!c.topics_done) c.topics_done = [];
+  if (c.topics_done.includes(topic)) {
+    c.topics_done = c.topics_done.filter(t=>t!==topic);
+    el.classList.remove('done');
+  } else {
+    c.topics_done.push(topic);
+    el.classList.add('done');
+  }
+  saveAll();
+}
+
+// ════════════════════════════════════════
+// MOCK TESTS
+// ════════════════════════════════════════
+
+function openMockModal() {
+  document.getElementById('mock-date').value = localDateKey();
+  document.getElementById('mock-modal').classList.add('open');
+}
+
+function closeMockModal() {
+  document.getElementById('mock-modal').classList.remove('open');
+}
+
+function saveMockTest() {
+  const nameEl = document.getElementById('mock-name');
+  const dateEl = document.getElementById('mock-date');
+  const scoreEls = ['mock-phy','mock-chem','mock-math'].map(id => document.getElementById(id));
+  const name = nameEl.value.trim() || 'Mock Test';
+  const date = dateEl.value;
+  if (!date) return markInvalid(dateEl, 'Choose the test date');
+  const scores = scoreEls.map(input => Number(input.value) || 0);
+  const invalidScore = scoreEls.find((input, index) => scores[index] < 0 || scores[index] > 100);
+  if (invalidScore) return markInvalid(invalidScore, 'Each subject score must be between 0 and 100');
+  const [phy, chem, math] = scores;
+  const notes = document.getElementById('mock-notes').value;
+
+  store.mocks.push({ name, date, phy, chem, math, total: phy+chem+math, notes, id: Date.now() });
+  saveAll();
+  closeMockModal();
+  renderMocks();
+  document.getElementById('mock-name').value = '';
+  document.getElementById('mock-phy').value = '';
+  document.getElementById('mock-chem').value = '';
+  document.getElementById('mock-math').value = '';
+  document.getElementById('mock-notes').value = '';
+  showToast('Mock test saved');
+}
+
+function renderMocks() {
+  const mocks = store.mocks || [];
+  document.getElementById('mock-total').textContent = mocks.length;
+
+  if (mocks.length) {
+    const totals = mocks.map(m=>m.total);
+    document.getElementById('best-score').textContent = Math.max(...totals);
+    document.getElementById('avg-score').textContent = Math.round(totals.reduce((a,b)=>a+b,0)/totals.length);
+    document.getElementById('best-phy').textContent = Math.max(...mocks.map(m=>m.phy));
+    document.getElementById('best-chem').textContent = Math.max(...mocks.map(m=>m.chem));
+    document.getElementById('best-math').textContent = Math.max(...mocks.map(m=>m.math));
+  } else {
+    document.getElementById('best-score').textContent = '—';
+    document.getElementById('avg-score').textContent = '—';
+    document.getElementById('best-phy').textContent = '—';
+    document.getElementById('best-chem').textContent = '—';
+    document.getElementById('best-math').textContent = '—';
+  }
+
+  const list = document.getElementById('mock-list');
+  if (!mocks.length) {
+    list.innerHTML = '<div style="color:var(--text3);font-size:13px;text-align:center;padding:32px 0">No mock tests logged yet</div>';
+    return;
+  }
+
+  list.innerHTML = [...mocks].reverse().map(m => {
+    const pct = Math.round(m.total/300*100);
+    const grade = m.total>=240?'var(--success)':m.total>=180?'var(--warn)':'var(--danger)';
+    return `
+      <div class="mock-card">
+        <div>
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px">
+          <div style="font-weight:500;font-size:14px">${escapeHtml(m.name)}</div>
+            <button class="btn-sm" onclick="deleteMockTest(${m.id})" style="font-size:11px;padding:3px 9px;margin-left:auto;color:var(--danger)">🗑 Delete</button>
+          </div>
+          <div style="font-size:12px;color:var(--text3)">${m.date}</div>
+          ${m.notes ? `<div style="font-size:12px;color:var(--text2);margin-top:6px">${escapeHtml(m.notes)}</div>` : ''}
+          <div class="prog-bar" style="width:200px;margin-top:8px">
+            <div class="prog-fill" style="width:${pct}%;background:${grade}"></div>
+          </div>
+        </div>
+        <div class="mock-scores">
+          <div class="score-pill">
+            <div class="num c-phy">${m.phy}</div>
+            <div class="lbl">Phy</div>
+          </div>
+          <div class="score-pill">
+            <div class="num c-chem">${m.chem}</div>
+            <div class="lbl">Chem</div>
+          </div>
+          <div class="score-pill">
+            <div class="num c-math">${m.math}</div>
+            <div class="lbl">Math</div>
+          </div>
+          <div class="score-pill">
+            <div class="num" style="color:${grade};font-size:22px">${m.total}</div>
+            <div class="lbl">Total</div>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function deleteMockTest(id) {
+  if (confirm('Delete this mock test?')) {
+    store.mocks = (store.mocks||[]).filter(m => m.id !== id);
+    saveAll();
+    renderMocks();
+  }
+}
+
+// ════════════════════════════════════════
+// STUDY LOG
+// ════════════════════════════════════════
+
+function openLogModal() {
+  document.getElementById('log-date').value = localDateKey();
+  document.getElementById('log-modal').classList.add('open');
+}
+
+function closeLogModal() {
+  document.getElementById('log-modal').classList.remove('open');
+}
+
+function saveLogEntry() {
+  const dateEl = document.getElementById('log-date');
+  const hoursEl = document.getElementById('log-hours');
+  const qsEl = document.getElementById('log-qs');
+  const date = dateEl.value;
+  const subject = document.getElementById('log-subject').value;
+  const hours = Number(hoursEl.value) || 0;
+  const qs = Number(qsEl.value) || 0;
+  if (!date) return markInvalid(dateEl, 'Choose the study date');
+  if (hours < 0 || hours > 24) return markInvalid(hoursEl, 'Study hours must be between 0 and 24');
+  if (qs < 0) return markInvalid(qsEl, 'Questions solved cannot be negative');
+  if (hours === 0 && qs === 0) return markInvalid(hoursEl, 'Add study hours or questions solved');
+  const topics = document.getElementById('log-topics').value;
+  const reflection = document.getElementById('log-reflection').value;
+
+  store.logs.push({ date, subject, hours, qs, topics, reflection, id: Date.now() });
+  saveAll();
+  closeLogModal();
+  renderStudyLog();
+  renderWeekChart();
+  document.getElementById('log-hours').value = '';
+  document.getElementById('log-qs').value = '';
+  document.getElementById('log-topics').value = '';
+  document.getElementById('log-reflection').value = '';
+  renderDashboard();
+  showToast('Study session logged');
+}
+
+function renderStudyLog() {
+  const logs = store.logs || [];
+  const totalHrs = logs.reduce((s,l)=>s+(l.hours||0),0);
+  const uniqueDays = new Set(logs.map(l=>l.date)).size;
+  document.getElementById('log-total-hrs').textContent = totalHrs.toFixed(1);
+  document.getElementById('log-days').textContent = uniqueDays;
+  document.getElementById('log-avg').textContent = uniqueDays ? (totalHrs/uniqueDays).toFixed(1) : '0';
+
+  let streak=0;
+  const daySet = new Set(logs.map(l=>l.date));
+  let d = new Date();
+  while (daySet.has(localDateKey(d))) {
+    streak++;
+    d.setDate(d.getDate()-1);
+  }
+  document.getElementById('log-streak').textContent = streak;
+
+  const list = document.getElementById('study-log-entries');
+  if (!logs.length) {
+    list.innerHTML = '<div style="color:var(--text3);font-size:13px;text-align:center;padding:32px 0">No sessions logged yet. Start by clicking "+ Log Session"</div>';
+    return;
+  }
+
+  const subjColor = { Physics:'var(--phy)', Chemistry:'var(--chem)', Mathematics:'var(--math)', Mixed:'var(--accent)' };
+  list.innerHTML = [...logs].reverse().map(l=>`
+    <div class="chapter-row" style="cursor:default">
+      <div>
+        <div style="display:flex;align-items:center;gap:10px">
+          <div style="width:8px;height:8px;border-radius:50%;background:${subjColor[l.subject]};flex-shrink:0"></div>
+          <div class="chapter-name">${l.date} · ${l.subject}</div>
+        </div>
+        <div class="chapter-meta" style="margin-top:6px">
+          <span>${l.hours}h studied</span>
+          <span>${l.qs} Qs solved</span>
+          ${l.topics ? `<span>${escapeHtml(l.topics)}</span>` : ''}
+        </div>
+        ${l.reflection ? `<div style="font-size:12px;color:var(--text2);margin-top:5px;font-style:italic">"${escapeHtml(l.reflection)}"</div>` : ''}
+      </div>
+      <button class="btn-sm" onclick="deleteLogEntry(${l.id})" style="color:var(--danger)">Delete</button>
+    </div>
+  `).join('');
+}
+
+function deleteLogEntry(id) {
+  store.logs = store.logs.filter(l => l.id !== id);
+  saveAll();
+  renderStudyLog();
+  renderWeekChart();
+}
+
+// ════════════════════════════════════════
+// TEST LOG
+// ════════════════════════════════════════
+
+function recalcScore() {
+  const phyC = +document.getElementById('tl-phy-c').value || 0;
+  const phyW = +document.getElementById('tl-phy-w').value || 0;
+  const chemC = +document.getElementById('tl-chem-c').value || 0;
+  const chemW = +document.getElementById('tl-chem-w').value || 0;
+  const mathC = +document.getElementById('tl-math-c').value || 0;
+  const mathW = +document.getElementById('tl-math-w').value || 0;
+  
+  const phyScore = phyC*4 - phyW;
+  const chemScore = chemC*4 - chemW;
+  const mathScore = mathC*4 - mathW;
+  const total = phyScore + chemScore + mathScore;
+  
+  const grade = total >= 240 ? 'var(--success)' : total >= 150 ? 'var(--warn)' : 'var(--danger)';
+  const scoreSpan = document.querySelector('#tl-score-display span:first-child');
+  if (scoreSpan) {
+    scoreSpan.style.color = grade;
+    scoreSpan.textContent = total + ' / 300';
+  }
+  const breakdown = document.getElementById('tl-score-breakdown');
+  if (breakdown) breakdown.innerHTML = `P: ${phyScore} &nbsp;·&nbsp; C: ${chemScore} &nbsp;·&nbsp; M: ${mathScore}`;
+}
+
+function openTestLogModal() {
+  document.getElementById('tl-date').value = localDateKey();
+  ['tl-name','tl-m1','tl-m2','tl-m3','tl-extra'].forEach(id => document.getElementById(id).value = '');
+  ['tl-phy-c','tl-phy-w','tl-phy-l','tl-chem-c','tl-chem-w','tl-chem-l','tl-math-c','tl-math-w','tl-math-l']
+    .forEach(id => document.getElementById(id).value = '0');
+  document.querySelectorAll('.mtype-chip').forEach(c => {
+    c.classList.remove('selected');
+    const inp = c.querySelector('input');
+    if (inp) inp.checked = false;
+  });
+  recalcScore();
+  document.getElementById('test-log-modal').classList.add('open');
+}
+
+function closeTestLogModal() {
+  document.getElementById('test-log-modal').classList.remove('open');
+}
+
+// Wire up mistake type chips
+document.querySelectorAll('.mtype-chip').forEach(chip => {
+  chip.addEventListener('click', function() {
+    this.classList.toggle('selected');
+    const inp = this.querySelector('input');
+    if (inp) inp.checked = this.classList.contains('selected');
+  });
+});
+
+function saveTestLog() {
+  if (!store.testLogs) store.testLogs = [];
+  
+  const name = document.getElementById('tl-name').value.trim() || 'Test';
+  const dateEl = document.getElementById('tl-date');
+  const date = dateEl.value;
+  if (!date) return markInvalid(dateEl, 'Choose the test date');
+  const phyC = +document.getElementById('tl-phy-c').value || 0;
+  const phyW = +document.getElementById('tl-phy-w').value || 0;
+  const phyL = +document.getElementById('tl-phy-l').value || 0;
+  const chemC = +document.getElementById('tl-chem-c').value || 0;
+  const chemW = +document.getElementById('tl-chem-w').value || 0;
+  const chemL = +document.getElementById('tl-chem-l').value || 0;
+  const mathC = +document.getElementById('tl-math-c').value || 0;
+  const mathW = +document.getElementById('tl-math-w').value || 0;
+  const mathL = +document.getElementById('tl-math-l').value || 0;
+  const subjectTotals = [
+    ['Physics', phyC + phyW + phyL, 'tl-phy-c'],
+    ['Chemistry', chemC + chemW + chemL, 'tl-chem-c'],
+    ['Mathematics', mathC + mathW + mathL, 'tl-math-c']
+  ];
+  const invalidTotal = subjectTotals.find(([, total]) => total > 25);
+  if (invalidTotal) return markInvalid(document.getElementById(invalidTotal[2]), `${invalidTotal[0]} cannot exceed 25 questions`);
+  const negativeInput = [...document.querySelectorAll('#test-log-modal input[type="number"]')].find(input => Number(input.value) < 0);
+  if (negativeInput) return markInvalid(negativeInput, 'Question counts cannot be negative');
+  
+  const mistakes = [
+    document.getElementById('tl-m1').value.trim(),
+    document.getElementById('tl-m2').value.trim(),
+    document.getElementById('tl-m3').value.trim(),
+  ].filter(Boolean);
+  
+  const mistakeTypes = [...document.querySelectorAll('.mtype-chip.selected')].map(c => c.dataset.val);
+  
+  const entry = {
+    id: Date.now(),
+    name, date,
+    phyC, phyW, phyL, chemC, chemW, chemL, mathC, mathW, mathL,
+    mistakes, mistakeTypes,
+    notes: document.getElementById('tl-extra').value.trim()
+  };
+  
+  store.testLogs.push(entry);
+  saveAll();
+  closeTestLogModal();
+  renderTestLog();
+  showToast('Test analysis saved');
+}
+
+function renderTestLog() {
+  if (!store.testLogs) store.testLogs = [];
+  const logs = store.testLogs;
+  
+  document.getElementById('tl-count').textContent = logs.length;
+  
+  if (!logs.length) {
+    document.getElementById('tl-best').textContent = '—';
+    document.getElementById('tl-avg').textContent = '—';
+    document.getElementById('tl-correct').textContent = '0';
+    document.getElementById('tl-wrong').textContent = '0';
+    document.getElementById('tl-left').textContent = '0';
+    document.getElementById('tl-mistake-bars').innerHTML = '<div style="color:var(--text3);font-size:13px;text-align:center;padding:20px 0">Log tests to see your mistake patterns</div>';
+    document.getElementById('tl-accuracy-bars').innerHTML = '<div style="color:var(--text3);font-size:13px;text-align:center;padding:20px 0">—</div>';
+    document.getElementById('test-log-list').innerHTML = '<div style="color:var(--text3);font-size:13px;text-align:center;padding:32px 0">No test entries yet. Click "+ Add Test Entry" to start.</div>';
+    return;
+  }
+  
+  const totals = logs.map(l => l.phyC*4 - l.phyW + l.chemC*4 - l.chemW + l.mathC*4 - l.mathW);
+  document.getElementById('tl-best').textContent = Math.max(...totals);
+  document.getElementById('tl-avg').textContent = Math.round(totals.reduce((a,b)=>a+b,0)/totals.length);
+  document.getElementById('tl-correct').textContent = logs.reduce((s,l)=>s+l.phyC+l.chemC+l.mathC,0);
+  document.getElementById('tl-wrong').textContent = logs.reduce((s,l)=>s+l.phyW+l.chemW+l.mathW,0);
+  document.getElementById('tl-left').textContent = logs.reduce((s,l)=>s+l.phyL+l.chemL+l.mathL,0);
+  
+  // Mistake type tally
+  const mtypes = ['Concept issue','Calculation issue','Silly mistake','Time management','Question selection'];
+  const mtCounts = {};
+  mtypes.forEach(t => mtCounts[t] = 0);
+  logs.forEach(l => (l.mistakeTypes||[]).forEach(t => { if (mtCounts[t]!==undefined) mtCounts[t]++; }));
+  const maxMT = Math.max(...Object.values(mtCounts), 1);
+  const mtColors = { 'Concept issue':'var(--phy)','Calculation issue':'var(--chem)','Silly mistake':'var(--danger)','Time management':'var(--warn)','Question selection':'var(--accent)' };
+  document.getElementById('tl-mistake-bars').innerHTML = mtypes.map(t => `
+    <div class="acc-row">
+      <div class="acc-label">${t}</div>
+      <div class="acc-bar-wrap"><div class="acc-bar-fill" style="width:${Math.round(mtCounts[t]/maxMT*100)}%;background:${mtColors[t]}"></div></div>
+      <div class="acc-pct">${mtCounts[t]}x</div>
+    </div>
+  `).join('');
+  
+  // Subject accuracy
+  const subjects = [
+    { name:'Physics', col:'var(--phy)', c:logs.reduce((s,l)=>s+l.phyC,0), w:logs.reduce((s,l)=>s+l.phyW,0), l:logs.reduce((s,l)=>s+l.phyL,0) },
+    { name:'Chemistry', col:'var(--chem)', c:logs.reduce((s,l)=>s+l.chemC,0), w:logs.reduce((s,l)=>s+l.chemW,0), l:logs.reduce((s,l)=>s+l.chemL,0) },
+    { name:'Maths', col:'var(--math)', c:logs.reduce((s,l)=>s+l.mathC,0), w:logs.reduce((s,l)=>s+l.mathW,0), l:logs.reduce((s,l)=>s+l.mathL,0) },
+  ];
+  document.getElementById('tl-accuracy-bars').innerHTML = subjects.map(s => {
+    const total = s.c + s.w + s.l;
+    const pct = total ? Math.round(s.c/total*100) : 0;
+    const grade = pct>=70?'var(--success)':pct>=50?'var(--warn)':'var(--danger)';
+    return `<div style="margin-bottom:14px"><div style="display:flex;justify-content:space-between;font-size:12px;color:var(--text2);margin-bottom:6px"><span style="color:${s.col};font-weight:500">${s.name}</span><span>${s.c}✓ · ${s.w}✗ · ${s.l} left</span></div><div class="acc-bar-wrap"><div class="acc-bar-fill" style="width:${pct}%;background:${grade}"></div></div><div style="font-size:11px;color:var(--text3);margin-top:3px">${pct}% accuracy</div></div>`;
+  }).join('');
+  
+  // Cards
+  const list = document.getElementById('test-log-list');
+  list.innerHTML = [...logs].reverse().map(l => {
+    const phyScore = l.phyC*4 - l.phyW;
+    const chemScore = l.chemC*4 - l.chemW;
+    const mathScore = l.mathC*4 - l.mathW;
+    const total = phyScore + chemScore + mathScore;
+    const grade = total>=240?'var(--success)':total>=180?'var(--warn)':'var(--danger)';
+    const pct = Math.max(0, Math.round(total/300*100));
+    const phyAcc = (l.phyC+l.phyW+l.phyL) ? Math.round(l.phyC/(l.phyC+l.phyW+l.phyL)*100) : 0;
+    const chemAcc = (l.chemC+l.chemW+l.chemL) ? Math.round(l.chemC/(l.chemC+l.chemW+l.chemL)*100) : 0;
+    const mathAcc = (l.mathC+l.mathW+l.mathL) ? Math.round(l.mathC/(l.mathC+l.mathW+l.mathL)*100) : 0;
+    l = {
+      ...l,
+      name: escapeHtml(l.name),
+      date: escapeHtml(l.date),
+      mistakes: (l.mistakes || []).map(escapeHtml),
+      mistakeTypes: (l.mistakeTypes || []).map(escapeHtml),
+      notes: escapeHtml(l.notes || '')
+    };
+    return `<div class="tl-card"><div class="tl-card-header"><div><div style="font-size:15px;font-weight:600;margin-bottom:3px">${l.name}</div><div style="font-size:12px;color:var(--text3)">${l.date}</div></div><div style="display:flex;align-items:center;gap:16px"><div style="text-align:center"><div style="font-size:26px;font-weight:700;color:${grade};line-height:1">${total}</div><div style="font-size:10px;color:var(--text3)">/ 300</div></div><button class="btn-sm" onclick="deleteTestLogEntry(${l.id})" style="color:var(--danger)">🗑 Delete</button></div></div><div class="prog-bar" style="margin-bottom:14px"><div class="prog-fill" style="width:${pct}%;background:${grade}"></div></div><div class="tl-subject-row"><div class="tl-subj-block"><div class="tl-subj-name" style="color:var(--phy)">⚡ Physics <span style="color:var(--text3);font-weight:400">· ${phyScore}pts · ${phyAcc}% acc</span></div><div class="tl-cwl"><div class="tl-cwl-item"><div class="tl-cwl-num" style="color:var(--success)">${l.phyC}</div><div class="tl-cwl-lbl">Correct</div></div><div class="tl-cwl-item"><div class="tl-cwl-num" style="color:var(--danger)">${l.phyW}</div><div class="tl-cwl-lbl">Wrong</div></div><div class="tl-cwl-item"><div class="tl-cwl-num" style="color:var(--text3)">${l.phyL}</div><div class="tl-cwl-lbl">Left</div></div></div></div><div class="tl-subj-block"><div class="tl-subj-name" style="color:var(--chem)">🧪 Chemistry <span style="color:var(--text3);font-weight:400">· ${chemScore}pts · ${chemAcc}% acc</span></div><div class="tl-cwl"><div class="tl-cwl-item"><div class="tl-cwl-num" style="color:var(--success)">${l.chemC}</div><div class="tl-cwl-lbl">Correct</div></div><div class="tl-cwl-item"><div class="tl-cwl-num" style="color:var(--danger)">${l.chemW}</div><div class="tl-cwl-lbl">Wrong</div></div><div class="tl-cwl-item"><div class="tl-cwl-num" style="color:var(--text3)">${l.chemL}</div><div class="tl-cwl-lbl">Left</div></div></div></div><div class="tl-subj-block"><div class="tl-subj-name" style="color:var(--math)">∑ Maths <span style="color:var(--text3);font-weight:400">· ${mathScore}pts · ${mathAcc}% acc</span></div><div class="tl-cwl"><div class="tl-cwl-item"><div class="tl-cwl-num" style="color:var(--success)">${l.mathC}</div><div class="tl-cwl-lbl">Correct</div></div><div class="tl-cwl-item"><div class="tl-cwl-num" style="color:var(--danger)">${l.mathW}</div><div class="tl-cwl-lbl">Wrong</div></div><div class="tl-cwl-item"><div class="tl-cwl-num" style="color:var(--text3)">${l.mathL}</div><div class="tl-cwl-lbl">Left</div></div></div></div></div>${l.mistakes && l.mistakes.length ? `<div class="tl-mistake-list"><div style="font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px">Top Mistakes</div>${l.mistakes.map((m,i)=>`<div class="tl-mistake-item"><div class="tl-mistake-num">${i+1}</div><div>${m}</div></div>`).join('')}</div>` : ''}${l.mistakeTypes && l.mistakeTypes.length ? `<div class="tl-mistake-tags">${l.mistakeTypes.map(t=>`<span class="tl-mistake-tag">${t}</span>`).join('')}</div>` : ''}${l.notes ? `<div style="font-size:12px;color:var(--text2);margin-top:10px;font-style:italic;border-top:0.5px solid var(--border);padding-top:10px">${l.notes}</div>` : ''}</div>`;
+  }).join('');
+}
+
+function deleteTestLogEntry(id) {
+  if (confirm('Delete this test entry?')) {
+    store.testLogs = (store.testLogs||[]).filter(l => l.id !== id);
+    saveAll();
+    renderTestLog();
+  }
+}
+
+// ════════════════════════════════════════
+// FORMULA BANK
+// ════════════════════════════════════════
+
+function switchFormulaTab(key, btn) {
+  btn.closest('.tabs').querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.formula-section').forEach(s=>s.style.display='none');
+  document.getElementById('formula-'+key).style.display='block';
+}
+
+function loadNotes() {
+  document.getElementById('notes-phy').value = store.notes.phy || '';
+  document.getElementById('notes-chem').value = store.notes.chem || '';
+  document.getElementById('notes-math').value = store.notes.math || '';
+  document.getElementById('notes-gen').value = store.notes.gen || '';
+}
+
+function saveNotes(key) {
+  store.notes[key] = document.getElementById('notes-'+key).value;
+  saveAll();
+  const status = document.getElementById('notes-status-'+key);
+  if (status) status.textContent = 'Saving...';
+  clearTimeout(notesSaveTimer);
+  notesSaveTimer = setTimeout(() => {
+    if (status) status.textContent = 'Saved locally';
+  }, 350);
+}
+
+// Close modals on overlay click
+document.getElementById('mock-modal').addEventListener('click', function(e) {
+  if (e.target === this) closeMockModal();
+});
+document.getElementById('log-modal').addEventListener('click', function(e) {
+  if (e.target === this) closeLogModal();
+});
+document.getElementById('test-log-modal').addEventListener('click', function(e) {
+  if (e.target === this) closeTestLogModal();
+});
+
+document.querySelectorAll('.nav-item').forEach(item => {
+  item.setAttribute('role', 'button');
+  item.setAttribute('tabindex', '0');
+  item.addEventListener('keydown', event => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      item.click();
+    }
+  });
+});
+
+document.addEventListener('keydown', event => {
+  if (event.key !== 'Escape') return;
+  closeSidebar();
+  closeMockModal();
+  closeLogModal();
+  closeTestLogModal();
+});
+
+// ════════════════════════════════════════
+// INIT
+// ════════════════════════════════════════
+
+migrateLegacyStorage();
+renderExistingUsers();
+const lastUser = localStorage.getItem(LAST_USER_KEY);
+if (lastUser) document.getElementById('login-name').value = lastUser;
+setInterval(updateDaysRemaining, 1000);
+</script>
+</body>
+</html>
