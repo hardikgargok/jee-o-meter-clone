@@ -10,3 +10,7 @@ npx serve .
 ```
 
 All study data is stored in the browser's `localStorage`.
+
+## License
+
+Licensed under the [MIT License](LICENSE).
