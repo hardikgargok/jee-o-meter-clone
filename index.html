@@ -1620,6 +1620,86 @@
     cursor: pointer;
   }
   .template-row { display: flex; gap: 8px; flex-wrap: wrap; margin: 0 0 12px; }
+  .toolkit-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+  }
+  .toolkit-card {
+    min-height: 180px;
+    padding: 18px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    background: rgba(12,16,25,.84);
+    box-shadow: 0 12px 32px rgba(0,0,0,.12);
+  }
+  .toolkit-card.wide { grid-column: 1 / -1; }
+  .toolkit-title { font-size: 14px; font-weight: 780; margin-bottom: 4px; }
+  .toolkit-copy { color: var(--text3); font-size: 11px; margin-bottom: 12px; }
+  .mini-list { display: grid; gap: 8px; }
+  .mini-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 10px 11px;
+    border: 1px solid var(--border);
+    border-radius: 11px;
+    background: rgba(255,255,255,.025);
+  }
+  .mini-row-main { min-width: 0; }
+  .mini-row-title { font-size: 12px; font-weight: 720; overflow-wrap: anywhere; }
+  .mini-row-copy { color: var(--text3); font-size: 10px; margin-top: 2px; }
+  .tool-input, .tool-textarea {
+    width: 100%;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: var(--text);
+    padding: 9px 11px;
+    font: inherit;
+    outline: none;
+  }
+  .tool-textarea { min-height: 132px; resize: vertical; line-height: 1.5; }
+  .tool-input:focus, .tool-textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(167,139,250,.1); }
+  .tool-two { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .badge-wall { display: flex; flex-wrap: wrap; gap: 8px; }
+  .achievement {
+    padding: 7px 10px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    color: var(--text2);
+    background: var(--bg3);
+    font-size: 11px;
+  }
+  .achievement.unlocked {
+    color: #fff;
+    border-color: rgba(52,211,153,.35);
+    background: rgba(52,211,153,.13);
+  }
+  .flashcard-face {
+    display: grid;
+    place-items: center;
+    min-height: 150px;
+    padding: 20px;
+    border-radius: 14px;
+    border: 1px solid rgba(167,139,250,.24);
+    background: radial-gradient(circle at 50% 0, rgba(167,139,250,.14), transparent 45%), var(--bg2);
+    text-align: center;
+    font-size: 16px;
+    font-weight: 760;
+    overflow-wrap: anywhere;
+  }
+  .energy-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 7px; }
+  .energy-btn {
+    min-height: 38px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--bg3);
+    color: var(--text2);
+    cursor: pointer;
+  }
+  .energy-btn.active { color: #fff; border-color: rgba(167,139,250,.45); background: rgba(124,58,237,.25); }
 
   @media (max-width: 1100px) {
     .dash-grid { grid-template-columns: 1fr; }
@@ -1666,6 +1746,8 @@
     .battle-item .btn-sm { grid-column: 2; justify-self: start; }
     .planner-boost { align-items: stretch; flex-direction: column; }
     .focus-stats { grid-template-columns: 1fr; }
+    .toolkit-grid { grid-template-columns: 1fr; }
+    .tool-two { grid-template-columns: 1fr; }
   }
 
   /* Planner, focus and revision */
@@ -1871,6 +1953,9 @@
   </a>
   <a class="nav-item" onclick="showPage('formula-bank')">
     <span class="nav-dot" style="background:var(--text3)"></span> Formula Bank
+  </a>
+  <a class="nav-item" onclick="showPage('toolkit')">
+    <span class="nav-dot" style="background:var(--gold)"></span> Toolkit
   </a>
 
   <div class="nav-section">Subjects</div>
@@ -2481,6 +2566,102 @@
     </div>
   </div>
 
+  <!-- Toolkit -->
+  <div class="page" id="page-toolkit">
+    <div class="page-header">
+      <div>
+        <div class="page-title">Study Toolkit</div>
+        <div class="page-subtitle">Flashcards, achievements, reminders, weekly plan, reports, and high-leverage utilities.</div>
+      </div>
+      <button class="btn-primary" onclick="renderToolkit()">Refresh</button>
+    </div>
+    <div class="toolkit-grid">
+      <div class="toolkit-card">
+        <div class="toolkit-title">Quick Review Deck</div>
+        <div class="toolkit-copy">Spaced-repetition cards for formulae, traps, and weak concepts.</div>
+        <div class="flashcard-face" id="flashcard-face">No cards yet. Add one below.</div>
+        <div class="action-row">
+          <button class="btn-sm" onclick="flipFlashcard()">Flip</button>
+          <button class="btn-sm" onclick="gradeFlashcard('hard')">Hard</button>
+          <button class="btn-sm" onclick="gradeFlashcard('good')">Good</button>
+        </div>
+        <div class="tool-two" style="margin-top:12px">
+          <input class="tool-input" id="flash-front" placeholder="Front: e.g. Lens maker formula">
+          <input class="tool-input" id="flash-back" placeholder="Back: formula, trap, or explanation">
+        </div>
+        <div class="action-row"><button class="btn-primary" onclick="addFlashcard()">Add card</button><button class="btn-sm" onclick="seedWeakFlashcards()">Seed weak cards</button></div>
+      </div>
+
+      <div class="toolkit-card">
+        <div class="toolkit-title">Achievement Wall</div>
+        <div class="toolkit-copy">Motivation badges from real preparation behavior.</div>
+        <div class="badge-wall" id="achievement-wall"></div>
+      </div>
+
+      <div class="toolkit-card">
+        <div class="toolkit-title">7-Day Calendar</div>
+        <div class="toolkit-copy">Upcoming tasks and deadlines at a glance.</div>
+        <div class="mini-list" id="weekly-calendar"></div>
+      </div>
+
+      <div class="toolkit-card">
+        <div class="toolkit-title">Chapter Bookmarks</div>
+        <div class="toolkit-copy">Pin high-priority chapters from any subject page.</div>
+        <div class="mini-list" id="bookmark-list"></div>
+      </div>
+
+      <div class="toolkit-card">
+        <div class="toolkit-title">Formula Search</div>
+        <div class="toolkit-copy">Search across all saved formula-bank notes.</div>
+        <input class="tool-input" id="formula-search" placeholder="Search notes..." oninput="searchNotes()">
+        <div class="mini-list" id="formula-search-results" style="margin-top:10px"></div>
+      </div>
+
+      <div class="toolkit-card">
+        <div class="toolkit-title">Score Predictor</div>
+        <div class="toolkit-copy">Projects a rough next mock range from recent trend and consistency.</div>
+        <div class="mini-list" id="score-predictor"></div>
+      </div>
+
+      <div class="toolkit-card">
+        <div class="toolkit-title">Energy Check-In</div>
+        <div class="toolkit-copy">Track study energy so planning respects recovery, not just ambition.</div>
+        <div class="energy-row" id="energy-row">
+          <button class="energy-btn" onclick="setEnergy(1)">1</button>
+          <button class="energy-btn" onclick="setEnergy(2)">2</button>
+          <button class="energy-btn" onclick="setEnergy(3)">3</button>
+          <button class="energy-btn" onclick="setEnergy(4)">4</button>
+          <button class="energy-btn" onclick="setEnergy(5)">5</button>
+        </div>
+        <div class="panel-caption" id="energy-caption">No energy check-in yet today.</div>
+      </div>
+
+      <div class="toolkit-card">
+        <div class="toolkit-title">Reminder Center</div>
+        <div class="toolkit-copy">Browser reminders plus urgent overdue/revision summary.</div>
+        <div class="mini-list" id="reminder-center"></div>
+        <div class="action-row"><button class="btn-primary" onclick="enableNotifications()">Enable reminders</button></div>
+      </div>
+
+      <div class="toolkit-card">
+        <div class="toolkit-title">Keyboard Shortcuts</div>
+        <div class="toolkit-copy">Move faster with power-user controls.</div>
+        <div class="mini-list" id="shortcut-list"></div>
+      </div>
+
+      <div class="toolkit-card wide">
+        <div class="toolkit-title">Study Report</div>
+        <div class="toolkit-copy">Generate a readable weekly report for self-review, mentor updates, or accountability.</div>
+        <textarea class="tool-textarea" id="study-report" readonly></textarea>
+        <div class="action-row">
+          <button class="btn-primary" onclick="generateStudyReport()">Generate report</button>
+          <button class="btn-sm" onclick="copyStudyReport()">Copy</button>
+          <button class="btn-sm" onclick="downloadStudyReport()">Download</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </main>
 </div>
 
@@ -3088,6 +3269,8 @@ function loadAll() {
   if (!store.settings)  store.settings  = {};
   if (!store.tasks)     store.tasks     = [];
   if (!store.focusSessions) store.focusSessions = [];
+  if (!store.flashcards) store.flashcards = [];
+  if (!store.energy) store.energy = {};
   if (!store.settings.goals) store.settings.goals = { hours: 6, questions: 60 };
   if (store.settings.autoLogFocus === undefined) store.settings.autoLogFocus = true;
 }
@@ -3196,6 +3379,7 @@ function showPage(name) {
   if (name === 'planner') renderPlanner();
   if (name === 'focus') renderFocusPage();
   if (name === 'formula-bank') loadNotes();
+  if (name === 'toolkit') renderToolkit();
   closeSidebar();
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
@@ -3695,7 +3879,10 @@ function renderSubject(subj, filter) {
           <div class="detail-field"><label>Notes / Weak Points</label><textarea oninput="updateChapter('${chapter.id}','notes',this.value)">${escapeHtml(data.notes || '')}</textarea></div>
           <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:8px">
             <div style="font-size:11px;color:var(--text3);text-transform:uppercase">Topics — click to mark done (${topicsDone}/${chapter.topics.length})</div>
-            <button class="btn-sm" type="button" onclick="event.stopPropagation();markChapterRevised('${chapter.id}')">Mark revised today</button>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <button class="btn-sm" type="button" onclick="event.stopPropagation();toggleBookmark('${chapter.id}')">${data.bookmarked ? 'Unpin' : 'Pin'}</button>
+              <button class="btn-sm" type="button" onclick="event.stopPropagation();markChapterRevised('${chapter.id}')">Mark revised today</button>
+            </div>
           </div>
           <div class="topics-row">${topicMarkup}</div>
         </div>
@@ -4536,6 +4723,7 @@ function buildCommandItems() {
     ['Mock Tests', 'Track full-length mock scores', 'M', () => showPage('mock-tests')],
     ['Study Log', 'Review day-by-day study sessions', 'S', () => showPage('study-log')],
     ['Formula Bank', 'Open personal notes and formulae', 'N', () => showPage('formula-bank')],
+    ['Toolkit', 'Open flashcards, reports, reminders, and achievements', 'TK', () => showPage('toolkit')],
     ['Physics', 'Open Physics syllabus tracker', 'Ph', () => showPage('physics')],
     ['Chemistry', 'Open Chemistry syllabus tracker', 'Ch', () => showPage('chemistry')],
     ['Mathematics', 'Open Mathematics syllabus tracker', 'Ma', () => showPage('mathematics')]
@@ -4547,6 +4735,8 @@ function buildCommandItems() {
     { title: 'Add planner task', copy: 'Create the next concrete study task', icon: '+', action: openTaskModal, keywords: 'task planner todo add' },
     { title: 'Add test analysis', copy: 'Save mistakes and subject accuracy', icon: '+', action: openTestLogModal, keywords: 'test analysis mistakes correct wrong left' },
     { title: 'Add mock test', copy: 'Save Physics, Chemistry, and Maths scores', icon: '+', action: openMockModal, keywords: 'mock test score add' },
+    { title: 'Build weak flashcards', copy: 'Create review cards from low-readiness chapters', icon: 'FC', action: () => { showPage('toolkit'); setTimeout(seedWeakFlashcards, 80); }, keywords: 'flashcards weak review spaced repetition' },
+    { title: 'Create study report', copy: 'Generate a shareable progress summary', icon: 'R', action: () => { showPage('toolkit'); setTimeout(generateStudyReport, 80); }, keywords: 'report summary progress copy download' },
     { title: 'Export backup', copy: 'Download this profile as local JSON', icon: 'E', action: exportUserData, keywords: 'export backup data json' }
   ];
 
@@ -4669,6 +4859,275 @@ function insertNoteTemplate(key, type) {
   textarea.focus();
   textarea.selectionStart = textarea.selectionEnd = start + insert.length;
   saveNotes(key);
+}
+
+// TOOLKIT
+let currentFlashcardId = null;
+let flashcardShowingBack = false;
+
+function renderToolkit() {
+  renderFlashcard();
+  renderAchievements();
+  renderWeeklyCalendar();
+  renderBookmarks();
+  searchNotes();
+  renderScorePredictor();
+  renderEnergy();
+  renderReminderCenter();
+  renderShortcuts();
+  generateStudyReport();
+}
+
+function dueFlashcards() {
+  const today = localDateKey();
+  return (store.flashcards || []).filter(card => !card.due || card.due <= today);
+}
+
+function renderFlashcard() {
+  const face = document.getElementById('flashcard-face');
+  if (!face) return;
+  const due = dueFlashcards();
+  const card = due[0] || (store.flashcards || [])[0];
+  currentFlashcardId = card?.id || null;
+  flashcardShowingBack = false;
+  face.textContent = card ? card.front : 'No cards yet. Add one below.';
+}
+
+function flipFlashcard() {
+  const card = (store.flashcards || []).find(item => item.id === currentFlashcardId);
+  if (!card) return showToast('Add a flashcard first', 'error');
+  flashcardShowingBack = !flashcardShowingBack;
+  document.getElementById('flashcard-face').textContent = flashcardShowingBack ? card.back : card.front;
+}
+
+function addFlashcard() {
+  const front = document.getElementById('flash-front').value.trim();
+  const back = document.getElementById('flash-back').value.trim();
+  if (!front || !back) return showToast('Add both sides of the card', 'error');
+  store.flashcards.push({ id: Date.now(), front, back, due: localDateKey(), box: 0, createdAt: new Date().toISOString() });
+  document.getElementById('flash-front').value = '';
+  document.getElementById('flash-back').value = '';
+  saveAll();
+  renderFlashcard();
+  renderAchievements();
+  showToast('Flashcard added');
+}
+
+function gradeFlashcard(result) {
+  const card = (store.flashcards || []).find(item => item.id === currentFlashcardId);
+  if (!card) return showToast('No flashcard selected', 'error');
+  card.box = result === 'good' ? Math.min(5, Number(card.box || 0) + 1) : Math.max(0, Number(card.box || 0) - 1);
+  const intervals = [1, 2, 4, 7, 14, 30];
+  const due = new Date();
+  due.setDate(due.getDate() + intervals[card.box]);
+  card.due = localDateKey(due);
+  card.lastReviewed = localDateKey();
+  saveAll();
+  renderFlashcard();
+  showToast(result === 'good' ? 'Card scheduled forward' : 'Card kept close');
+}
+
+function seedWeakFlashcards() {
+  const existing = new Set((store.flashcards || []).map(card => card.front.toLowerCase()));
+  const weak = getAllChapters().filter(chapter => {
+    const data = store.chapters[chapter.id] || {};
+    return (data.status !== 'done' || Number(data.confidence || 3) <= 2) && chapter.high;
+  }).slice(0, 5);
+  weak.forEach(chapter => {
+    const front = `Key traps in ${chapter.name}?`;
+    if (!existing.has(front.toLowerCase())) {
+      store.flashcards.push({
+        id: Date.now() + Math.random(),
+        front,
+        back: `Review: ${chapter.topics.slice(0, 4).join(', ')}. Add your exact mistake after practice.`,
+        due: localDateKey(),
+        box: 0,
+        createdAt: new Date().toISOString()
+      });
+    }
+  });
+  saveAll();
+  renderFlashcard();
+  showToast(`${weak.length} weak-topic card${weak.length === 1 ? '' : 's'} prepared`);
+}
+
+function renderAchievements() {
+  const wall = document.getElementById('achievement-wall');
+  if (!wall) return;
+  const logs = store.logs || [];
+  const tasks = store.tasks || [];
+  const mocks = store.mocks || [];
+  const totalHours = logs.reduce((sum, log) => sum + Number(log.hours || 0), 0);
+  const totalQs = logs.reduce((sum, log) => sum + Number(log.qs || 0), 0);
+  const streak = getStudyStreak(logs);
+  const doneTasks = tasks.filter(task => task.done).length;
+  const cards = store.flashcards || [];
+  const badges = [
+    ['First Log', logs.length >= 1],
+    ['10h Club', totalHours >= 10],
+    ['100 Questions', totalQs >= 100],
+    ['3-Day Streak', streak >= 3],
+    ['Task Finisher', doneTasks >= 5],
+    ['Mock Warrior', mocks.length >= 3],
+    ['Flashcard Builder', cards.length >= 10],
+    ['Revision Machine', getRevisionQueue().length === 0 && getAllChapters().some(ch => store.chapters[ch.id]?.lastRevised)]
+  ];
+  wall.innerHTML = badges.map(([name, unlocked]) => `<span class="achievement ${unlocked ? 'unlocked' : ''}">${unlocked ? '✓ ' : ''}${name}</span>`).join('');
+}
+
+function renderWeeklyCalendar() {
+  const list = document.getElementById('weekly-calendar');
+  if (!list) return;
+  const today = new Date(`${localDateKey()}T00:00:00`);
+  const rows = [];
+  for (let i = 0; i < 7; i++) {
+    const d = new Date(today);
+    d.setDate(d.getDate() + i);
+    const key = localDateKey(d);
+    const tasks = (store.tasks || []).filter(task => !task.done && task.due === key);
+    rows.push(`<div class="mini-row"><div class="mini-row-main"><div class="mini-row-title">${key}</div><div class="mini-row-copy">${tasks.length ? tasks.map(t => escapeHtml(t.title)).slice(0, 2).join(' · ') : 'No planned tasks'}</div></div><span class="badge">${tasks.length}</span></div>`);
+  }
+  list.innerHTML = rows.join('');
+}
+
+function toggleBookmark(id) {
+  const chapter = getChapter(id);
+  chapter.bookmarked = !chapter.bookmarked;
+  saveAll();
+  const found = getAllChapters().find(item => item.id === id);
+  if (found) renderSubject(found.subject, currentFilter[found.subject]);
+  renderBookmarks();
+  showToast(chapter.bookmarked ? 'Chapter pinned' : 'Chapter unpinned');
+}
+
+function renderBookmarks() {
+  const list = document.getElementById('bookmark-list');
+  if (!list) return;
+  const bookmarks = getAllChapters().filter(chapter => store.chapters[chapter.id]?.bookmarked);
+  if (!bookmarks.length) {
+    list.innerHTML = '<div class="empty-state" style="padding:20px 12px">No pinned chapters yet.</div>';
+    return;
+  }
+  list.innerHTML = bookmarks.map(chapter => `<div class="mini-row"><div class="mini-row-main"><div class="mini-row-title">${escapeHtml(chapter.name)}</div><div class="mini-row-copy">${escapeHtml(chapter.subject)} · ${escapeHtml(chapter.unit)}</div></div><button class="btn-sm" onclick="showPage('${chapter.subject}')">Open</button></div>`).join('');
+}
+
+function searchNotes() {
+  const results = document.getElementById('formula-search-results');
+  if (!results) return;
+  const q = (document.getElementById('formula-search')?.value || '').trim().toLowerCase();
+  if (!q) {
+    results.innerHTML = '<div class="empty-state" style="padding:20px 12px">Type to search saved notes.</div>';
+    return;
+  }
+  const found = Object.entries(store.notes || {}).flatMap(([key, text]) =>
+    String(text || '').split('\n').map((line, index) => ({ key, line, index })).filter(item => item.line.toLowerCase().includes(q))
+  ).slice(0, 8);
+  results.innerHTML = found.length
+    ? found.map(item => `<div class="mini-row"><div class="mini-row-main"><div class="mini-row-title">${escapeHtml(item.key.toUpperCase())}</div><div class="mini-row-copy">${escapeHtml(item.line)}</div></div></div>`).join('')
+    : '<div class="empty-state" style="padding:20px 12px">No note matches.</div>';
+}
+
+function renderScorePredictor() {
+  const box = document.getElementById('score-predictor');
+  if (!box) return;
+  const mocks = [...(store.mocks || [])].sort((a, b) => String(a.date).localeCompare(String(b.date)));
+  if (!mocks.length) {
+    box.innerHTML = '<div class="empty-state" style="padding:20px 12px">Add mocks to predict score movement.</div>';
+    return;
+  }
+  const recent = mocks.slice(-3);
+  const avg = recent.reduce((sum, mock) => sum + Number(mock.total || 0), 0) / recent.length;
+  const trend = recent.length > 1 ? Number(recent[recent.length - 1].total || 0) - Number(recent[0].total || 0) : 0;
+  const consistencyBoost = Math.min(15, (store.logs || []).slice(-7).reduce((sum, log) => sum + Number(log.hours || 0), 0));
+  const predicted = Math.round(Math.min(300, Math.max(0, avg + trend * .35 + consistencyBoost * .4)));
+  box.innerHTML = `<div class="mini-row"><div class="mini-row-main"><div class="mini-row-title">${predicted - 12}–${predicted + 12}</div><div class="mini-row-copy">Projected next mock range from recent average, trend, and study volume.</div></div></div>`;
+}
+
+function setEnergy(value) {
+  store.energy[localDateKey()] = value;
+  saveAll();
+  renderEnergy();
+  showToast('Energy check-in saved');
+}
+
+function renderEnergy() {
+  const value = store.energy?.[localDateKey()] || 0;
+  document.querySelectorAll('.energy-btn').forEach((btn, index) => btn.classList.toggle('active', index + 1 === value));
+  const caption = document.getElementById('energy-caption');
+  if (caption) caption.textContent = value ? `Today's energy: ${value}/5. ${value <= 2 ? 'Keep the plan lighter and protect sleep.' : value >= 4 ? 'Good day for a deep block.' : 'Steady day. Use focused, bounded sessions.'}` : 'No energy check-in yet today.';
+}
+
+function renderReminderCenter() {
+  const list = document.getElementById('reminder-center');
+  if (!list) return;
+  const today = localDateKey();
+  const overdue = (store.tasks || []).filter(task => !task.done && task.due && task.due < today).length;
+  const dueToday = (store.tasks || []).filter(task => !task.done && task.due === today).length;
+  const revisions = getRevisionQueue().length;
+  const permission = 'Notification' in window ? Notification.permission : 'unsupported';
+  list.innerHTML = [
+    ['Overdue tasks', overdue],
+    ['Due today', dueToday],
+    ['Revision queue', revisions],
+    ['Browser permission', permission]
+  ].map(([title, copy]) => `<div class="mini-row"><div class="mini-row-main"><div class="mini-row-title">${escapeHtml(title)}</div><div class="mini-row-copy">${escapeHtml(copy)}</div></div></div>`).join('');
+}
+
+function enableNotifications() {
+  if (!('Notification' in window)) return showToast('Notifications are not supported here', 'error');
+  Notification.requestPermission().then(permission => {
+    renderReminderCenter();
+    if (permission === 'granted') {
+      new Notification('StudyMeter reminders enabled', { body: 'Check your planner and revision queue daily.' });
+    }
+  });
+}
+
+function renderShortcuts() {
+  const list = document.getElementById('shortcut-list');
+  if (!list) return;
+  const shortcuts = [
+    ['Ctrl/Cmd + K', 'Open Command Center'],
+    ['Escape', 'Close modal/sidebar/command center'],
+    ['Enter on login', 'Continue into app'],
+    ['Enter/Space on nav item', 'Open page'],
+    ['Enter in quick add', 'Add task to today']
+  ];
+  list.innerHTML = shortcuts.map(([key, desc]) => `<div class="mini-row"><div class="mini-row-main"><div class="mini-row-title">${escapeHtml(key)}</div><div class="mini-row-copy">${escapeHtml(desc)}</div></div></div>`).join('');
+}
+
+function generateStudyReport() {
+  const output = document.getElementById('study-report');
+  if (!output) return '';
+  const logs = store.logs || [];
+  const tasks = store.tasks || [];
+  const mocks = store.mocks || [];
+  const totalHours = logs.reduce((sum, log) => sum + Number(log.hours || 0), 0).toFixed(1);
+  const totalQs = logs.reduce((sum, log) => sum + Number(log.qs || 0), 0);
+  const openTasks = tasks.filter(task => !task.done).length;
+  const latestMock = [...mocks].sort((a, b) => String(b.date).localeCompare(String(a.date)))[0];
+  const revisions = getRevisionQueue().slice(0, 5).map(item => item.name).join(', ') || 'None due';
+  const report = `StudyMeter Weekly Report\n\nHours logged: ${totalHours}\nQuestions solved: ${totalQs}\nOpen tasks: ${openTasks}\nCurrent streak: ${getStudyStreak(logs)} days\nLatest mock: ${latestMock ? `${latestMock.name || 'Mock'} - ${latestMock.total}/300` : 'No mock logged'}\nRevision focus: ${revisions}\nEnergy today: ${store.energy?.[localDateKey()] || 'Not checked'}\n\nNext move:\n${(document.getElementById('next-action-title')?.textContent || 'Generate a battle plan and start one focused block')}`;
+  output.value = report;
+  return report;
+}
+
+function copyStudyReport() {
+  const report = generateStudyReport();
+  navigator.clipboard?.writeText(report).then(() => showToast('Report copied')).catch(() => showToast('Copy failed', 'error'));
+}
+
+function downloadStudyReport() {
+  const report = generateStudyReport();
+  const blob = new Blob([report], { type: 'text/plain' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = `studymeter-report-${localDateKey()}.txt`;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  URL.revokeObjectURL(url);
 }
 
 // Close modals on overlay click
