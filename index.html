@@ -1620,6 +1620,26 @@
     cursor: pointer;
   }
   .template-row { display: flex; gap: 8px; flex-wrap: wrap; margin: 0 0 12px; }
+  .update-banner {
+    position: fixed;
+    left: 50%;
+    bottom: 22px;
+    z-index: 1300;
+    width: min(440px, calc(100vw - 24px));
+    display: none;
+    transform: translateX(-50%);
+    padding: 13px;
+    border: 1px solid rgba(52,211,153,.28);
+    border-radius: 16px;
+    background: rgba(10,14,22,.96);
+    box-shadow: var(--shadow);
+    gap: 12px;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .update-banner.open { display: flex; }
+  .update-title { font-size: 13px; font-weight: 800; }
+  .update-copy { color: var(--text3); font-size: 11px; margin-top: 2px; }
   .toolkit-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1746,6 +1766,8 @@
     .battle-item .btn-sm { grid-column: 2; justify-self: start; }
     .planner-boost { align-items: stretch; flex-direction: column; }
     .focus-stats { grid-template-columns: 1fr; }
+    .update-banner { align-items: stretch; flex-direction: column; }
+    .update-banner .btn-primary { width: 100%; }
     .toolkit-grid { grid-template-columns: 1fr; }
     .tool-two { grid-template-columns: 1fr; }
   }
@@ -1882,6 +1904,13 @@
 </div>
 <div class="sidebar-backdrop" id="sidebar-backdrop" onclick="closeSidebar()"></div>
 <div class="toast-stack" id="toast-stack" aria-live="polite"></div>
+<div class="update-banner" id="update-banner" role="status" aria-live="polite">
+  <div>
+    <div class="update-title">Update available</div>
+    <div class="update-copy">Restart StudyMeter to load the newest GitHub version.</div>
+  </div>
+  <button class="btn-primary" onclick="restartForUpdate()">Restart</button>
+</div>
 <input type="file" id="import-file" accept="application/json" style="display:none" onchange="importUserData(event)">
 <div class="command-overlay" id="command-overlay" onclick="if(event.target===this) closeCommandPalette()">
   <div class="command-panel" role="dialog" aria-modal="true" aria-label="Command palette">
@@ -3023,6 +3052,7 @@ let timerMode = 'Focus session';
 let commandItems = [];
 let commandActiveIndex = 0;
 let deferredInstallPrompt = null;
+let waitingServiceWorker = null;
 
 function escapeHtml(value) {
   return String(value ?? '').replace(/[&<>"']/g, char => ({
@@ -3042,6 +3072,16 @@ function showToast(message, type = 'success') {
     toast.style.transform = 'translateY(8px)';
     setTimeout(() => toast.remove(), 220);
   }, 2600);
+}
+
+function showUpdateBanner(worker) {
+  waitingServiceWorker = worker;
+  document.getElementById('update-banner')?.classList.add('open');
+}
+
+function restartForUpdate() {
+  if (!waitingServiceWorker) return location.reload();
+  waitingServiceWorker.postMessage({ type: 'SKIP_WAITING' });
 }
 
 function toggleSidebar() {
@@ -5210,7 +5250,26 @@ window.addEventListener('appinstalled', () => {
   showToast('StudyMeter installed');
 });
 if ('serviceWorker' in navigator && location.protocol === 'https:') {
-  window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js').catch(() => {}));
+  let refreshingForUpdate = false;
+  navigator.serviceWorker.addEventListener('controllerchange', () => {
+    if (refreshingForUpdate) return;
+    refreshingForUpdate = true;
+    location.reload();
+  });
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js').then(registration => {
+      if (registration.waiting) showUpdateBanner(registration.waiting);
+      registration.addEventListener('updatefound', () => {
+        const worker = registration.installing;
+        if (!worker) return;
+        worker.addEventListener('statechange', () => {
+          if (worker.state === 'installed' && navigator.serviceWorker.controller) {
+            showUpdateBanner(worker);
+          }
+        });
+      });
+    }).catch(() => {});
+  });
 }
 </script>
 </body>
