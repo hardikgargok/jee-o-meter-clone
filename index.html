@@ -1441,10 +1441,126 @@
     padding: 2px 7px;
     font-size: 10px;
   }
+  .performance-grid {
+    display: grid;
+    grid-template-columns: minmax(280px, .95fr) minmax(0, 1.1fr) minmax(260px, .95fr);
+    gap: 14px;
+    margin: 0 0 24px;
+  }
+  .readiness-card {
+    min-height: 292px;
+    padding: 22px;
+    border: 1px solid rgba(52,211,153,.2);
+    border-radius: var(--radius-lg);
+    background:
+      radial-gradient(circle at 85% 14%, rgba(52,211,153,.17), transparent 35%),
+      linear-gradient(145deg, rgba(13,28,32,.96), rgba(12,16,25,.96));
+    box-shadow: var(--shadow-lg);
+  }
+  .readiness-score {
+    margin-top: 14px;
+    font-size: clamp(54px, 8vw, 82px);
+    line-height: .9;
+    font-weight: 850;
+    letter-spacing: -3px;
+    color: var(--success);
+  }
+  .readiness-score span { color: var(--text3); font-size: 22px; letter-spacing: 0; }
+  .readiness-copy { margin-top: 12px; color: var(--text2); font-size: 13px; max-width: 420px; }
+  .readiness-meter {
+    height: 9px;
+    margin-top: 18px;
+    overflow: hidden;
+    border-radius: 999px;
+    background: rgba(255,255,255,.07);
+  }
+  .readiness-fill {
+    height: 100%;
+    width: 0%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, var(--danger), var(--warn), var(--success));
+    transition: width .5s ease;
+  }
+  .readiness-mini {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-top: 16px;
+  }
+  .readiness-mini div {
+    padding: 10px;
+    border-radius: 11px;
+    background: rgba(255,255,255,.035);
+    border: 1px solid var(--border);
+  }
+  .mini-label { color: var(--text3); font-size: 10px; text-transform: uppercase; letter-spacing: .6px; }
+  .mini-value { margin-top: 4px; font-size: 16px; font-weight: 780; }
+  .heatmap {
+    display: grid;
+    grid-template-columns: repeat(14, 1fr);
+    gap: 5px;
+    margin-top: 12px;
+  }
+  .heat-cell {
+    aspect-ratio: 1;
+    min-width: 11px;
+    border-radius: 4px;
+    background: var(--bg4);
+    border: 1px solid rgba(255,255,255,.035);
+  }
+  .heat-cell.l1 { background: rgba(91,158,249,.35); }
+  .heat-cell.l2 { background: rgba(52,211,153,.48); }
+  .heat-cell.l3 { background: rgba(251,191,36,.62); }
+  .heat-cell.l4 { background: rgba(167,139,250,.8); }
+  .panel-caption { margin-top: 12px; color: var(--text3); font-size: 11px; line-height: 1.45; }
+  .sparkline {
+    display: flex;
+    align-items: flex-end;
+    gap: 7px;
+    height: 122px;
+    margin-top: 12px;
+    padding: 12px 6px 0;
+    border-radius: 12px;
+    background: rgba(255,255,255,.022);
+    border: 1px solid var(--border);
+  }
+  .spark-bar {
+    flex: 1;
+    min-width: 8px;
+    border-radius: 6px 6px 2px 2px;
+    background: linear-gradient(180deg, var(--accent), var(--phy));
+    min-height: 7px;
+    position: relative;
+  }
+  .spark-bar.best { background: linear-gradient(180deg, var(--success), var(--chem)); }
+  .risk-list { display: grid; gap: 9px; margin-top: 12px; }
+  .risk-item {
+    display: grid;
+    grid-template-columns: 9px minmax(0,1fr);
+    gap: 10px;
+    align-items: start;
+    padding: 11px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: rgba(255,255,255,.025);
+  }
+  .risk-dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    margin-top: 5px;
+    background: var(--success);
+  }
+  .risk-dot.warn { background: var(--warn); }
+  .risk-dot.danger { background: var(--danger); }
+  .risk-title { font-size: 12px; font-weight: 750; }
+  .risk-copy { color: var(--text3); font-size: 11px; margin-top: 2px; line-height: 1.4; }
 
   @media (max-width: 1100px) {
     .dash-grid { grid-template-columns: 1fr; }
     .dashboard-hero { grid-template-columns: 1fr .55fr; }
+    .performance-grid { grid-template-columns: 1fr 1fr; }
+    .readiness-card { grid-column: 1 / -1; }
   }
   @media (max-width: 900px) {
     .mobile-topbar { display: flex; }
@@ -1460,6 +1576,7 @@
     .subject-toolbar { align-items: stretch; flex-direction: column; }
     .search-wrap { max-width: none; }
     .momentum-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .performance-grid { grid-template-columns: 1fr; }
   }
   @media (max-width: 620px) {
     .page-header { align-items: flex-start; gap: 14px; }
@@ -1478,6 +1595,8 @@
     .toast { min-width: 0; max-width: none; }
     .momentum-strip { grid-template-columns: 1fr; }
     .command-overlay { padding-top: 72px; }
+    .readiness-mini { grid-template-columns: 1fr; }
+    .heatmap { grid-template-columns: repeat(7, 1fr); }
   }
 
   /* Planner, focus and revision */
@@ -1699,6 +1818,7 @@
   <div class="nav-section">Your Data</div>
   <div class="sidebar-tools">
     <button class="tool-btn wide" onclick="openCommandPalette()">Command Center</button>
+    <button class="tool-btn wide" id="install-app-btn" onclick="installApp()" style="display:none">Install App</button>
     <button class="tool-btn" onclick="exportUserData()">Export</button>
     <button class="tool-btn" onclick="document.getElementById('import-file').click()">Import</button>
   </div>
@@ -1794,6 +1914,34 @@
       <div class="card">
         <div class="section-title" style="margin-top:0">Smart Insights <span class="section-line"></span></div>
         <div class="insight-list" id="dashboard-insights"></div>
+      </div>
+    </section>
+
+    <section class="performance-grid" aria-label="Performance intelligence">
+      <div class="readiness-card">
+        <div class="hero-eyebrow">Exam readiness</div>
+        <div class="readiness-score"><span id="readiness-score">0</span><span>/100</span></div>
+        <div class="readiness-copy" id="readiness-copy">Log study, finish chapters, and add tests to build a real readiness signal.</div>
+        <div class="readiness-meter"><div class="readiness-fill" id="readiness-fill"></div></div>
+        <div class="readiness-mini">
+          <div><div class="mini-label">Pace needed</div><div class="mini-value" id="pace-needed">-</div></div>
+          <div><div class="mini-label">Streak</div><div class="mini-value" id="readiness-streak">0d</div></div>
+          <div><div class="mini-label">Last mock</div><div class="mini-value" id="readiness-mock">-</div></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="section-title" style="margin-top:0">Consistency Map <span class="section-line"></span></div>
+        <div class="heatmap" id="study-heatmap"></div>
+        <div class="panel-caption" id="heatmap-caption">The last 28 days of study intensity will appear here.</div>
+      </div>
+      <div class="card">
+        <div class="section-title" style="margin-top:0">Mock Trajectory <span class="section-line"></span></div>
+        <div class="sparkline" id="mock-sparkline"></div>
+        <div class="panel-caption" id="mock-caption">Add mock scores to see direction, best score, and recent momentum.</div>
+      </div>
+      <div class="card">
+        <div class="section-title" style="margin-top:0">Risk Radar <span class="section-line"></span></div>
+        <div class="risk-list" id="risk-radar"></div>
       </div>
     </section>
 
@@ -2583,6 +2731,7 @@ let timerRunning = false;
 let timerMode = 'Focus session';
 let commandItems = [];
 let commandActiveIndex = 0;
+let deferredInstallPrompt = null;
 
 function escapeHtml(value) {
   return String(value ?? '').replace(/[&<>"']/g, char => ({
@@ -2625,6 +2774,10 @@ function markInvalid(element, message) {
 
 function clampNumber(value, min, max) {
   return Math.min(max, Math.max(min, Number(value) || 0));
+}
+
+function clampPercent(value) {
+  return Math.round(Math.min(100, Math.max(0, Number(value) || 0)));
 }
 
 function localDateKey(date = new Date()) {
@@ -2990,8 +3143,151 @@ function renderDashboard() {
   renderWeekChart();
   renderRecentLog();
   renderMomentumStrip(totalDone, ids);
+  renderPerformanceIntelligence({ totalDone, totalChapters, ids });
   renderDashboardIntelligence();
   updatePlannerBadge();
+}
+
+function getStudyStreak(logs = store.logs || []) {
+  const days = new Set(logs.map(log => log.date));
+  let streak = 0;
+  const cursor = new Date(`${localDateKey()}T00:00:00`);
+  while (days.has(localDateKey(cursor))) {
+    streak++;
+    cursor.setDate(cursor.getDate() - 1);
+  }
+  return streak;
+}
+
+function getSubjectProgress(ids) {
+  return Object.entries(ids).map(([subject, subjectIds]) => {
+    const done = subjectIds.filter(id => store.chapters[id]?.status === 'done').length;
+    const partial = subjectIds.filter(id => store.chapters[id]?.status === 'partial').length;
+    const questions = subjectIds.reduce((sum, id) => sum + Number(store.chapters[id]?.qs_solved || 0), 0);
+    return {
+      subject,
+      done,
+      partial,
+      total: subjectIds.length,
+      questions,
+      pct: subjectIds.length ? Math.round((done + partial * .45) / subjectIds.length * 100) : 0
+    };
+  });
+}
+
+function renderPerformanceIntelligence({ totalDone, totalChapters, ids }) {
+  const daysRemaining = Math.max(0, Math.ceil((currentExamDate - new Date()) / 86400000));
+  const logs = store.logs || [];
+  const mocks = [...(store.mocks || [])].sort((a, b) => String(a.date).localeCompare(String(b.date)));
+  const testLogs = store.testLogs || [];
+  const subjectProgress = getSubjectProgress(ids).sort((a, b) => a.pct - b.pct);
+  const weakest = subjectProgress[0];
+  const coverageScore = totalChapters ? (totalDone / totalChapters) * 42 : 0;
+  const weekCutoff = new Date();
+  weekCutoff.setDate(weekCutoff.getDate() - 6);
+  const recentHours = logs.filter(log => new Date(`${log.date}T00:00:00`) >= weekCutoff)
+    .reduce((sum, log) => sum + Number(log.hours || 0), 0);
+  const consistencyScore = Math.min(18, recentHours / Math.max(1, (store.settings.goals?.hours || 6) * 7) * 18);
+  const latestMock = mocks[mocks.length - 1];
+  const bestMock = mocks.length ? Math.max(...mocks.map(mock => Number(mock.total || 0))) : 0;
+  const mockScore = latestMock ? Math.min(24, Number(latestMock.total || 0) / 300 * 24) : 0;
+  const revisionScore = Math.max(0, 16 - Math.min(16, getRevisionQueue().length * 2));
+  const readiness = clampPercent(coverageScore + consistencyScore + mockScore + revisionScore);
+  const paceNeeded = daysRemaining ? ((totalChapters - totalDone) / daysRemaining).toFixed(2) : '0.00';
+  const streak = getStudyStreak(logs);
+
+  document.getElementById('readiness-score').textContent = readiness;
+  document.getElementById('readiness-fill').style.width = `${readiness}%`;
+  document.getElementById('pace-needed').textContent = `${paceNeeded}/d`;
+  document.getElementById('readiness-streak').textContent = `${streak}d`;
+  document.getElementById('readiness-mock').textContent = latestMock ? `${latestMock.total}/300` : '-';
+  document.getElementById('readiness-copy').textContent = readiness >= 75
+    ? 'Strong signal. Protect consistency, revise weak chapters, and keep mocks brutally honest.'
+    : readiness >= 45
+      ? 'You are building shape. The fastest lift now is steady daily hours plus one weak subject attack.'
+      : 'Foundation mode. Log work, complete chapters, and add mocks so the app can guide you sharply.';
+
+  renderStudyHeatmap(logs);
+  renderMockSparkline(mocks, bestMock);
+  renderRiskRadar({ daysRemaining, weakest, recentHours, latestMock, testLogs, totalDone, totalChapters });
+}
+
+function renderStudyHeatmap(logs) {
+  const heatmap = document.getElementById('study-heatmap');
+  if (!heatmap) return;
+  const byDay = {};
+  logs.forEach(log => {
+    byDay[log.date] = (byDay[log.date] || 0) + Number(log.hours || 0);
+  });
+  const cells = [];
+  let total = 0;
+  let active = 0;
+  for (let i = 27; i >= 0; i--) {
+    const date = new Date();
+    date.setDate(date.getDate() - i);
+    const key = localDateKey(date);
+    const hours = byDay[key] || 0;
+    total += hours;
+    if (hours > 0) active++;
+    const level = hours >= 6 ? 4 : hours >= 4 ? 3 : hours >= 2 ? 2 : hours > 0 ? 1 : 0;
+    cells.push(`<div class="heat-cell ${level ? `l${level}` : ''}" title="${key}: ${hours.toFixed(1)}h"></div>`);
+  }
+  heatmap.innerHTML = cells.join('');
+  document.getElementById('heatmap-caption').textContent = `${active}/28 active days, ${total.toFixed(1)} total hours. Darker cells mean deeper study days.`;
+}
+
+function renderMockSparkline(mocks, bestMock) {
+  const sparkline = document.getElementById('mock-sparkline');
+  if (!sparkline) return;
+  if (!mocks.length) {
+    sparkline.innerHTML = '<div class="empty-state" style="width:100%;padding:24px 12px">No mocks yet.</div>';
+    document.getElementById('mock-caption').textContent = 'Add mock scores to see direction, best score, and recent momentum.';
+    return;
+  }
+  const recent = mocks.slice(-8);
+  sparkline.innerHTML = recent.map(mock => {
+    const total = Number(mock.total || 0);
+    const height = Math.max(7, Math.round(total / 300 * 100));
+    return `<div class="spark-bar ${total === bestMock ? 'best' : ''}" style="height:${height}%" title="${escapeHtml(mock.name || 'Mock')}: ${total}/300"></div>`;
+  }).join('');
+  const first = Number(recent[0].total || 0);
+  const last = Number(recent[recent.length - 1].total || 0);
+  const delta = last - first;
+  document.getElementById('mock-caption').textContent = `${recent.length} recent mock${recent.length === 1 ? '' : 's'} shown. Best ${bestMock}/300. Trend ${delta >= 0 ? '+' : ''}${delta} from first to latest.`;
+}
+
+function renderRiskRadar({ daysRemaining, weakest, recentHours, latestMock, testLogs, totalDone, totalChapters }) {
+  const list = document.getElementById('risk-radar');
+  if (!list) return;
+  const risks = [];
+  const remaining = totalChapters - totalDone;
+  if (weakest && weakest.pct < 35) {
+    risks.push({ level: 'danger', title: `${weakest.subject[0].toUpperCase() + weakest.subject.slice(1)} coverage is low`, copy: `${weakest.done}/${weakest.total} chapters done. Put the next two sessions here.` });
+  }
+  if (recentHours < 12) {
+    risks.push({ level: 'warn', title: 'Weekly volume needs pressure', copy: `${recentHours.toFixed(1)} hours in the last 7 days. Raise the floor before adding complexity.` });
+  }
+  if (!latestMock) {
+    risks.push({ level: 'warn', title: 'No mock baseline yet', copy: 'Add one full-length mock so score, accuracy, and mistake patterns become visible.' });
+  } else if (Number(latestMock.total || 0) < 150) {
+    risks.push({ level: 'danger', title: 'Mock score below safety line', copy: `Latest mock is ${latestMock.total}/300. Review errors before the next test.` });
+  }
+  if (daysRemaining && remaining / daysRemaining > .32) {
+    risks.push({ level: 'warn', title: 'Chapter pace is tight', copy: `${remaining} chapters left in ${daysRemaining} days. Finish at least ${Math.ceil(remaining / Math.max(1, daysRemaining / 7))} chapters/week.` });
+  }
+  const mistakeCount = testLogs.reduce((sum, log) => sum + (log.mistakes || []).length, 0);
+  if (testLogs.length && mistakeCount / testLogs.length < 2) {
+    risks.push({ level: 'warn', title: 'Test analysis is too shallow', copy: 'Capture at least 3 mistake notes per test so patterns become actionable.' });
+  }
+  if (!risks.length) {
+    risks.push({ level: 'ok', title: 'No major red flags', copy: 'Keep logging honestly and let the dashboard expose the next weak spot.' });
+  }
+  list.innerHTML = risks.slice(0, 4).map(risk => `
+    <div class="risk-item">
+      <div class="risk-dot ${risk.level === 'danger' ? 'danger' : risk.level === 'warn' ? 'warn' : ''}"></div>
+      <div><div class="risk-title">${escapeHtml(risk.title)}</div><div class="risk-copy">${escapeHtml(risk.copy)}</div></div>
+    </div>
+  `).join('');
 }
 
 function renderMomentumStrip(totalDone, ids) {
@@ -3259,6 +3555,7 @@ function saveMockTest() {
   saveAll();
   closeMockModal();
   renderMocks();
+  refreshDashboardIfVisible();
   document.getElementById('mock-name').value = '';
   document.getElementById('mock-phy').value = '';
   document.getElementById('mock-chem').value = '';
@@ -3336,6 +3633,7 @@ function deleteMockTest(id) {
     store.mocks = (store.mocks||[]).filter(m => m.id !== id);
     saveAll();
     renderMocks();
+    refreshDashboardIfVisible();
   }
 }
 
@@ -3428,6 +3726,7 @@ function deleteLogEntry(id) {
   saveAll();
   renderStudyLog();
   renderWeekChart();
+  refreshDashboardIfVisible();
 }
 
 // ════════════════════════════════════════
@@ -3530,6 +3829,7 @@ function saveTestLog() {
   saveAll();
   closeTestLogModal();
   renderTestLog();
+  refreshDashboardIfVisible();
   showToast('Test analysis saved');
 }
 
@@ -3615,6 +3915,7 @@ function deleteTestLogEntry(id) {
     store.testLogs = (store.testLogs||[]).filter(l => l.id !== id);
     saveAll();
     renderTestLog();
+    refreshDashboardIfVisible();
   }
 }
 
@@ -3657,6 +3958,7 @@ function markChapterRevised(id) {
   renderPlanner();
   const found = getAllChapters().find(item => item.id === id);
   if (found) renderSubject(found.subject, currentFilter[found.subject]);
+  refreshDashboardIfVisible();
   showToast('Revision recorded. Next review scheduled.');
 }
 
@@ -3693,6 +3995,7 @@ function saveTask() {
   closeTaskModal();
   renderPlanner();
   renderDashboardIntelligence();
+  refreshDashboardIfVisible();
   showToast('Task added to your plan');
 }
 
@@ -3707,6 +4010,7 @@ function quickAddTask() {
   input.value = '';
   saveAll();
   renderPlanner();
+  refreshDashboardIfVisible();
   showToast('Added to today');
 }
 
@@ -3725,6 +4029,7 @@ function toggleTask(id) {
   saveAll();
   renderPlanner();
   renderDashboardIntelligence();
+  refreshDashboardIfVisible();
   showToast(task.done ? 'Task completed' : 'Task reopened');
 }
 
@@ -3734,6 +4039,7 @@ function deleteTask(id) {
   saveAll();
   renderPlanner();
   renderDashboardIntelligence();
+  refreshDashboardIfVisible();
 }
 
 function renderTaskList() {
@@ -3778,6 +4084,7 @@ function saveGoals() {
   };
   saveAll();
   renderGoalProgress();
+  refreshDashboardIfVisible();
   showToast('Daily targets updated');
 }
 
@@ -3820,6 +4127,10 @@ function renderPlanner() {
   renderRevisionQueue();
   updatePlannerBadge();
   populateFocusTasks();
+}
+
+function refreshDashboardIfVisible() {
+  if (document.getElementById('page-dashboard')?.classList.contains('active')) renderDashboard();
 }
 
 function renderDashboardIntelligence() {
@@ -3930,6 +4241,7 @@ function recordFocusSession(minutes) {
   saveAll();
   renderFocusHistory();
   renderDashboardIntelligence();
+  refreshDashboardIfVisible();
 }
 
 function renderFocusHistory() {
@@ -4045,6 +4357,18 @@ function runCommand(index = commandActiveIndex) {
   item.action();
 }
 
+async function installApp() {
+  if (!deferredInstallPrompt) {
+    showToast('Install is available from your browser menu', 'error');
+    return;
+  }
+  deferredInstallPrompt.prompt();
+  await deferredInstallPrompt.userChoice.catch(() => null);
+  deferredInstallPrompt = null;
+  const installBtn = document.getElementById('install-app-btn');
+  if (installBtn) installBtn.style.display = 'none';
+}
+
 // FORMULA BANK
 // ════════════════════════════════════════
 
@@ -4140,6 +4464,18 @@ renderExistingUsers();
 const lastUser = localStorage.getItem(LAST_USER_KEY);
 if (lastUser) document.getElementById('login-name').value = lastUser;
 setInterval(updateDaysRemaining, 1000);
+window.addEventListener('beforeinstallprompt', event => {
+  event.preventDefault();
+  deferredInstallPrompt = event;
+  const installBtn = document.getElementById('install-app-btn');
+  if (installBtn) installBtn.style.display = 'block';
+});
+window.addEventListener('appinstalled', () => {
+  deferredInstallPrompt = null;
+  const installBtn = document.getElementById('install-app-btn');
+  if (installBtn) installBtn.style.display = 'none';
+  showToast('StudyMeter installed');
+});
 if ('serviceWorker' in navigator && location.protocol === 'https:') {
   window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js').catch(() => {}));
 }
