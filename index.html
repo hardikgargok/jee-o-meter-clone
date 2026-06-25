@@ -2327,6 +2327,172 @@
     box-shadow: 0 20px 50px rgba(7,20,47,.24);
   }
 
+  body.theme-dark {
+    --bg: #070b13;
+    --bg2: #101826;
+    --bg3: #172233;
+    --bg4: #202c40;
+    --bg5: #2a3850;
+    --border: rgba(255,255,255,0.08);
+    --border2: rgba(255,255,255,0.14);
+    --border3: rgba(255,255,255,0.22);
+    --text: #f4f7fb;
+    --text2: #b6c1d4;
+    --text3: #7f8ca4;
+    --phy: #60a5fa;
+    --phy-dim: #132240;
+    --phy-glow: rgba(96,165,250,0.16);
+    --chem: #4ade80;
+    --chem-dim: #0b2d1c;
+    --chem-glow: rgba(74,222,128,0.16);
+    --math: #fbbf24;
+    --math-dim: #352207;
+    --math-glow: rgba(251,191,36,0.16);
+    --accent: #7aa7ff;
+    --accent2: #eaf1ff;
+    --danger: #fb7185;
+    --success: #4ade80;
+    --warn: #fbbf24;
+    --gold: #f6c45f;
+    background:
+      radial-gradient(circle at 16% 12%, rgba(96,165,250,0.13), transparent 30%),
+      radial-gradient(circle at 86% 8%, rgba(74,222,128,0.10), transparent 26%),
+      linear-gradient(180deg, #070b13, #0b1220 44%, #101827 100%);
+  }
+
+  body.theme-dark #login-screen {
+    background:
+      radial-gradient(circle at 18% 18%, rgba(96,165,250,0.14), transparent 30%),
+      radial-gradient(circle at 84% 80%, rgba(74,222,128,0.10), transparent 28%),
+      linear-gradient(180deg, #070b13, #101827);
+  }
+
+  body.theme-dark .login-box,
+  body.theme-dark .momentum-tile,
+  body.theme-dark .card,
+  body.theme-dark .stat-card,
+  body.theme-dark .subj-card,
+  body.theme-dark .toolkit-card,
+  body.theme-dark .goal-card,
+  body.theme-dark .readiness-card,
+  body.theme-dark .focus-now-card,
+  body.theme-dark .task-card,
+  body.theme-dark .chapter-row,
+  body.theme-dark .mock-card,
+  body.theme-dark .tl-card,
+  body.theme-dark .timer-card,
+  body.theme-dark .modal,
+  body.theme-dark .command-panel,
+  body.theme-dark .hero-progress {
+    background: rgba(16,24,38,.94);
+    border-color: rgba(255,255,255,.09);
+    box-shadow: 0 22px 54px rgba(0,0,0,.28);
+  }
+
+  body.theme-dark .dashboard-hero {
+    background:
+      linear-gradient(115deg, rgba(14,22,36,.98), rgba(15,28,50,.95) 55%, rgba(18,43,78,.9)),
+      radial-gradient(circle at 80% 20%, rgba(96,165,250,.16), transparent 32%);
+    border-color: rgba(255,255,255,.09);
+    box-shadow: 0 28px 70px rgba(0,0,0,.34);
+  }
+
+  body.theme-dark .page-title,
+  body.theme-dark .hero-title,
+  body.theme-dark .login-logo::before,
+  body.theme-dark .progress-ring-value,
+  body.theme-dark .readiness-score,
+  body.theme-dark .stat-value,
+  body.theme-dark .momentum-value,
+  body.theme-dark .focus-stat-value,
+  body.theme-dark .section-title {
+    color: #f4f7fb;
+  }
+
+  body.theme-dark .login-input,
+  body.theme-dark .command-search,
+  body.theme-dark .chapter-search,
+  body.theme-dark .detail-field input,
+  body.theme-dark .detail-field select,
+  body.theme-dark .detail-field textarea,
+  body.theme-dark .notes-area,
+  body.theme-dark .tool-input,
+  body.theme-dark .tool-textarea,
+  body.theme-dark .goal-input,
+  body.theme-dark .timer-task select,
+  body.theme-dark .quick-capture input,
+  body.theme-dark .exam-select {
+    background: #111a2a;
+    border-color: rgba(255,255,255,.12);
+    color: #f4f7fb;
+  }
+
+  body.theme-dark .btn-sm,
+  body.theme-dark .tool-btn,
+  body.theme-dark .quick-action,
+  body.theme-dark .filter-pill,
+  body.theme-dark .tab-btn {
+    background: #111a2a;
+    color: #edf4ff;
+    border-color: rgba(255,255,255,.12);
+    box-shadow: 0 10px 24px rgba(0,0,0,.18);
+  }
+
+  body.theme-dark .btn-primary,
+  body.theme-dark .login-btn,
+  body.theme-dark .icon-btn,
+  body.theme-dark .toast,
+  body.theme-dark .update-banner {
+    background: #eaf1ff;
+    color: #07142f;
+    border-color: rgba(255,255,255,.20);
+  }
+
+  body.theme-dark .mobile-topbar {
+    background: rgba(7,11,19,.88);
+    border-bottom-color: rgba(255,255,255,.08);
+  }
+
+  body.theme-dark .mobile-brand { color: #f4f7fb; }
+  body.theme-dark .progress-ring { background: conic-gradient(var(--success) var(--progress, 0deg), #253149 0); }
+  body.theme-dark .progress-ring::before { background: #101826; border-color: rgba(255,255,255,.09); }
+  body.theme-dark .prog-bar,
+  body.theme-dark .readiness-meter,
+  body.theme-dark .heat-cell { background: #253149; }
+  body.theme-dark .subj-card.phy,
+  body.theme-dark .subj-card.chem,
+  body.theme-dark .subj-card.math { background: rgba(16,24,38,.94); }
+  body.theme-dark .subj-icon { background: #172233; }
+
+  .appearance-toggle {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+    padding: 5px;
+    border-radius: 999px;
+    background: rgba(255,255,255,.07);
+    border: 1px solid rgba(255,255,255,.10);
+  }
+
+  .appearance-option {
+    border: 0;
+    border-radius: 999px;
+    padding: 8px 10px;
+    font: inherit;
+    font-size: 12px;
+    font-weight: 750;
+    color: rgba(255,255,255,.72);
+    background: transparent;
+    cursor: pointer;
+  }
+
+  .appearance-option.active {
+    background: #fff;
+    color: #07142f;
+    box-shadow: 0 10px 22px rgba(0,0,0,.18);
+  }
+
   @media (max-width: 760px) {
     .login-box {
       min-height: 0;
@@ -2455,6 +2621,10 @@
 
   <div class="nav-section">Your Data</div>
   <div class="sidebar-tools">
+    <div class="appearance-toggle" aria-label="Appearance">
+      <button class="appearance-option active" id="theme-light-btn" type="button">Light</button>
+      <button class="appearance-option" id="theme-dark-btn" type="button">Dark</button>
+    </div>
     <button class="tool-btn wide" onclick="openCommandPalette()">Command Center</button>
     <button class="tool-btn wide" id="install-app-btn" onclick="installApp()" style="display:none">Install App</button>
     <button class="tool-btn" onclick="exportUserData()">Export</button>
@@ -3495,6 +3665,7 @@ let store = {};
 
 const USER_REGISTRY_KEY = 'studymeter_users_registry';
 const LAST_USER_KEY = 'studymeter_last_user';
+const THEME_KEY = 'studymeter_theme';
 const USER_COLORS = ['#5b9ef9','#34d399','#fb923c','#a78bfa','#fb7185','#fbbf24','#e879f9','#22d3ee'];
 const subjectSearch = { physics: '', chemistry: '', mathematics: '' };
 let notesSaveTimer = null;
@@ -3573,6 +3744,35 @@ function localDateKey(date = new Date()) {
   return `${year}-${month}-${day}`;
 }
 
+function applyTheme(theme) {
+  const chosen = theme === 'dark' ? 'dark' : 'light';
+  document.body.classList.toggle('theme-dark', chosen === 'dark');
+  document.documentElement.style.colorScheme = chosen;
+  document.querySelector('meta[name="theme-color"]')?.setAttribute('content', chosen === 'dark' ? '#070b13' : '#f6f9ff');
+  document.getElementById('theme-light-btn')?.classList.toggle('active', chosen === 'light');
+  document.getElementById('theme-dark-btn')?.classList.toggle('active', chosen === 'dark');
+}
+
+function setTheme(theme, announce = true) {
+  const chosen = theme === 'dark' ? 'dark' : 'light';
+  if (store.settings) {
+    store.settings.theme = chosen;
+    saveAll();
+  }
+  try { localStorage.setItem(THEME_KEY, chosen); } catch(e) {}
+  applyTheme(chosen);
+  if (announce) showToast(`${chosen === 'dark' ? 'Dark' : 'Light'} mode enabled`);
+}
+
+function bindThemeControls() {
+  document.addEventListener('click', event => {
+    const button = event.target.closest?.('#theme-light-btn, #theme-dark-btn');
+    if (!button) return;
+    event.preventDefault();
+    setTheme(button.id === 'theme-dark-btn' ? 'dark' : 'light');
+  }, true);
+}
+
 // Exam dates mapping
 const EXAM_DATES = {
   mains1: new Date('2027-01-21T09:30:00+05:30'),
@@ -3640,6 +3840,7 @@ function loginAs(name) {
   localStorage.setItem(LAST_USER_KEY, name);
   loadAll();
   updateUserUI();
+  applyTheme(store.settings.theme || localStorage.getItem(THEME_KEY) || 'light');
   document.getElementById('login-screen').classList.add('hidden');
   document.getElementById('main-shell').style.display = 'flex';
   const savedExam = store.settings?.exam;
@@ -3740,6 +3941,7 @@ function importUserData(event) {
       if (!store.tasks) store.tasks = [];
       if (!store.focusSessions) store.focusSessions = [];
       saveAll();
+      applyTheme(store.settings.theme || localStorage.getItem(THEME_KEY) || 'light');
       renderDashboard();
       showToast('Backup restored');
     } catch (error) {
@@ -3768,6 +3970,7 @@ function loadAll() {
   if (!store.energy) store.energy = {};
   if (!store.settings.goals) store.settings.goals = { hours: 6, questions: 60 };
   if (store.settings.autoLogFocus === undefined) store.settings.autoLogFocus = true;
+  if (!store.settings.theme) store.settings.theme = localStorage.getItem(THEME_KEY) || 'light';
 }
 
 function getChapter(id) {
@@ -5232,6 +5435,8 @@ function buildCommandItems() {
     { title: 'Add mock test', copy: 'Save Physics, Chemistry, and Maths scores', icon: '+', action: openMockModal, keywords: 'mock test score add' },
     { title: 'Build weak flashcards', copy: 'Create review cards from low-readiness chapters', icon: 'FC', action: () => { showPage('toolkit'); setTimeout(seedWeakFlashcards, 80); }, keywords: 'flashcards weak review spaced repetition' },
     { title: 'Create study report', copy: 'Generate a shareable progress summary', icon: 'R', action: () => { showPage('toolkit'); setTimeout(generateStudyReport, 80); }, keywords: 'report summary progress copy download' },
+    { title: 'Switch to light mode', copy: 'Use the bright StudyMeter appearance', icon: 'L', action: () => setTheme('light'), keywords: 'appearance theme light white mode' },
+    { title: 'Switch to dark mode', copy: 'Use the dark StudyMeter appearance', icon: 'D', action: () => setTheme('dark'), keywords: 'appearance theme dark black mode' },
     { title: 'Export backup', copy: 'Download this profile as local JSON', icon: 'E', action: exportUserData, keywords: 'export backup data json' }
   ];
 
@@ -5688,6 +5893,8 @@ document.addEventListener('keydown', event => {
 // ════════════════════════════════════════
 
 migrateLegacyStorage();
+bindThemeControls();
+applyTheme(localStorage.getItem(THEME_KEY) || 'light');
 renderExistingUsers();
 const lastUser = localStorage.getItem(LAST_USER_KEY);
 if (lastUser) document.getElementById('login-name').value = lastUser;
