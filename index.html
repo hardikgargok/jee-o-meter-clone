@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="A complete JEE Main and Advanced study companion for planning, focused study, spaced revision, syllabus tracking, mock tests, and performance analysis.">
-<meta name="theme-color" content="#070a11">
-<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#f6f9ff">
+<meta name="color-scheme" content="light">
 <meta name="application-name" content="StudyMeter">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -1892,6 +1892,460 @@
     .quick-capture { grid-template-columns: 1fr; }
   }
 
+  /* Athenify-inspired 2026 polish pass: bright, product-led, dashboard-first. */
+  :root {
+    --bg: #f5f8ff;
+    --bg2: #ffffff;
+    --bg3: #f0f5ff;
+    --bg4: #e7eefb;
+    --bg5: #dbe7f7;
+    --border: rgba(15, 23, 42, 0.08);
+    --border2: rgba(15, 23, 42, 0.14);
+    --border3: rgba(15, 23, 42, 0.22);
+    --text: #0b1220;
+    --text2: #4d5b73;
+    --text3: #7b879a;
+    --phy: #2563eb;
+    --phy-dim: #dbeafe;
+    --phy-glow: rgba(37, 99, 235, 0.13);
+    --chem: #159947;
+    --chem-dim: #dcfce7;
+    --chem-glow: rgba(21, 153, 71, 0.13);
+    --math: #e08a12;
+    --math-dim: #fff3d4;
+    --math-glow: rgba(224, 138, 18, 0.14);
+    --accent: #2d66e8;
+    --accent2: #07142f;
+    --danger: #e5484d;
+    --success: #159947;
+    --warn: #d98500;
+    --gold: #f2b33d;
+    --radius: 8px;
+    --radius-lg: 8px;
+    --radius-xl: 8px;
+    --glow-phy: 0 16px 34px rgba(37, 99, 235, 0.10);
+    --glow-chem: 0 16px 34px rgba(21, 153, 71, 0.10);
+    --glow-math: 0 16px 34px rgba(224, 138, 18, 0.10);
+    --glow-accent: 0 18px 48px rgba(45, 102, 232, 0.15);
+  }
+
+  body {
+    background:
+      linear-gradient(180deg, rgba(255,255,255,0.98), rgba(245,248,255,0.96) 36%, #eef5ff 100%),
+      radial-gradient(circle at 14% 16%, rgba(37,99,235,0.08), transparent 30%),
+      radial-gradient(circle at 86% 6%, rgba(21,153,71,0.08), transparent 28%);
+    color: var(--text);
+    letter-spacing: 0;
+  }
+
+  #login-screen {
+    background:
+      radial-gradient(circle at 22% 20%, rgba(37,99,235,0.14), transparent 28%),
+      radial-gradient(circle at 84% 80%, rgba(21,153,71,0.12), transparent 26%),
+      linear-gradient(180deg, #ffffff, #edf5ff);
+  }
+
+  .login-box {
+    width: min(920px, 94vw);
+    min-height: 510px;
+    display: grid;
+    grid-template-columns: minmax(0, .84fr) minmax(320px, 1fr);
+    gap: 34px;
+    align-items: center;
+    background: rgba(255,255,255,0.92);
+    border: 1px solid rgba(15,23,42,0.08);
+    box-shadow: 0 28px 90px rgba(18, 36, 77, 0.16);
+    padding: 36px;
+  }
+
+  .login-box > * {
+    grid-column: 1;
+    position: relative;
+    z-index: 2;
+  }
+
+  .login-box::before {
+    inset: 28px 28px 28px auto;
+    width: min(420px, 44%);
+    height: auto;
+    border-radius: 26px;
+    background:
+      linear-gradient(135deg, rgba(7,20,47,0.96), rgba(16,44,100,0.94)),
+      radial-gradient(circle at 20% 15%, rgba(37,99,235,0.28), transparent 35%);
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.12);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .login-box::after {
+    content: 'Focus timer\A Streaks\A Mock analytics\A Revision queue';
+    white-space: pre-line;
+    top: 118px;
+    right: 72px;
+    bottom: auto;
+    left: auto;
+    width: 250px;
+    height: auto;
+    color: rgba(255,255,255,0.92);
+    font-weight: 800;
+    font-size: 24px;
+    line-height: 1.55;
+    background: transparent;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .login-logo {
+    color: var(--accent);
+    background: none;
+    -webkit-text-fill-color: currentColor;
+    letter-spacing: 0;
+    font-size: clamp(34px, 5vw, 54px);
+    line-height: 1.02;
+  }
+
+  .login-logo::before {
+    content: 'The motivating ';
+    display: block;
+    color: var(--text);
+  }
+
+  .login-tagline {
+    color: var(--text2);
+    max-width: 430px;
+    font-size: 16px;
+    line-height: 1.7;
+    margin: 18px 0 28px;
+  }
+
+  .login-field label, .login-users-label, .stat-label, .mini-label, .momentum-label, .hero-eyebrow {
+    letter-spacing: .04em;
+  }
+
+  .login-input, .command-search, .chapter-search, .detail-field input, .detail-field select,
+  .detail-field textarea, .notes-area, .tool-input, .tool-textarea, .goal-input, .timer-task select,
+  .quick-capture input, .exam-select {
+    background: #fff;
+    border: 1px solid rgba(15,23,42,.12);
+    color: var(--text);
+    box-shadow: 0 1px 0 rgba(15,23,42,.03);
+  }
+
+  .login-input:focus, .command-search:focus, .chapter-search:focus, .detail-field input:focus,
+  .detail-field textarea:focus, .notes-area:focus, .tool-input:focus, .tool-textarea:focus,
+  .quick-capture input:focus {
+    border-color: rgba(37,99,235,.45);
+    box-shadow: 0 0 0 4px rgba(37,99,235,.11);
+  }
+
+  .login-btn, .btn-primary {
+    background: #07142f;
+    color: #fff;
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 999px;
+    box-shadow: 0 14px 24px rgba(7,20,47,.16);
+  }
+
+  .btn-primary:hover, .login-btn:hover { transform: translateY(-1px); box-shadow: 0 18px 30px rgba(7,20,47,.20); }
+
+  .btn-sm, .tool-btn, .quick-action, .filter-pill, .tab-btn {
+    background: #fff;
+    color: #172033;
+    border: 1px solid rgba(15,23,42,.10);
+    border-radius: 999px;
+    box-shadow: 0 8px 18px rgba(15,23,42,.04);
+  }
+
+  .btn-sm:hover, .tool-btn:hover, .quick-action:hover, .filter-pill:hover, .tab-btn:hover {
+    border-color: rgba(37,99,235,.24);
+    color: var(--accent);
+    background: #f8fbff;
+  }
+
+  .sidebar {
+    background: #07142f;
+    border-right: 0;
+    box-shadow: 20px 0 60px rgba(7,20,47,.12);
+  }
+
+  .sidebar-logo {
+    border-bottom-color: rgba(255,255,255,.08);
+  }
+
+  .sidebar-logo .title {
+    color: #fff !important;
+    background: none !important;
+    -webkit-text-fill-color: currentColor !important;
+  }
+
+  .sidebar-logo .sub, .sidebar .nav-section, .sidebar .days-label, .sidebar .days-left-box div,
+  .sidebar #sidebar-username {
+    color: rgba(255,255,255,.64) !important;
+  }
+
+  .nav-item {
+    color: rgba(255,255,255,.72);
+    border: 1px solid transparent;
+    border-radius: 10px;
+  }
+
+  .nav-item:hover {
+    color: #fff;
+    background: rgba(255,255,255,.07);
+  }
+
+  .nav-item.active {
+    color: #07142f;
+    background: #fff;
+    border-color: rgba(255,255,255,.24);
+    box-shadow: 0 14px 28px rgba(0,0,0,.18);
+  }
+
+  .nav-item.active::before { display: none; }
+  .nav-dot { box-shadow: none; }
+
+  .days-left-box {
+    background: rgba(255,255,255,.07);
+    border: 1px solid rgba(255,255,255,.10);
+    box-shadow: none;
+  }
+
+  .days-num { color: #fff; }
+  .main { padding: 30px clamp(18px, 3vw, 44px) 54px; }
+
+  .mobile-topbar {
+    background: rgba(255,255,255,.88);
+    border-bottom: 1px solid rgba(15,23,42,.08);
+    box-shadow: 0 14px 32px rgba(15,23,42,.08);
+  }
+
+  .mobile-brand { color: #07142f; font-weight: 850; }
+  .icon-btn { border-radius: 999px; background: #07142f; color: #fff; border-color: transparent; }
+
+  .page-header {
+    align-items: center;
+    margin-bottom: 26px;
+  }
+
+  .page-title {
+    color: #07142f;
+    font-size: clamp(28px, 4vw, 46px);
+    line-height: 1.04;
+    letter-spacing: 0;
+  }
+
+  .page-subtitle { color: var(--text2); font-size: 15px; }
+
+  .dashboard-hero {
+    grid-template-columns: minmax(0, 1fr) minmax(250px, 320px);
+    gap: clamp(18px, 3vw, 34px);
+    background:
+      linear-gradient(115deg, rgba(255,255,255,.98), rgba(248,251,255,.95) 54%, rgba(225,238,255,.92)),
+      radial-gradient(circle at 80% 20%, rgba(37,99,235,.13), transparent 32%);
+    border: 1px solid rgba(15,23,42,.08);
+    box-shadow: 0 26px 70px rgba(22,52,105,.13);
+    border-radius: 8px;
+    padding: clamp(24px, 4vw, 48px);
+    overflow: hidden;
+    position: relative;
+  }
+
+  .dashboard-hero > div:first-child {
+    position: relative;
+    z-index: 2;
+    min-width: 0;
+  }
+
+  .dashboard-hero::after {
+    content: '';
+    position: absolute;
+    right: 38px;
+    bottom: -36px;
+    width: min(360px, 42%);
+    height: 190px;
+    border-radius: 26px 26px 0 0;
+    background:
+      linear-gradient(180deg, rgba(7,20,47,.96), rgba(15,35,78,.96)),
+      repeating-linear-gradient(90deg, rgba(255,255,255,.14) 0 12px, transparent 12px 20px);
+    box-shadow: 0 22px 50px rgba(7,20,47,.24);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .hero-eyebrow {
+    color: var(--accent);
+    background: rgba(37,99,235,.07);
+    border: 1px solid rgba(37,99,235,.13);
+    border-radius: 999px;
+    display: inline-flex;
+    padding: 6px 10px;
+    font-weight: 850;
+  }
+
+  .hero-title {
+    color: #07142f;
+    font-size: clamp(34px, 5.5vw, 64px);
+    line-height: .98;
+    letter-spacing: 0;
+    margin-top: 18px;
+  }
+
+  .hero-title strong, .c-phy { color: var(--phy); }
+  .c-chem { color: var(--chem); }
+  .c-math { color: var(--math); }
+  .hero-copy { color: var(--text2); max-width: 560px; font-size: 16px; }
+
+  .hero-progress {
+    position: relative;
+    z-index: 1;
+    background: #fff;
+    border: 1px solid rgba(15,23,42,.08);
+    border-radius: 8px;
+    box-shadow: 0 22px 60px rgba(22,52,105,.16);
+  }
+
+  .progress-ring {
+    background: conic-gradient(var(--success) var(--progress, 0deg), #e8eef7 0);
+    box-shadow: inset 0 0 0 1px rgba(15,23,42,.04);
+  }
+
+  .progress-ring::before { background: #fff; }
+  .progress-ring-value, .readiness-score, .stat-value, .momentum-value, .focus-stat-value { color: #07142f; }
+
+  .momentum-strip, .subject-overview, .stat-grid, .toolkit-grid {
+    gap: 14px;
+  }
+
+  .momentum-tile, .card, .stat-card, .subj-card, .toolkit-card, .goal-card,
+  .readiness-card, .focus-now-card, .task-card, .chapter-row, .mock-card, .tl-card,
+  .timer-card, .modal, .command-panel {
+    background: rgba(255,255,255,.95);
+    border: 1px solid rgba(15,23,42,.08);
+    border-radius: 8px;
+    box-shadow: 0 16px 38px rgba(31,55,91,.08);
+  }
+
+  .momentum-tile:hover, .card:hover, .stat-card:hover, .subj-card:hover, .toolkit-card:hover,
+  .chapter-row:hover, .mock-card:hover, .tl-card:hover, .task-card:hover {
+    border-color: rgba(37,99,235,.18);
+    box-shadow: 0 22px 48px rgba(31,55,91,.12);
+    transform: translateY(-2px);
+  }
+
+  .stat-card::before { background: linear-gradient(90deg, var(--phy), var(--success)); }
+  .stat-sub, .subj-stats, .panel-caption, .toolkit-copy, .insight-copy, .readiness-copy,
+  .momentum-copy, .task-meta, .revision-reason { color: var(--text3); }
+
+  .section-title {
+    color: #07142f;
+    font-size: 16px;
+    letter-spacing: 0;
+  }
+
+  .section-line {
+    background: linear-gradient(90deg, rgba(37,99,235,.18), transparent);
+  }
+
+  .prog-bar, .readiness-meter {
+    background: #e9eff8;
+    border-radius: 999px;
+  }
+
+  .prog-fill, .readiness-fill {
+    border-radius: 999px;
+    box-shadow: none;
+  }
+
+  .fill-phy { background: linear-gradient(90deg, #2563eb, #60a5fa); }
+  .fill-chem { background: linear-gradient(90deg, #159947, #56c878); }
+  .fill-math { background: linear-gradient(90deg, #e08a12, #f6c45f); }
+
+  .subj-card.phy { background: linear-gradient(180deg, #fff, #f5f9ff); }
+  .subj-card.chem { background: linear-gradient(180deg, #fff, #f5fff8); }
+  .subj-card.math { background: linear-gradient(180deg, #fff, #fffaf0); }
+  .subj-icon {
+    width: 42px;
+    height: 42px;
+    display: grid;
+    place-items: center;
+    border-radius: 12px;
+    background: #f0f5ff;
+  }
+
+  .performance-grid, .dashboard-intelligence, .dash-grid {
+    align-items: stretch;
+  }
+
+  .heat-cell { border-radius: 5px; background: #e8eef7; }
+  .heat-cell.l1 { background: #cfe9d7; }
+  .heat-cell.l2 { background: #8ed5a2; }
+  .heat-cell.l3 { background: #43b86b; }
+  .heat-cell.l4 { background: #167c3b; }
+
+  .timer-card {
+    background:
+      radial-gradient(circle at 50% 18%, rgba(37,99,235,.10), transparent 34%),
+      linear-gradient(180deg, #fff, #f8fbff);
+    border-color: rgba(37,99,235,.12);
+  }
+
+  .timer-display {
+    color: #07142f;
+    letter-spacing: 0;
+    text-shadow: none;
+  }
+
+  .filter-pill.active, .tab-btn.active {
+    color: #fff;
+    border-color: #07142f;
+    background: #07142f;
+  }
+
+  .flashcard-face {
+    background: linear-gradient(135deg, #07142f, #153a87);
+    color: #fff;
+    border-color: rgba(255,255,255,.1);
+  }
+
+  .modal-overlay, .command-overlay {
+    background: rgba(7,20,47,.42);
+    backdrop-filter: blur(10px);
+  }
+
+  .toast {
+    background: #07142f;
+    color: #fff;
+    border: 1px solid rgba(255,255,255,.12);
+    box-shadow: 0 18px 42px rgba(7,20,47,.22);
+  }
+
+  .update-banner {
+    background: #07142f;
+    color: #fff;
+    border: 1px solid rgba(255,255,255,.10);
+    border-radius: 8px;
+    box-shadow: 0 20px 50px rgba(7,20,47,.24);
+  }
+
+  @media (max-width: 760px) {
+    .login-box {
+      min-height: 0;
+      grid-template-columns: 1fr;
+      padding: 28px 22px;
+    }
+    .login-box::before, .login-box::after { display: none; }
+    .dashboard-hero {
+      grid-template-columns: 1fr;
+      gap: 18px;
+      padding: 22px;
+    }
+    .dashboard-hero::after { display: none; }
+    .hero-copy { max-width: none; }
+    .hero-progress { min-height: 170px; width: 100%; }
+    .page-header { gap: 12px; }
+    .page-title { font-size: 30px; }
+  }
+
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
   }
@@ -1924,14 +2378,14 @@
 <div id="login-screen">
   <div class="login-box">
     <div class="login-logo">StudyMeter</div>
-    <div class="login-tagline">Your personal JEE Main & Advanced preparation tracker</div>
+    <div class="login-tagline">Track your study time, build streaks, review weak chapters, and keep JEE preparation beautifully measurable.</div>
 
     <div class="login-field">
       <label>Your name / username</label>
       <input class="login-input" type="text" id="login-name" placeholder="Enter your name to begin…" maxlength="30"
         onkeydown="if(event.key==='Enter') doLogin()">
     </div>
-    <button class="login-btn" onclick="doLogin()">Start Tracking →</button>
+    <button class="login-btn" onclick="doLogin()">Start tracking now →</button>
 
     <div class="login-users-list" id="existing-users-section" style="display:none">
       <div class="login-users-label">Continue as</div>
@@ -2042,9 +2496,9 @@
 
     <section class="dashboard-hero">
       <div>
-        <div class="hero-eyebrow">Your preparation command center</div>
-        <h1 class="hero-title" id="hero-greeting">Keep the momentum going.</h1>
-        <p class="hero-copy" id="hero-copy">Small, consistent sessions compound into exam-day confidence. Log today's work and keep your syllabus moving.</p>
+        <div class="hero-eyebrow">#1 JEE preparation dashboard</div>
+        <h1 class="hero-title" id="hero-greeting">The motivating StudyMeter app.</h1>
+        <p class="hero-copy" id="hero-copy">Track time, build momentum, review smarter, and walk into mocks with a clear picture of what is improving.</p>
         <div class="quick-actions">
           <button class="quick-action" onclick="openLogModal()">＋ Log study</button>
           <button class="quick-action" onclick="showPage('test-log')">⌁ Analyze test</button>
