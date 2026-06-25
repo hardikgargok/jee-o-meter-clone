@@ -2500,41 +2500,89 @@
     display: none;
     overflow-y: auto;
     background:
-      radial-gradient(circle at 20% 18%, rgba(96,165,250,.16), transparent 28%),
-      radial-gradient(circle at 84% 82%, rgba(74,222,128,.12), transparent 28%),
-      linear-gradient(180deg, #070b13, #101827);
+      linear-gradient(135deg, rgba(35,134,255,.16) 0 1px, transparent 1px),
+      linear-gradient(45deg, rgba(34,197,94,.10) 0 1px, transparent 1px),
+      linear-gradient(180deg, #050814, #0a1020 48%, #101827);
+    background-size: 48px 48px, 68px 68px, auto;
     color: #f4f7fb;
   }
 
   .onboarding-overlay.open { display: block; }
 
+  .onboarding-overlay::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      linear-gradient(90deg, rgba(5,8,20,.96), rgba(5,8,20,.40) 45%, rgba(5,8,20,.86)),
+      radial-gradient(ellipse at 52% 48%, transparent 0 42%, rgba(0,0,0,.28) 75%);
+    pointer-events: none;
+  }
+
   .onboarding-shell {
+    position: relative;
+    z-index: 1;
     min-height: 100vh;
     display: grid;
-    grid-template-columns: minmax(280px, .82fr) minmax(420px, 1.18fr);
-    gap: clamp(28px, 5vw, 70px);
+    grid-template-columns: minmax(300px, .9fr) minmax(460px, 1.1fr);
+    gap: clamp(34px, 6vw, 86px);
     align-items: center;
-    width: min(1180px, calc(100% - 40px));
+    width: min(1220px, calc(100% - 40px));
     margin: 0 auto;
     padding: 54px 0;
   }
 
   .onboarding-hero {
+    position: relative;
     max-width: 470px;
   }
 
+  .onboarding-hero::before {
+    content: 'JEE Mission Control';
+    display: inline-flex;
+    align-items: center;
+    margin-bottom: 22px;
+    padding: 8px 12px;
+    border: 1px solid rgba(125,166,255,.24);
+    border-radius: 999px;
+    color: #a9c4ff;
+    background: rgba(35,134,255,.10);
+    font-size: 12px;
+    font-weight: 850;
+    text-transform: uppercase;
+  }
+
+  .onboarding-hero::after {
+    content: 'Today\\A 6h goal\\A 60 questions\\A 3 tasks ready';
+    white-space: pre-line;
+    position: absolute;
+    right: -36px;
+    bottom: -118px;
+    width: 210px;
+    padding: 18px;
+    border: 1px solid rgba(255,255,255,.12);
+    border-radius: 18px;
+    background: linear-gradient(180deg, rgba(255,255,255,.12), rgba(255,255,255,.05));
+    box-shadow: 0 30px 80px rgba(0,0,0,.28);
+    color: #f4f7fb;
+    font-weight: 850;
+    line-height: 1.6;
+    backdrop-filter: blur(18px);
+  }
+
   .onboarding-art {
-    width: 128px;
-    height: 128px;
+    width: 116px;
+    height: 116px;
     display: grid;
     place-items: center;
-    border-radius: 32px;
-    margin-bottom: 28px;
-    font-size: 58px;
+    border-radius: 28px;
+    margin-bottom: 26px;
+    font-size: 40px;
+    font-weight: 950;
+    color: #06111f;
     background:
-      radial-gradient(circle at 35% 25%, rgba(255,255,255,.22), transparent 28%),
-      linear-gradient(135deg, #16345f, #0b1a32);
-    box-shadow: 0 0 42px rgba(96,165,250,.22), inset 0 0 0 1px rgba(255,255,255,.1);
+      linear-gradient(135deg, #ffffff, #cce2ff 48%, #22c55e);
+    box-shadow: 0 0 0 9px rgba(35,134,255,.08), 0 26px 70px rgba(35,134,255,.28);
   }
 
   .onboarding-hero h2 {
@@ -2554,11 +2602,24 @@
   .onboarding-hero strong { color: #fff; }
 
   .onboarding-card {
-    background: rgba(25,33,49,.96);
-    border: 1px solid rgba(255,255,255,.10);
-    border-radius: 28px;
-    box-shadow: 0 28px 80px rgba(0,0,0,.35);
+    position: relative;
+    overflow: hidden;
+    background:
+      linear-gradient(180deg, rgba(255,255,255,.11), rgba(255,255,255,.055)),
+      rgba(16,24,38,.82);
+    border: 1px solid rgba(255,255,255,.14);
+    border-radius: 18px;
+    box-shadow: 0 34px 90px rgba(0,0,0,.42);
     padding: clamp(24px, 4vw, 34px);
+    backdrop-filter: blur(24px);
+  }
+
+  .onboarding-card::before {
+    content: '';
+    position: absolute;
+    inset: 0 0 auto;
+    height: 3px;
+    background: linear-gradient(90deg, #2386ff, #22c55e, #fbbf24);
   }
 
   .onboarding-top {
@@ -2570,9 +2631,12 @@
   }
 
   .onboarding-step-label {
-    color: #94a3b8;
-    font-weight: 750;
+    color: #dbeafe;
+    font-weight: 850;
     font-size: 13px;
+    padding: 7px 10px;
+    border-radius: 999px;
+    background: rgba(255,255,255,.08);
   }
 
   .onboarding-dots {
@@ -2581,8 +2645,8 @@
   }
 
   .onboarding-dot {
-    width: 9px;
-    height: 9px;
+    width: 10px;
+    height: 10px;
     border-radius: 50%;
     background: rgba(255,255,255,.32);
   }
@@ -2591,7 +2655,7 @@
   .onboarding-dot.active { background: #2386ff; box-shadow: 0 0 0 5px rgba(35,134,255,.12); }
 
   .onboarding-title {
-    font-size: clamp(24px, 3vw, 34px);
+    font-size: clamp(28px, 3vw, 38px);
     line-height: 1.08;
     margin-bottom: 8px;
   }
@@ -2617,10 +2681,10 @@
   .onboarding-field select {
     width: 100%;
     border: 1px solid rgba(255,255,255,.12);
-    border-radius: 12px;
-    background: #2a3448;
+    border-radius: 14px;
+    background: rgba(8,13,25,.72);
     color: #fff;
-    padding: 13px 14px;
+    padding: 15px 16px;
     font: inherit;
     outline: none;
   }
@@ -2634,7 +2698,7 @@
   .onboarding-grid {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 14px;
+    gap: 16px;
     margin-bottom: 18px;
   }
 
@@ -2643,11 +2707,13 @@
   .onboarding-choice {
     min-height: 150px;
     text-align: left;
-    border: 1px solid rgba(255,255,255,.10);
+    border: 1px solid rgba(255,255,255,.11);
     border-radius: 18px;
-    background: rgba(15,23,42,.36);
+    background:
+      linear-gradient(180deg, rgba(255,255,255,.075), rgba(255,255,255,.035)),
+      rgba(15,23,42,.42);
     color: #f4f7fb;
-    padding: 18px;
+    padding: 19px;
     cursor: pointer;
     transition: .18s ease;
   }
@@ -2655,19 +2721,24 @@
   .onboarding-choice:hover,
   .onboarding-choice.active {
     border-color: #2386ff;
-    box-shadow: 0 0 0 1px rgba(35,134,255,.52), 0 18px 40px rgba(0,0,0,.22);
+    background:
+      linear-gradient(180deg, rgba(35,134,255,.20), rgba(34,197,94,.075)),
+      rgba(15,23,42,.62);
+    box-shadow: 0 0 0 1px rgba(35,134,255,.52), 0 22px 50px rgba(0,0,0,.28);
     transform: translateY(-2px);
   }
 
   .choice-icon {
-    width: 58px;
-    height: 58px;
+    width: 62px;
+    height: 62px;
     display: grid;
     place-items: center;
-    border-radius: 16px;
-    font-size: 30px;
+    border-radius: 18px;
+    font-size: 18px;
+    font-weight: 950;
     margin-bottom: 14px;
-    background: rgba(255,255,255,.08);
+    color: #06111f;
+    background: linear-gradient(135deg, #fff, #dbeafe 52%, #86efac);
   }
 
   .choice-title {
@@ -2723,7 +2794,7 @@
     background: rgba(255,255,255,.06);
     color: #f4f7fb;
     border-radius: 999px;
-    padding: 12px 18px;
+    padding: 13px 19px;
     font: inherit;
     font-weight: 750;
     cursor: pointer;
@@ -2731,14 +2802,49 @@
 
   .onboarding-next {
     border: 0;
-    background: #22c55e;
+    background: linear-gradient(135deg, #22c55e, #8bffb8);
     color: #052e16;
     border-radius: 999px;
-    padding: 12px 22px;
+    padding: 13px 24px;
     font: inherit;
     font-weight: 850;
     cursor: pointer;
     box-shadow: 0 14px 34px rgba(34,197,94,.22);
+  }
+
+  .onboarding-next:hover,
+  .onboarding-back:hover,
+  .onboarding-skip:hover {
+    transform: translateY(-1px);
+  }
+
+  .dashboard-hero {
+    isolation: isolate;
+  }
+
+  .dashboard-hero::before {
+    content: 'Study streak   Mock growth   Revision queue';
+    position: absolute;
+    left: clamp(18px, 4vw, 48px);
+    right: clamp(18px, 4vw, 48px);
+    bottom: 16px;
+    display: flex;
+    justify-content: center;
+    padding: 11px 16px;
+    border: 1px solid rgba(37,99,235,.12);
+    border-radius: 999px;
+    background: rgba(255,255,255,.62);
+    color: #486078;
+    font-size: 12px;
+    font-weight: 800;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  body.theme-dark .dashboard-hero::before {
+    background: rgba(8,13,25,.62);
+    border-color: rgba(255,255,255,.10);
+    color: #b6c1d4;
   }
 
   .onboarding-confetti {
@@ -4098,28 +4204,28 @@ function bindOnboardingControls() {
 
 const ONBOARDING_STEPS = [
   {
-    art: '01',
+    art: 'GO',
     heroTitle: 'Welcome to StudyMeter.',
     heroCopy: 'Build a preparation dashboard that knows your exam, target, and study rhythm.',
     title: 'Personalize your experience',
     copy: 'Tell StudyMeter what kind of support you want most right now.'
   },
   {
-    art: '02',
+    art: 'JEE',
     heroTitle: 'Choose your exam path.',
     heroCopy: 'Your countdown, planning pressure, and recommendations will follow this attempt.',
     title: 'Exam and appearance',
     copy: 'Pick the JEE attempt you are preparing for and choose the look you prefer.'
   },
   {
-    art: '03',
+    art: '6H',
     heroTitle: 'Set your daily rhythm.',
     heroCopy: 'A realistic target makes the dashboard useful from day one.',
     title: 'Daily targets',
     copy: 'Set the minimum study pace StudyMeter should hold you accountable to.'
   },
   {
-    art: '04',
+    art: 'WIN',
     heroTitle: 'Your setup is ready.',
     heroCopy: 'StudyMeter will create a first-day launch plan so you can start immediately.',
     title: 'Launch plan',
@@ -4187,9 +4293,9 @@ function renderOnboardingStep() {
         <input id="onboarding-name" type="text" maxlength="30" value="${escapeHtml(onboardingState.name)}" placeholder="Your name">
       </div>
       <div class="onboarding-grid">
-        ${onboardingChoice('reason', 'motivation', 'Trophy', 'Motivation', 'Keep streaks, medals, and visible momentum in front.')}
-        ${onboardingChoice('reason', 'accountability', 'Checks', 'Accountability', 'Get daily targets, reminders, and honest next actions.')}
-        ${onboardingChoice('reason', 'analysis', 'Charts', 'Analysis', 'Focus on mocks, weak chapters, and progress patterns.')}
+        ${onboardingChoice('reason', 'motivation', 'XP', 'Motivation', 'Keep streaks, medals, and visible momentum in front.')}
+        ${onboardingChoice('reason', 'accountability', 'DO', 'Accountability', 'Get daily targets, reminders, and honest next actions.')}
+        ${onboardingChoice('reason', 'analysis', 'IQ', 'Analysis', 'Focus on mocks, weak chapters, and progress patterns.')}
       </div>
     `;
   }
