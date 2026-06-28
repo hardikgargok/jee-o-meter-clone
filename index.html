@@ -5714,6 +5714,34 @@
         <div class="mini-list" id="source-studio-output" style="margin-top:10px"></div>
       </div>
 
+      <div class="toolkit-card wide">
+        <div class="toolkit-title">100 Improvement Pack</div>
+        <div class="toolkit-copy">A concrete library of 100 small upgrades you can apply to make StudyMeter smoother, friendlier, and more useful every day.</div>
+        <div class="tool-two" style="margin-top:12px">
+          <select class="tool-input" id="improvement-pack-category" onchange="renderImprovementPack()" aria-label="Improvement category">
+            <option value="all">All 100 improvements</option>
+            <option value="Speed">Speed</option>
+            <option value="Clarity">Clarity</option>
+            <option value="Planning">Planning</option>
+            <option value="Recall">Recall</option>
+            <option value="Focus">Focus</option>
+            <option value="Mocks">Mocks</option>
+            <option value="Notes">Notes</option>
+            <option value="Motivation">Motivation</option>
+            <option value="Accessibility">Accessibility</option>
+            <option value="Mobile">Mobile</option>
+          </select>
+          <input class="tool-input" id="improvement-pack-search" placeholder="Search improvements..." oninput="renderImprovementPack()">
+        </div>
+        <div class="action-row">
+          <button class="btn-primary" onclick="addTopImprovementTasks()">Add best 10</button>
+          <button class="btn-sm" onclick="addAllImprovementTasks()">Add all 100</button>
+          <button class="btn-sm" onclick="speakImprovementPack()">Read top fix</button>
+        </div>
+        <div class="mini-list" id="improvement-pack-summary" style="margin-top:10px"></div>
+        <div class="mini-list" id="improvement-pack-list" style="margin-top:10px;max-height:360px;overflow:auto"></div>
+      </div>
+
       <div class="toolkit-card">
         <div class="toolkit-title">Achievement Wall</div>
         <div class="toolkit-copy">Motivation badges from real preparation behavior.</div>
@@ -9903,6 +9931,7 @@ function buildCommandItems() {
     { title: 'Build weak flashcards', copy: 'Create review cards from low-readiness chapters', icon: 'FC', action: () => { showPage('toolkit'); setTimeout(seedWeakFlashcards, 80); }, keywords: 'flashcards weak review spaced repetition' },
     { title: 'Generate recall quiz', copy: 'Create a quick active-recall test from weak areas', icon: 'Q', action: () => { showPage('toolkit'); setTimeout(generateQuizPrompt, 80); }, keywords: 'quiz active recall test practice weak doubts' },
     { title: 'Open Source Studio', copy: 'Paste notes and build cards, quizzes, and tasks', icon: 'SS', action: () => { showPage('toolkit'); setTimeout(() => document.getElementById('source-studio-input')?.focus(), 80); }, keywords: 'source studio notes paste flashcards quiz tasks notebook' },
+    { title: 'Open 100 Improvement Pack', copy: 'Browse and apply one hundred concrete app improvements', icon: '100', action: () => { showPage('toolkit'); setTimeout(renderImprovementPack, 80); }, keywords: '100 improvements pack add fix change better app polish ideas' },
     { title: 'Create study report', copy: 'Generate a shareable progress summary', icon: 'R', action: () => { showPage('toolkit'); setTimeout(generateStudyReport, 80); }, keywords: 'report summary progress copy download' },
     { title: 'Switch to light mode', copy: 'Use the bright StudyMeter appearance', icon: 'L', action: () => setTheme('light'), keywords: 'appearance theme light white mode' },
     { title: 'Switch to dark mode', copy: 'Use the dark StudyMeter appearance', icon: 'D', action: () => setTheme('dark'), keywords: 'appearance theme dark black mode' },
@@ -10044,6 +10073,7 @@ function renderToolkit() {
   renderFlashcard();
   renderQuizLab();
   renderSourceStudio();
+  renderImprovementPack();
   renderAchievements();
   renderWeeklyCalendar();
   renderBookmarks();
@@ -10228,6 +10258,219 @@ function speakSourceStudio() {
   const text = document.getElementById('source-studio-input')?.value.trim();
   if (!text) return showToast('Paste notes before reading source', 'error');
   speakText(text.slice(0, 900), 'Source Studio');
+}
+
+const IMPROVEMENT_PACK = {
+  Speed: [
+    ['One-click next session', 'Start the highest-priority task without hunting through pages.'],
+    ['Faster task naming', 'Use action-first task titles that begin with solve, revise, analyze, or log.'],
+    ['Quick command habit', 'Use the command palette for every page jump.'],
+    ['Top task pinning', 'Keep the next task visible at the top of the dashboard.'],
+    ['Short task blocks', 'Split long goals into 15-50 minute blocks.'],
+    ['Fast source paste', 'Paste class notes into Source Studio immediately after a lecture.'],
+    ['Fewer open tabs', 'Use Toolkit instead of opening separate note, timer, and quiz apps.'],
+    ['Refresh routine', 'Hit Toolkit refresh after a big logging session.'],
+    ['Keyboard-first navigation', 'Use shortcuts and search before scrolling.'],
+    ['Daily reset task', 'Create one end-of-day reset task to prepare tomorrow.']
+  ],
+  Clarity: [
+    ['Readable next action', 'Make every task finishable and visible in one sentence.'],
+    ['Remove vague goals', 'Replace study physics with solve 20 NLM questions.'],
+    ['Clear weak chapter label', 'Bookmark the exact chapter that feels weakest.'],
+    ['One metric focus', 'Watch one metric for the day: hours, questions, recall, or mock repair.'],
+    ['Clean dashboard mode', 'Use Simple mode when overwhelmed and Full mode for review.'],
+    ['Plain mistake wording', 'Write mistakes in simple words a tired brain can understand.'],
+    ['Better task notes', 'Add why this task matters to high-priority work.'],
+    ['Daily review caption', 'End the day with one sentence about what improved.'],
+    ['Visible exam signal', 'Keep the selected exam and countdown current.'],
+    ['Sharper report', 'Generate a study report before weekly planning.']
+  ],
+  Planning: [
+    ['Today-only focus', 'Move only realistic tasks into today.'],
+    ['Overdue cleanup', 'Reschedule or delete old overdue tasks.'],
+    ['High priority cap', 'Keep high priority to four tasks or fewer.'],
+    ['Weekly anchor blocks', 'Add fixed mock, revision, and backlog blocks.'],
+    ['Question quota split', 'Divide daily questions across subjects.'],
+    ['Revision-first day', 'Clear due revision before new theory on heavy days.'],
+    ['Mock repair buffer', 'Schedule repair time after every mock.'],
+    ['Backlog burn lane', 'Keep one recurring task for pending chapters.'],
+    ['Sunday planning pass', 'Use the 100x audit before the new week.'],
+    ['Plan from energy', 'Use Energy Check-In before generating heavy tasks.']
+  ],
+  Recall: [
+    ['Daily flashcard seed', 'Create cards from every missed concept.'],
+    ['Grade every card', 'Use Hard or Good so spacing becomes useful.'],
+    ['Recall before reading', 'Answer from memory before opening notes.'],
+    ['Source Studio habit', 'Turn pasted notes into cards after each class.'],
+    ['Missed quiz conversion', 'Convert missed quiz prompts into flashcards.'],
+    ['Formula trap cards', 'Write cards for when a formula should not be used.'],
+    ['Micro oral test', 'Speak one answer aloud before checking.'],
+    ['Five-card warmup', 'Start study with five due flashcards.'],
+    ['Interleaved recall', 'Mix Physics, Chemistry, and Math prompts.'],
+    ['Weekly card cleanup', 'Delete duplicates and rewrite unclear cards.']
+  ],
+  Focus: [
+    ['25-minute default', 'Start with 25 minutes when resistance is high.'],
+    ['Deep work block', 'Use 50 minutes for hard problem solving.'],
+    ['Task-linked timer', 'Attach the timer to a planner task.'],
+    ['Auto-log focus', 'Keep focus auto-log enabled for honest tracking.'],
+    ['Finish early button', 'Record partial focus instead of losing the session.'],
+    ['Ambience choice', 'Use rain, library, or deep noise only if it helps.'],
+    ['Phone-away rule', 'Write phone-away in the task notes for deep blocks.'],
+    ['Break protection', 'Use short breaks as breaks, not scrolling sessions.'],
+    ['One-block restart', 'After a bad day, restart with one block only.'],
+    ['Focus history review', 'Check recent focus sessions weekly.']
+  ],
+  Mocks: [
+    ['Baseline mock', 'Log one baseline mock if none exists.'],
+    ['Subject score split', 'Always enter Physics, Chemistry, and Math separately.'],
+    ['Mistake taxonomy', 'Tag mistakes as concept, calculation, time, or silly.'],
+    ['Redo before new mock', 'Redo similar questions before taking another test.'],
+    ['Mock note summary', 'Write one note after every mock.'],
+    ['Trend over emotion', 'Use mock trajectory instead of judging one score.'],
+    ['Best score anchor', 'Compare to your best score, not random expectations.'],
+    ['Next mock range', 'Use score predictor as a rough planning signal.'],
+    ['Analysis task', 'Create a planner task after every mock.'],
+    ['Exam-day routine', 'Write attempt order and skip rules in General Notes.']
+  ],
+  Notes: [
+    ['Formula template use', 'Use templates instead of messy note dumps.'],
+    ['Mistake log template', 'Record wrong method, correct idea, and trigger.'],
+    ['Revision snapshots', 'Summarize must-remember points after revision.'],
+    ['Subject note balance', 'Keep notes in all three subjects.'],
+    ['General strategy page', 'Store exam rules and weekly rules in General Notes.'],
+    ['Search before rewrite', 'Use Formula Search before duplicating notes.'],
+    ['Notes to cards', 'Turn important notes into flashcards.'],
+    ['Doubt capture', 'Park confusion immediately from the dashboard.'],
+    ['Doubt closure', 'Mark doubts solved after repair.'],
+    ['Short notes only', 'Prefer crisp bullets over long paragraphs.']
+  ],
+  Motivation: [
+    ['Daily quest check', 'Use quests as a small starting ritual.'],
+    ['Momentum level review', 'Watch XP rise from real work, not mood.'],
+    ['Celebrate closure', 'Finish one small task before chasing big motivation.'],
+    ['Streak repair', 'If streak breaks, restart with one honest log.'],
+    ['Pulse coach pick', 'Pick Focused, Tired, Stuck, or Stressed before studying.'],
+    ['Calm mode permission', 'Use Calm Study on low-energy days.'],
+    ['Mentor snapshot', 'Read the mentor snapshot before difficult sessions.'],
+    ['Achievement wall', 'Use badges as proof of consistency.'],
+    ['Visible wins', 'Log small wins so the app feels alive.'],
+    ['Recovery without guilt', 'Use lighter tasks instead of quitting fully.']
+  ],
+  Accessibility: [
+    ['High contrast theme', 'Use the theme that keeps text easiest to read.'],
+    ['Reduced motion option', 'Use reduced motion if animations distract.'],
+    ['Readable density', 'Choose roomy density when tired.'],
+    ['Voice read-aloud', 'Use Speak plan, flashcard read, and quiz read.'],
+    ['Clear button labels', 'Prefer direct action buttons in daily flow.'],
+    ['Short visible text', 'Keep task titles short enough for mobile.'],
+    ['Avoid hidden meaning', 'Use notes to explain why a task matters.'],
+    ['Keyboard access', 'Use command palette and shortcuts.'],
+    ['Reminder timing', 'Set reminders when you are actually available.'],
+    ['Export backup', 'Back up local data before large changes.']
+  ],
+  Mobile: [
+    ['Mobile bottom bar', 'Use quick mobile navigation instead of sidebar hunting.'],
+    ['Compact dashboard', 'Use Simple mode on small screens.'],
+    ['Short task titles', 'Keep mobile task cards readable.'],
+    ['One-thumb actions', 'Use Focus, Search, and Log from the launch strip.'],
+    ['Mobile note paste', 'Paste lecture notes into Source Studio from phone.'],
+    ['Small focus sessions', 'Use 25-minute blocks when studying away from desk.'],
+    ['Install as app', 'Install StudyMeter for faster launch.'],
+    ['Offline confidence', 'Let the PWA cache the app shell.'],
+    ['Scroll-light toolkit', 'Use filters/search in the improvement pack.'],
+    ['Quick doubt entry', 'Capture doubts immediately from mobile.']
+  ]
+};
+
+function getImprovementPackItems() {
+  return Object.entries(IMPROVEMENT_PACK).flatMap(([category, items]) =>
+    items.map((item, index) => ({
+      id: `${category.toLowerCase()}-${index + 1}`,
+      number: Object.keys(IMPROVEMENT_PACK).indexOf(category) * 10 + index + 1,
+      category,
+      title: item[0],
+      copy: item[1],
+      minutes: index < 3 ? 20 : 10,
+      priority: index < 2 ? 'high' : 'medium'
+    }))
+  );
+}
+
+function getFilteredImprovementPack() {
+  const category = document.getElementById('improvement-pack-category')?.value || 'all';
+  const query = (document.getElementById('improvement-pack-search')?.value || '').trim().toLowerCase();
+  return getImprovementPackItems().filter(item => {
+    const categoryMatch = category === 'all' || item.category === category;
+    const queryMatch = !query || `${item.title} ${item.copy} ${item.category}`.toLowerCase().includes(query);
+    return categoryMatch && queryMatch;
+  });
+}
+
+function renderImprovementPack() {
+  const list = document.getElementById('improvement-pack-list');
+  const summary = document.getElementById('improvement-pack-summary');
+  if (!list || !summary) return;
+  const all = getImprovementPackItems();
+  const filtered = getFilteredImprovementPack();
+  const categories = Object.keys(IMPROVEMENT_PACK).length;
+  summary.innerHTML = `<div class="mini-row"><div class="mini-row-main"><div class="mini-row-title">${all.length} concrete improvements across ${categories} areas</div><div class="mini-row-copy">Filter, search, add one, add best 10, or add all 100 to the planner.</div></div><span class="badge">${filtered.length}</span></div>`;
+  list.innerHTML = filtered.length
+    ? filtered.map(item => `<div class="mini-row">
+        <div class="mini-row-main">
+          <div class="mini-row-title">${item.number}. ${escapeHtml(item.title)}</div>
+          <div class="mini-row-copy">${escapeHtml(item.copy)} - ${escapeHtml(item.category)}</div>
+        </div>
+        <button class="btn-sm" onclick="addImprovementTask('${item.id}')">Add</button>
+      </div>`).join('')
+    : '<div class="empty-state">No improvements match that search.</div>';
+}
+
+function addImprovementTask(id) {
+  const item = getImprovementPackItems().find(entry => entry.id === id);
+  if (!item) return;
+  return addImprovementTasks([item]);
+}
+
+function addTopImprovementTasks() {
+  return addImprovementTasks(getImprovementPackItems().slice(0, 10));
+}
+
+function addAllImprovementTasks() {
+  return addImprovementTasks(getImprovementPackItems());
+}
+
+function addImprovementTasks(items) {
+  const existing = new Set((store.tasks || []).filter(task => !task.done).map(task => String(task.title || '').toLowerCase()));
+  const stamp = Date.now();
+  let added = 0;
+  items.forEach((item, index) => {
+    const title = `Improve: ${item.title}`;
+    if (existing.has(title.toLowerCase())) return;
+    store.tasks.push({
+      id: stamp + index,
+      title,
+      subject: 'Mixed',
+      due: localDateKey(),
+      priority: item.priority,
+      minutes: item.minutes,
+      notes: `${item.category}: ${item.copy}`,
+      done: false,
+      createdAt: new Date().toISOString()
+    });
+    existing.add(title.toLowerCase());
+    added += 1;
+  });
+  saveAll();
+  renderPlanner();
+  renderImprovementPack();
+  refreshDashboardIfVisible();
+  showToast(`${added} improvement task${added === 1 ? '' : 's'} added`);
+}
+
+function speakImprovementPack() {
+  const item = getFilteredImprovementPack()[0] || getImprovementPackItems()[0];
+  speakText(`Improvement ${item.number}. ${item.title}. ${item.copy}`, '100 Improvement Pack');
 }
 
 function renderAchievements() {
