@@ -1,4 +1,4 @@
-const CACHE_NAME = 'studymeter-v30';
+const CACHE_NAME = 'studymeter-v31';
 const APP_SHELL = ['./', './index.html', './manifest.webmanifest', './favicon.png', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('install', event => {

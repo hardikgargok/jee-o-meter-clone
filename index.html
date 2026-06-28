@@ -5715,11 +5715,11 @@
       </div>
 
       <div class="toolkit-card wide">
-        <div class="toolkit-title">100 Improvement Pack</div>
-        <div class="toolkit-copy">A concrete library of 100 small upgrades you can apply to make StudyMeter smoother, friendlier, and more useful every day.</div>
+        <div class="toolkit-title">200 Improvement Pack</div>
+        <div class="toolkit-copy">A concrete library of 200 small upgrades you can apply to make StudyMeter smoother, friendlier, and more useful every day.</div>
         <div class="tool-two" style="margin-top:12px">
           <select class="tool-input" id="improvement-pack-category" onchange="renderImprovementPack()" aria-label="Improvement category">
-            <option value="all">All 100 improvements</option>
+            <option value="all">All 200 improvements</option>
             <option value="Speed">Speed</option>
             <option value="Clarity">Clarity</option>
             <option value="Planning">Planning</option>
@@ -5730,12 +5730,22 @@
             <option value="Motivation">Motivation</option>
             <option value="Accessibility">Accessibility</option>
             <option value="Mobile">Mobile</option>
+            <option value="Automation">Automation</option>
+            <option value="Analytics">Analytics</option>
+            <option value="AI Coach">AI Coach</option>
+            <option value="Review">Review</option>
+            <option value="Exam Strategy">Exam Strategy</option>
+            <option value="Habit Design">Habit Design</option>
+            <option value="Data Safety">Data Safety</option>
+            <option value="Visual Polish">Visual Polish</option>
+            <option value="Collaboration">Collaboration</option>
+            <option value="Premium Feel">Premium Feel</option>
           </select>
           <input class="tool-input" id="improvement-pack-search" placeholder="Search improvements..." oninput="renderImprovementPack()">
         </div>
         <div class="action-row">
           <button class="btn-primary" onclick="addTopImprovementTasks()">Add best 10</button>
-          <button class="btn-sm" onclick="addAllImprovementTasks()">Add all 100</button>
+          <button class="btn-sm" onclick="addAllImprovementTasks()">Add all 200</button>
           <button class="btn-sm" onclick="speakImprovementPack()">Read top fix</button>
         </div>
         <div class="mini-list" id="improvement-pack-summary" style="margin-top:10px"></div>
@@ -9931,7 +9941,7 @@ function buildCommandItems() {
     { title: 'Build weak flashcards', copy: 'Create review cards from low-readiness chapters', icon: 'FC', action: () => { showPage('toolkit'); setTimeout(seedWeakFlashcards, 80); }, keywords: 'flashcards weak review spaced repetition' },
     { title: 'Generate recall quiz', copy: 'Create a quick active-recall test from weak areas', icon: 'Q', action: () => { showPage('toolkit'); setTimeout(generateQuizPrompt, 80); }, keywords: 'quiz active recall test practice weak doubts' },
     { title: 'Open Source Studio', copy: 'Paste notes and build cards, quizzes, and tasks', icon: 'SS', action: () => { showPage('toolkit'); setTimeout(() => document.getElementById('source-studio-input')?.focus(), 80); }, keywords: 'source studio notes paste flashcards quiz tasks notebook' },
-    { title: 'Open 100 Improvement Pack', copy: 'Browse and apply one hundred concrete app improvements', icon: '100', action: () => { showPage('toolkit'); setTimeout(renderImprovementPack, 80); }, keywords: '100 improvements pack add fix change better app polish ideas' },
+    { title: 'Open 200 Improvement Pack', copy: 'Browse and apply two hundred concrete app improvements', icon: '200', action: () => { showPage('toolkit'); setTimeout(renderImprovementPack, 80); }, keywords: '100 200 improvements pack add fix change better app polish ideas' },
     { title: 'Create study report', copy: 'Generate a shareable progress summary', icon: 'R', action: () => { showPage('toolkit'); setTimeout(generateStudyReport, 80); }, keywords: 'report summary progress copy download' },
     { title: 'Switch to light mode', copy: 'Use the bright StudyMeter appearance', icon: 'L', action: () => setTheme('light'), keywords: 'appearance theme light white mode' },
     { title: 'Switch to dark mode', copy: 'Use the dark StudyMeter appearance', icon: 'D', action: () => setTheme('dark'), keywords: 'appearance theme dark black mode' },
@@ -10383,11 +10393,136 @@ const IMPROVEMENT_PACK = {
   ]
 };
 
+const IMPROVEMENT_PACK_MORE = {
+  Automation: [
+    ['Auto-plan after audit', 'Run the 100x audit and immediately add the top fixes as tasks.'],
+    ['Auto-create review tasks', 'Turn due revision reminders into planner tasks each morning.'],
+    ['Auto-log short focus', 'Record honest partial sessions instead of losing progress data.'],
+    ['Auto-seed weak cards', 'Generate flashcards from low-confidence high-weight chapters.'],
+    ['Auto-open next tool', 'After adding Source Studio cards, jump to the quiz prompt.'],
+    ['Auto-prioritize overdue', 'Put overdue high-priority tasks above new tasks.'],
+    ['Auto-detect stale mocks', 'Create a mock reminder when no mock appears for two weeks.'],
+    ['Auto-detect no notes', 'Prompt formula-bank use when notes are empty.'],
+    ['Auto-suggest calm plan', 'Switch to light tasks when energy check-in is low.'],
+    ['Auto-weekly report', 'Generate a weekly report before planning the next week.']
+  ],
+  Analytics: [
+    ['Question velocity', 'Track questions solved per focused hour.'],
+    ['Subject drift check', 'Detect when one subject is ignored for too long.'],
+    ['Mock repair ratio', 'Compare mock count to analysis count.'],
+    ['Revision debt score', 'Show how many due reviews are waiting.'],
+    ['Confidence heat signal', 'Use low confidence to rank weak chapters.'],
+    ['Consistency floor', 'Track minimum study done on weak days.'],
+    ['Peak study window', 'Notice which time of day gets best focus.'],
+    ['Task completion rate', 'Compare completed tasks to created tasks.'],
+    ['Recall accuracy trend', 'Watch quiz got-it versus missed history.'],
+    ['Backlog pressure', 'Estimate how much pending chapter work remains.']
+  ],
+  'AI Coach': [
+    ['Sharper mentor brief', 'Keep mentor advice tied to today, not generic motivation.'],
+    ['Low-energy coaching', 'Recommend tiny tasks when energy is low.'],
+    ['Stuck-mode coaching', 'Suggest one solved example before more practice.'],
+    ['Mock-mode coaching', 'Recommend repair work before another test.'],
+    ['Recall-mode coaching', 'Push active recall before reading notes.'],
+    ['Parent-readable summary', 'Make progress understandable to a parent or mentor.'],
+    ['Risk-first coaching', 'Show the highest-risk chapter before easy wins.'],
+    ['Praise real closure', 'Celebrate finished loops more than ambitious plans.'],
+    ['Explain why tasks matter', 'Add a reason to each generated task.'],
+    ['Coach voice pass', 'Use read-aloud for the next best action.']
+  ],
+  Review: [
+    ['Morning review queue', 'Clear due cards before opening new theory.'],
+    ['Evening repair pass', 'Review mistakes from the day before sleep.'],
+    ['Weekly chapter scan', 'Check bookmarked and low-confidence chapters weekly.'],
+    ['Two-pass revision', 'First recall, then read notes only for gaps.'],
+    ['Formula-only sprint', 'Run a short formula sprint before problem sets.'],
+    ['Doubt review block', 'Resolve open doubts in batches.'],
+    ['Old mock revisit', 'Redo errors from the oldest unresolved mock.'],
+    ['Flashcard rewrite', 'Rewrite vague cards into direct questions.'],
+    ['Source refresh', 'Paste stale notes into Source Studio again.'],
+    ['Review proof', 'Mark chapters revised only after testing memory.']
+  ],
+  'Exam Strategy': [
+    ['Attempt order note', 'Write the subject and section order you will use.'],
+    ['Skip rule note', 'Define when to leave a question.'],
+    ['Time split rule', 'Set rough minutes per subject or section.'],
+    ['Last 15 minutes rule', 'Write exactly what to check at the end.'],
+    ['Silly-error checklist', 'Keep a short checklist for units, signs, and copying.'],
+    ['High-yield first pass', 'Start revision from high-weight chapters.'],
+    ['Mock condition habit', 'Take some mocks under stricter exam conditions.'],
+    ['Post-mock cooldown', 'Wait briefly, then analyze calmly.'],
+    ['Score target ladder', 'Create realistic score bands instead of one fantasy number.'],
+    ['Exam-week simplification', 'Reduce new theory near exam week.']
+  ],
+  'Habit Design': [
+    ['Tiny start rule', 'Begin with two minutes when resistance is high.'],
+    ['Same-place cue', 'Use the same desk setup to start focus faster.'],
+    ['After-class capture', 'Capture notes or doubts immediately after class.'],
+    ['Night shutdown', 'End with tomorrow’s first task already chosen.'],
+    ['No-zero-day rule', 'Log at least one honest study action daily.'],
+    ['Recovery day label', 'Name low-output days as recovery, not failure.'],
+    ['Reward after closure', 'Take breaks after completing a loop.'],
+    ['Friction removal', 'Keep books, timer, and notes ready before the session.'],
+    ['Weekly reset ritual', 'Clean tasks, notes, and doubts once a week.'],
+    ['Identity reminder', 'Use the app as proof that you are someone who returns.']
+  ],
+  'Data Safety': [
+    ['Export weekly backup', 'Download a backup every week.'],
+    ['Backup before cleanup', 'Export data before deleting many tasks.'],
+    ['Local-first awareness', 'Remember this app stores your study data locally.'],
+    ['Profile name consistency', 'Use the same profile name to avoid split data.'],
+    ['Avoid duplicate profiles', 'Continue an existing user when possible.'],
+    ['Check saved notes', 'Confirm Formula Bank content after major edits.'],
+    ['Keep mock notes concise', 'Avoid storing unnecessary personal details.'],
+    ['Use clear profile labels', 'Name profiles so they are easy to recognize.'],
+    ['Data restore habit', 'Keep exported backups in a known folder.'],
+    ['Delete carefully', 'Delete tasks only when they are truly noise.']
+  ],
+  'Visual Polish': [
+    ['Use light mode for planning', 'Use bright UI when scanning lots of tasks.'],
+    ['Use dark mode for night', 'Switch to dark UI for late sessions.'],
+    ['Keep compact for dashboards', 'Use compact density for repeated tracking.'],
+    ['Use roomy for notes', 'Use roomy density when reading long notes.'],
+    ['Avoid card overload', 'Keep only useful modules visible.'],
+    ['Clear visual priority', 'High priority should be rare and meaningful.'],
+    ['Readable task text', 'Shorten titles that wrap too much.'],
+    ['Friendly guide timing', 'Show the guide while learning, hide it later.'],
+    ['Motion comfort', 'Reduce motion if animation distracts.'],
+    ['Sound restraint', 'Use UI sounds only if they support focus.']
+  ],
+  Collaboration: [
+    ['Mentor snapshot share', 'Use Mentor Snapshot before discussing progress.'],
+    ['Weekly report share', 'Generate a report for accountability.'],
+    ['Parent-friendly signal', 'Use hours, tasks, and mock trend instead of vague updates.'],
+    ['Tutor doubt list', 'Bring parked doubts to coaching sessions.'],
+    ['Mock analysis review', 'Discuss mistake categories with a mentor.'],
+    ['Study buddy challenge', 'Compare completed loops, not just hours.'],
+    ['Accountability task', 'Add a task that must be reported tonight.'],
+    ['Progress screenshot habit', 'Use dashboard signals during check-ins.'],
+    ['Shared exam rules', 'Write attempt rules so mentors can critique them.'],
+    ['Ask better questions', 'Turn doubts into exact questions before asking.']
+  ],
+  'Premium Feel': [
+    ['Outcome-first homepage', 'Start from what to do next, not raw data.'],
+    ['Zero blank-state anxiety', 'Every empty area should suggest the next action.'],
+    ['Human coach tone', 'Use calm, direct wording in task notes.'],
+    ['Immediate payoff', 'Every generated feature should produce a usable task, card, or prompt.'],
+    ['Power without clutter', 'Hide complexity behind filters, search, and commands.'],
+    ['Trust through verification', 'Use visible counts and summaries after actions.'],
+    ['Delight in completion', 'Let celebrations reward closure, not distraction.'],
+    ['Consistent labels', 'Use the same words for tasks, cards, mocks, and reviews.'],
+    ['Premium restraint', 'Prefer clean spacing and useful controls over decoration.'],
+    ['Million-dollar loop', 'Every feature should help a student decide, act, and review.']
+  ]
+};
+
 function getImprovementPackItems() {
-  return Object.entries(IMPROVEMENT_PACK).flatMap(([category, items]) =>
+  const packs = { ...IMPROVEMENT_PACK, ...IMPROVEMENT_PACK_MORE };
+  const categories = Object.keys(packs);
+  return Object.entries(packs).flatMap(([category, items]) =>
     items.map((item, index) => ({
       id: `${category.toLowerCase()}-${index + 1}`,
-      number: Object.keys(IMPROVEMENT_PACK).indexOf(category) * 10 + index + 1,
+      number: categories.indexOf(category) * 10 + index + 1,
       category,
       title: item[0],
       copy: item[1],
@@ -10413,8 +10548,8 @@ function renderImprovementPack() {
   if (!list || !summary) return;
   const all = getImprovementPackItems();
   const filtered = getFilteredImprovementPack();
-  const categories = Object.keys(IMPROVEMENT_PACK).length;
-  summary.innerHTML = `<div class="mini-row"><div class="mini-row-main"><div class="mini-row-title">${all.length} concrete improvements across ${categories} areas</div><div class="mini-row-copy">Filter, search, add one, add best 10, or add all 100 to the planner.</div></div><span class="badge">${filtered.length}</span></div>`;
+  const categories = new Set(all.map(item => item.category)).size;
+  summary.innerHTML = `<div class="mini-row"><div class="mini-row-main"><div class="mini-row-title">${all.length} concrete improvements across ${categories} areas</div><div class="mini-row-copy">Filter, search, add one, add best 10, or add all ${all.length} to the planner.</div></div><span class="badge">${filtered.length}</span></div>`;
   list.innerHTML = filtered.length
     ? filtered.map(item => `<div class="mini-row">
         <div class="mini-row-main">
@@ -10470,7 +10605,7 @@ function addImprovementTasks(items) {
 
 function speakImprovementPack() {
   const item = getFilteredImprovementPack()[0] || getImprovementPackItems()[0];
-  speakText(`Improvement ${item.number}. ${item.title}. ${item.copy}`, '100 Improvement Pack');
+  speakText(`Improvement ${item.number}. ${item.title}. ${item.copy}`, '200 Improvement Pack');
 }
 
 function renderAchievements() {
