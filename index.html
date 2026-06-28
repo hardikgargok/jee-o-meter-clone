@@ -4205,6 +4205,64 @@
   body.theme-dark .quest-kicker,
   body.theme-dark .quest-copy { color: #aab6c9; }
 
+  .voice-coach {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 12px;
+    align-items: center;
+    margin: 0 0 14px;
+    padding: 14px;
+    border: 1px solid var(--hairline);
+    border-radius: 8px;
+    background:
+      linear-gradient(135deg, color-mix(in srgb, var(--accent) 9%, transparent), transparent 52%),
+      var(--surface);
+    box-shadow: var(--shadow-soft);
+  }
+
+  .voice-title {
+    color: var(--ink);
+    font-size: 13px;
+    font-weight: 900;
+  }
+
+  .voice-copy {
+    color: var(--ink-muted);
+    font-size: 11px;
+    line-height: 1.45;
+    margin-top: 3px;
+  }
+
+  .voice-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+
+  .voice-status {
+    grid-column: 1 / -1;
+    display: none;
+    padding: 8px 10px;
+    border-radius: 8px;
+    background: color-mix(in srgb, var(--accent) 10%, transparent);
+    color: var(--ink-muted);
+    font-size: 11px;
+  }
+
+  .voice-status.open { display: block; }
+
+  body.theme-dark .voice-coach {
+    background:
+      linear-gradient(135deg, rgba(96,165,250,.10), transparent 52%),
+      rgba(16,24,38,.94);
+    border-color: rgba(255,255,255,.09);
+  }
+
+  body.theme-dark .voice-title { color: #f4f7fb; }
+  body.theme-dark .voice-copy,
+  body.theme-dark .voice-status { color: #aab6c9; }
+
   @media (max-width: 900px) {
     .customize-hero,
     .customize-grid,
@@ -4251,6 +4309,8 @@
     .friendly-actions { width: 100%; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
     .friendly-guide { grid-template-columns: 1fr; }
     .momentum-game { grid-template-columns: 1fr; }
+    .voice-coach { grid-template-columns: 1fr; }
+    .voice-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .mobile-quickbar { display: grid; }
     .main { padding-bottom: 86px; }
   }
@@ -4767,6 +4827,19 @@
       <div class="guide-card"><strong>1. Pick a state</strong><span>Use the Pulse Coach so the app adapts to your real energy.</span></div>
       <div class="guide-card"><strong>2. Create a mode plan</strong><span>Choose Quick Win, Revision Sprint, Mock Repair, Backlog Burn, or Calm Study.</span></div>
       <div class="guide-card"><strong>3. Close the loop</strong><span>Start focus, park doubts, and log what you finished.</span></div>
+    </section>
+
+    <section class="voice-coach" aria-label="Voice coach">
+      <div>
+        <div class="voice-title">Voice Coach</div>
+        <div class="voice-copy">StudyMeter can read your next move aloud, speak a mentor brief, or listen for simple commands when your browser allows it.</div>
+      </div>
+      <div class="voice-actions">
+        <button class="btn-primary" onclick="speakDashboardBrief()">Speak plan</button>
+        <button class="btn-sm" onclick="startVoiceCommand()">Voice command</button>
+        <button class="btn-sm" onclick="stopVoice()">Stop voice</button>
+      </div>
+      <div class="voice-status" id="voice-status"></div>
     </section>
 
     <section class="student-launch" aria-label="Today command strip">
@@ -5463,6 +5536,7 @@
         <div class="flashcard-face" id="flashcard-face">No cards yet. Add one below.</div>
         <div class="action-row">
           <button class="btn-sm" onclick="flipFlashcard()">Flip</button>
+          <button class="btn-sm" onclick="speakCurrentFlashcard()">Read</button>
           <button class="btn-sm" onclick="gradeFlashcard('hard')">Hard</button>
           <button class="btn-sm" onclick="gradeFlashcard('good')">Good</button>
         </div>
@@ -5481,6 +5555,7 @@
         <div class="action-row">
           <button class="btn-primary" onclick="generateQuizPrompt()">Generate quiz</button>
           <button class="btn-sm" onclick="revealQuizAnswer()">Reveal</button>
+          <button class="btn-sm" onclick="speakQuizPrompt()">Read</button>
           <button class="btn-sm" onclick="gradeQuizPrompt('got')">Got it</button>
           <button class="btn-sm" onclick="gradeQuizPrompt('missed')">Missed</button>
         </div>
@@ -6455,6 +6530,7 @@ function setTheme(theme, announce = true) {
 
 let uiAudioContext = null;
 let ambientNodes = null;
+let activeRecognition = null;
 
 function playUISound(kind = 'tap') {
   const pref = store.settings?.personalization;
@@ -6544,6 +6620,96 @@ function bindPremiumInteractions() {
     const control = event.target.closest?.('button, .nav-item, .quick-action, .filter-pill, .tab-btn');
     if (control) playUISound('tap');
   }, true);
+}
+
+function setVoiceStatus(message, open = true) {
+  const status = document.getElementById('voice-status');
+  if (!status) return;
+  status.textContent = message;
+  status.classList.toggle('open', open);
+}
+
+function speakText(text, label = 'StudyMeter voice') {
+  if (!('speechSynthesis' in window)) {
+    showToast('Voice is not supported in this browser', 'error');
+    return;
+  }
+  const clean = String(text || '').replace(/\s+/g, ' ').trim();
+  if (!clean) return showToast('Nothing to read yet', 'error');
+  window.speechSynthesis.cancel();
+  const utterance = new SpeechSynthesisUtterance(clean);
+  utterance.rate = 0.96;
+  utterance.pitch = 1.02;
+  utterance.volume = 0.92;
+  utterance.onstart = () => setVoiceStatus(`${label}: speaking...`);
+  utterance.onend = () => setVoiceStatus('Voice finished.', false);
+  utterance.onerror = () => setVoiceStatus('Voice stopped.', false);
+  window.speechSynthesis.speak(utterance);
+}
+
+function stopVoice() {
+  try { window.speechSynthesis?.cancel(); } catch(e) {}
+  try { activeRecognition?.stop(); } catch(e) {}
+  activeRecognition = null;
+  setVoiceStatus('Voice stopped.', false);
+}
+
+function speakDashboardBrief() {
+  const next = document.getElementById('student-launch-title')?.textContent || 'Choose one clear study win.';
+  const copy = document.getElementById('student-launch-copy')?.textContent || '';
+  const pulse = document.getElementById('pulse-coach-title')?.textContent || 'Coach mode ready';
+  const mentor = [...document.querySelectorAll('#mentor-snapshot .snapshot-line')].map(item => item.textContent).join(' ');
+  speakText(`Your next move is: ${next}. ${copy}. Coach mode: ${pulse}. ${mentor}`, 'Dashboard brief');
+}
+
+function speakCurrentFlashcard() {
+  const card = (store.flashcards || []).find(item => item.id === currentFlashcardId);
+  if (!card) return showToast('Add a flashcard first', 'error');
+  speakText(`${card.front}. ${flashcardShowingBack ? card.back : 'Try to answer before flipping.'}`, 'Flashcard');
+}
+
+function speakQuizPrompt() {
+  if (!currentQuizPrompt) generateQuizPrompt();
+  speakText(`${currentQuizPrompt.prompt}. ${currentQuizPrompt.revealed ? currentQuizPrompt.answer : 'Answer first, then reveal.'}`, 'Quiz');
+}
+
+function runVoiceCommand(command) {
+  const text = String(command || '').toLowerCase();
+  if (text.includes('planner') || text.includes('plan')) return showPage('planner');
+  if (text.includes('focus')) return startSuggestedFocus();
+  if (text.includes('log')) return openLogModal();
+  if (text.includes('toolkit') || text.includes('quiz')) {
+    showPage('toolkit');
+    if (text.includes('quiz')) setTimeout(generateQuizPrompt, 100);
+    return;
+  }
+  if (text.includes('mentor')) return showPage('ai-mentor');
+  if (text.includes('dashboard') || text.includes('home')) return showPage('dashboard');
+  if (text.includes('dark')) return setTheme('dark');
+  if (text.includes('light')) return setTheme('light');
+  showToast('Try: open planner, start focus, log study, generate quiz', 'error');
+}
+
+function startVoiceCommand() {
+  const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!Recognition) {
+    speakText('Voice commands are not supported in this browser. You can still use read aloud.', 'Voice command');
+    return;
+  }
+  stopVoice();
+  activeRecognition = new Recognition();
+  activeRecognition.lang = 'en-IN';
+  activeRecognition.interimResults = false;
+  activeRecognition.maxAlternatives = 1;
+  activeRecognition.onstart = () => setVoiceStatus('Listening. Try: open planner, start focus, log study, generate quiz.');
+  activeRecognition.onerror = () => setVoiceStatus('Could not hear a command. Try again.', true);
+  activeRecognition.onend = () => { activeRecognition = null; };
+  activeRecognition.onresult = event => {
+    const spoken = event.results?.[0]?.[0]?.transcript || '';
+    setVoiceStatus(`Heard: ${spoken}`);
+    runVoiceCommand(spoken);
+  };
+  activeRecognition.start();
 }
 
 function getPersonalization() {
@@ -9303,6 +9469,8 @@ function buildCommandItems() {
     { title: "Generate today's plan", copy: 'Create smart tasks from weak chapters and revision due', icon: 'AI', action: generateTodaysPlan, keywords: 'generate plan smart tasks battle' },
     { title: 'Open AI Mentor', copy: 'See readiness, weak chapters, micro-lessons, and next moves', icon: 'AI', action: () => showPage('ai-mentor'), keywords: 'ai mentor coach intelligence weakness risk readiness' },
     { title: 'Open Personalize', copy: 'Tune themes, modules, density, layout, and reminders', icon: 'PZ', action: () => showPage('personalize'), keywords: 'personalize customize settings theme layout modules reminders' },
+    { title: 'Speak dashboard plan', copy: 'Read your next action and mentor snapshot aloud', icon: 'VO', action: speakDashboardBrief, keywords: 'voice speak read aloud dashboard mentor audio' },
+    { title: 'Start voice command', copy: 'Say open planner, start focus, log study, or generate quiz', icon: 'MIC', action: startVoiceCommand, keywords: 'voice command microphone speech recognition' },
     { title: 'Create AI mentor tasks', copy: 'Add the full 48-hour attack plan to planner', icon: 'AI', action: createAiMentorTasks, keywords: 'ai generate mentor tasks attack plan' },
     { title: 'Make AI flashcards', copy: 'Generate recall cards from highest-risk chapters', icon: 'FC', action: generateMentorFlashcards, keywords: 'ai flashcards recall weak chapters' },
     { title: 'Add planner task', copy: 'Create the next concrete study task', icon: '+', action: openTaskModal, keywords: 'task planner todo add' },
