@@ -3800,6 +3800,135 @@
   body.theme-dark .pulse-option span,
   body.theme-dark .coach-line span { color: #aab6c9; }
 
+  .student-upgrade-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(280px, .8fr);
+    gap: 14px;
+    margin: 0 0 18px;
+  }
+
+  .upgrade-panel {
+    padding: 16px;
+    border: 1px solid var(--hairline);
+    border-radius: 8px;
+    background: var(--surface);
+    box-shadow: var(--shadow-soft);
+  }
+
+  .mode-grid {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 8px;
+    margin-top: 12px;
+  }
+
+  .mode-btn {
+    min-height: 76px;
+    border: 1px solid var(--hairline);
+    border-radius: 8px;
+    background: rgba(255,255,255,.58);
+    color: var(--ink);
+    font: inherit;
+    text-align: left;
+    padding: 10px;
+    cursor: pointer;
+  }
+
+  .mode-btn strong {
+    display: block;
+    font-size: 12px;
+    font-weight: 900;
+  }
+
+  .mode-btn span {
+    display: block;
+    color: var(--ink-muted);
+    font-size: 10px;
+    line-height: 1.35;
+    margin-top: 3px;
+  }
+
+  .doubt-capture {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 8px;
+    margin-top: 12px;
+  }
+
+  .doubt-capture input {
+    min-height: 40px;
+    border: 1px solid var(--hairline);
+    border-radius: 8px;
+    background: var(--surface-strong);
+    color: var(--ink);
+    padding: 10px 11px;
+    font: inherit;
+  }
+
+  .doubt-list {
+    display: grid;
+    gap: 8px;
+    margin-top: 12px;
+    max-height: 220px;
+    overflow: auto;
+  }
+
+  .doubt-item {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 8px;
+    align-items: center;
+    padding: 9px;
+    border: 1px solid var(--hairline);
+    border-radius: 8px;
+    background: rgba(255,255,255,.52);
+  }
+
+  .doubt-item.done {
+    opacity: .62;
+  }
+
+  .mentor-snapshot {
+    display: grid;
+    gap: 8px;
+    margin-top: 12px;
+  }
+
+  .snapshot-line {
+    padding: 9px;
+    border: 1px solid var(--hairline);
+    border-radius: 8px;
+    background: rgba(255,255,255,.52);
+    color: var(--ink-muted);
+    font-size: 11px;
+    line-height: 1.45;
+  }
+
+  .snapshot-line strong {
+    color: var(--ink);
+  }
+
+  body.theme-dark .upgrade-panel,
+  body.theme-dark .mode-btn,
+  body.theme-dark .doubt-item,
+  body.theme-dark .snapshot-line {
+    background: rgba(16,24,38,.94);
+    border-color: rgba(255,255,255,.09);
+  }
+
+  body.theme-dark .mode-btn,
+  body.theme-dark .snapshot-line strong { color: #f4f7fb; }
+
+  body.theme-dark .mode-btn span,
+  body.theme-dark .snapshot-line,
+  body.theme-dark .doubt-item { color: #aab6c9; }
+
+  body.theme-dark .doubt-capture input {
+    background: #111a2a;
+    border-color: rgba(255,255,255,.12);
+    color: #f4f7fb;
+  }
+
   @media (max-width: 900px) {
     .customize-hero,
     .customize-grid,
@@ -3835,6 +3964,11 @@
     }
     .pulse-coach,
     .pulse-options {
+      grid-template-columns: 1fr;
+    }
+    .student-upgrade-grid,
+    .mode-grid,
+    .doubt-capture {
       grid-template-columns: 1fr;
     }
   }
@@ -4375,6 +4509,35 @@
           <button class="btn-sm" onclick="startSuggestedFocus()">Start now</button>
         </div>
       </div>
+    </section>
+
+    <section class="student-upgrade-grid" aria-label="Study modes and doubt parking">
+      <div class="upgrade-panel">
+        <div class="pulse-title">One-tap study modes</div>
+        <div class="pulse-copy">When you do not know what to do, pick the situation. StudyMeter creates the plan.</div>
+        <div class="mode-grid">
+          <button class="mode-btn" onclick="createStudyModePlan('quick')"><strong>Quick Win</strong><span>25 min momentum reset</span></button>
+          <button class="mode-btn" onclick="createStudyModePlan('revision')"><strong>Revision Sprint</strong><span>Memory-first session</span></button>
+          <button class="mode-btn" onclick="createStudyModePlan('mock')"><strong>Mock Repair</strong><span>Fix recent mistakes</span></button>
+          <button class="mode-btn" onclick="createStudyModePlan('backlog')"><strong>Backlog Burn</strong><span>Clear pending load</span></button>
+          <button class="mode-btn" onclick="createStudyModePlan('calm')"><strong>Calm Study</strong><span>Low-pressure progress</span></button>
+        </div>
+      </div>
+      <div class="upgrade-panel">
+        <div class="pulse-title">Doubt Parking Lot</div>
+        <div class="pulse-copy">Capture confusion instantly so it becomes a solvable queue, not background stress.</div>
+        <div class="doubt-capture">
+          <input id="quick-doubt-input" maxlength="220" placeholder="Type a doubt, trap, or confusing question..." onkeydown="if(event.key==='Enter') addQuickDoubt()">
+          <button class="btn-primary" onclick="addQuickDoubt()">Park</button>
+        </div>
+        <div class="doubt-list" id="doubt-list"></div>
+      </div>
+    </section>
+
+    <section class="upgrade-panel" aria-label="Mentor snapshot">
+      <div class="pulse-title">Mentor Snapshot</div>
+      <div class="pulse-copy">A premium-readable summary for you, a parent, or a mentor before the next study block.</div>
+      <div class="mentor-snapshot" id="mentor-snapshot"></div>
     </section>
 
     <section class="dashboard-hero">
@@ -5713,6 +5876,7 @@ function normalizeStore(raw = {}) {
   normalized.tasks = ensureArray(normalized.tasks);
   normalized.focusSessions = ensureArray(normalized.focusSessions);
   normalized.flashcards = ensureArray(normalized.flashcards);
+  normalized.doubts = ensureArray(normalized.doubts);
   normalized.energy = ensureObject(normalized.energy);
   normalized.notes = { phy: '', chem: '', math: '', gen: '', ...ensureObject(normalized.notes) };
   normalized.settings = ensureObject(normalized.settings);
@@ -5811,6 +5975,16 @@ function normalizeStore(raw = {}) {
     mode: cleanText(session?.mode || 'Focus session', 80),
     taskTitle: cleanText(session?.taskTitle, 120)
   }));
+
+  normalized.doubts = normalized.doubts.map(doubt => ({
+    ...ensureObject(doubt),
+    id: Number(doubt?.id) || Date.now() + Math.random(),
+    text: cleanText(doubt?.text, 220),
+    subject: cleanText(doubt?.subject || 'Mixed', 40),
+    source: cleanText(doubt?.source || '', 120),
+    solved: Boolean(doubt?.solved),
+    createdAt: cleanText(doubt?.createdAt || new Date().toISOString(), 80)
+  })).filter(doubt => doubt.text);
 
   normalized.flashcards = normalized.flashcards.map(card => ({
     ...ensureObject(card),
@@ -6845,6 +7019,8 @@ function renderDashboard() {
   renderDashboardAiCoach();
   renderStudentLaunch();
   renderPulseCoach();
+  renderDoubtParking();
+  renderMentorSnapshot();
   updatePlannerBadge();
 }
 
@@ -6992,6 +7168,111 @@ function createPulseTask() {
   renderPlanner();
   renderDashboard();
   showToast('Pulse plan added to today');
+}
+
+const STUDY_MODE_PLANS = {
+  quick: [
+    ['Quick win: finish one tiny study block', 'Mixed', 25, 'medium', 'Pick the easiest useful task and finish it fully.'],
+    ['Log one result immediately after', 'Mixed', 5, 'low', 'Write what improved so momentum becomes visible.']
+  ],
+  revision: [
+    ['Revision sprint: clear one due chapter', 'Mixed', 35, 'high', 'Use active recall before reading notes.'],
+    ['Make 3 flashcards from mistakes', 'Mixed', 15, 'medium', 'Turn weak memory into spaced review.']
+  ],
+  mock: [
+    ['Mock repair: classify top 5 mistakes', 'Mixed', 35, 'high', 'Sort mistakes into concept, calculation, time, or silly error.'],
+    ['Redo 10 similar questions', 'Mixed', 50, 'high', 'Repair the pattern, not just the score.']
+  ],
+  backlog: [
+    ['Backlog burn: choose one pending chapter', 'Mixed', 60, 'high', 'Reduce backlog by one visible unit.'],
+    ['Schedule the next backlog block', 'Mixed', 10, 'medium', 'Leave a concrete next step.']
+  ],
+  calm: [
+    ['Calm study: light revision block', 'Mixed', 25, 'medium', 'Protect consistency without burnout.'],
+    ['Clean desk and plan tomorrow', 'Mixed', 10, 'low', 'End with control instead of pressure.']
+  ]
+};
+
+function createStudyModePlan(mode) {
+  const plan = STUDY_MODE_PLANS[mode] || STUDY_MODE_PLANS.quick;
+  const stamp = Date.now();
+  plan.forEach((item, index) => {
+    store.tasks.push({
+      id: stamp + index,
+      title: item[0],
+      subject: item[1],
+      due: localDateKey(),
+      priority: item[3],
+      minutes: item[2],
+      notes: item[4],
+      done: false,
+      createdAt: new Date().toISOString()
+    });
+  });
+  saveAll();
+  renderPlanner();
+  renderDashboard();
+  showToast(`${plan.length} study-mode tasks added`);
+}
+
+function addQuickDoubt() {
+  const input = document.getElementById('quick-doubt-input');
+  const text = input?.value.trim();
+  if (!text) return markInvalid(input, 'Type the doubt first');
+  store.doubts.push({
+    id: Date.now(),
+    text,
+    subject: 'Mixed',
+    source: 'Dashboard quick capture',
+    solved: false,
+    createdAt: new Date().toISOString()
+  });
+  input.value = '';
+  saveAll();
+  renderDoubtParking();
+  renderMentorSnapshot();
+  showToast('Doubt parked');
+}
+
+function toggleDoubt(id) {
+  const doubt = store.doubts.find(item => item.id === id);
+  if (!doubt) return;
+  doubt.solved = !doubt.solved;
+  saveAll();
+  renderDoubtParking();
+  renderMentorSnapshot();
+}
+
+function renderDoubtParking() {
+  const list = document.getElementById('doubt-list');
+  if (!list) return;
+  const doubts = [...(store.doubts || [])].reverse().slice(0, 6);
+  if (!doubts.length) {
+    list.innerHTML = '<div class="snapshot-line">No parked doubts. Capture one the moment confusion appears.</div>';
+    return;
+  }
+  list.innerHTML = doubts.map(doubt => `
+    <div class="doubt-item ${doubt.solved ? 'done' : ''}">
+      <div><strong>${escapeHtml(doubt.text)}</strong><div class="pulse-copy">${escapeHtml(doubt.source || 'Captured')} · ${escapeHtml(doubt.createdAt.slice(0, 10))}</div></div>
+      <button class="btn-sm" onclick="toggleDoubt(${doubt.id})">${doubt.solved ? 'Reopen' : 'Solved'}</button>
+    </div>
+  `).join('');
+}
+
+function renderMentorSnapshot() {
+  const box = document.getElementById('mentor-snapshot');
+  if (!box) return;
+  const today = localDateKey();
+  const todayHours = (store.logs || []).filter(log => log.date === today).reduce((sum, log) => sum + Number(log.hours || 0), 0);
+  const openTasks = (store.tasks || []).filter(task => !task.done).length;
+  const openDoubts = (store.doubts || []).filter(doubt => !doubt.solved).length;
+  const revisions = getRevisionQueue().length;
+  const latestMock = [...(store.mocks || [])].sort((a, b) => String(b.date).localeCompare(String(a.date)))[0];
+  box.innerHTML = `
+    <div class="snapshot-line"><strong>Today:</strong> ${todayHours.toFixed(1)}h logged, ${openTasks} open task${openTasks === 1 ? '' : 's'}, ${revisions} revision reminder${revisions === 1 ? '' : 's'}.</div>
+    <div class="snapshot-line"><strong>Risk:</strong> ${openDoubts ? `${openDoubts} unsolved doubt${openDoubts === 1 ? '' : 's'} need closure.` : 'No parked doubts waiting.'}</div>
+    <div class="snapshot-line"><strong>Mock signal:</strong> ${latestMock ? `${escapeHtml(latestMock.name)} at ${latestMock.total}/300. Repair mistakes before chasing a new test.` : 'No mock logged yet. Add one to unlock sharper mentor guidance.'}</div>
+  `;
 }
 
 function getStudyStreak(logs = store.logs || []) {
