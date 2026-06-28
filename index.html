@@ -3576,6 +3576,107 @@
     border-color: rgba(255,255,255,.08);
   }
 
+  .mission-visual {
+    position: relative;
+    width: min(100%, 360px);
+    aspect-ratio: 1;
+    display: grid;
+    place-items: center;
+  }
+
+  #mission-3d {
+    width: 100%;
+    height: 100%;
+    display: block;
+    border-radius: 8px;
+  }
+
+  .mission-fallback {
+    position: absolute;
+    inset: 12%;
+    border-radius: 50%;
+    border: 1px solid color-mix(in srgb, var(--accent) 34%, transparent);
+    background:
+      radial-gradient(circle at 50% 50%, color-mix(in srgb, var(--success) 20%, transparent), transparent 35%),
+      conic-gradient(from 160deg, color-mix(in srgb, var(--phy) 46%, transparent), color-mix(in srgb, var(--accent) 38%, transparent), color-mix(in srgb, var(--success) 34%, transparent), color-mix(in srgb, var(--phy) 46%, transparent));
+    filter: blur(.1px);
+    animation: missionFallbackSpin 11s linear infinite;
+    opacity: .7;
+  }
+
+  .mission-caption {
+    position: absolute;
+    left: 50%;
+    bottom: 10px;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    border: 1px solid var(--hairline);
+    border-radius: 999px;
+    background: rgba(255,255,255,.72);
+    color: var(--ink-muted);
+    padding: 5px 9px;
+    font-size: 10px;
+    font-weight: 850;
+    letter-spacing: .35px;
+    text-transform: uppercase;
+  }
+
+  body.theme-dark .mission-caption {
+    background: rgba(16,24,38,.72);
+    color: #aab6c9;
+  }
+
+  @keyframes missionFallbackSpin {
+    to { transform: rotate(360deg); }
+  }
+
+  .ambient-panel {
+    margin-top: 14px;
+    padding: 12px;
+    border: 1px solid var(--hairline);
+    border-radius: 8px;
+    background: color-mix(in srgb, var(--accent) 7%, transparent);
+  }
+
+  .ambient-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .ambient-title {
+    color: var(--ink);
+    font-size: 12px;
+    font-weight: 850;
+  }
+
+  .ambient-copy {
+    color: var(--ink-muted);
+    font-size: 11px;
+    line-height: 1.35;
+    margin-top: 2px;
+  }
+
+  .ambient-select {
+    min-height: 38px;
+    border: 1px solid var(--hairline);
+    border-radius: 8px;
+    background: var(--surface-strong);
+    color: var(--ink);
+    padding: 8px 10px;
+    font: inherit;
+    font-size: 12px;
+  }
+
+  body.theme-dark .ambient-title { color: #f4f7fb; }
+  body.theme-dark .ambient-copy { color: #aab6c9; }
+  body.theme-dark .ambient-select {
+    background: #111a2a;
+    border-color: rgba(255,255,255,.12);
+    color: #f4f7fb;
+  }
+
   @media (max-width: 900px) {
     .customize-hero,
     .customize-grid,
@@ -3602,6 +3703,12 @@
     .student-launch-actions button {
       width: 100%;
       padding-inline: 8px;
+    }
+    .mission-visual {
+      width: min(100%, 280px);
+    }
+    .ambient-row {
+      grid-template-columns: 1fr;
     }
   }
 
@@ -4133,11 +4240,16 @@
         </div>
       </div>
       <div class="hero-progress">
-        <div class="progress-ring" id="overall-progress-ring">
-          <div class="progress-ring-content">
-            <div class="progress-ring-value" id="overall-progress-value">0%</div>
-            <div class="progress-ring-label">Syllabus complete</div>
+        <div class="mission-visual" aria-label="Animated preparation mission visual">
+          <canvas id="mission-3d"></canvas>
+          <div class="mission-fallback" aria-hidden="true"></div>
+          <div class="progress-ring" id="overall-progress-ring">
+            <div class="progress-ring-content">
+              <div class="progress-ring-value" id="overall-progress-value">0%</div>
+              <div class="progress-ring-label">Syllabus complete</div>
+            </div>
           </div>
+          <div class="mission-caption">Live prep orbit</div>
         </div>
       </div>
     </section>
@@ -4617,6 +4729,21 @@
           <button class="btn-primary" id="timer-start-btn" onclick="toggleTimer()">Start</button>
           <button class="btn-sm" onclick="resetTimer()">Reset</button>
           <button class="btn-sm" onclick="completeFocusEarly()">Finish now</button>
+        </div>
+        <div class="ambient-panel">
+          <div class="ambient-row">
+            <div>
+              <div class="ambient-title">Focus ambience</div>
+              <div class="ambient-copy">Optional generated soundscapes for deeper study. Nothing plays until you choose it.</div>
+            </div>
+            <select class="ambient-select" id="ambient-select" aria-label="Focus ambience">
+              <option value="off">Off</option>
+              <option value="rain">Soft rain</option>
+              <option value="library">Library hum</option>
+              <option value="brown">Deep noise</option>
+            </select>
+            <button class="btn-sm" id="ambient-toggle" onclick="toggleAmbient()">Play</button>
+          </div>
         </div>
         <label class="toggle-line"><input id="auto-log-focus" type="checkbox" onchange="saveFocusSettings()"> Auto-log completed focus as study time</label>
       </div>
@@ -5652,6 +5779,7 @@ function setTheme(theme, announce = true) {
 }
 
 let uiAudioContext = null;
+let ambientNodes = null;
 
 function playUISound(kind = 'tap') {
   const pref = store.settings?.personalization;
@@ -5672,6 +5800,67 @@ function playUISound(kind = 'tap') {
     oscillator.start(now);
     oscillator.stop(now + .12);
   } catch(e) {}
+}
+
+function stopAmbient() {
+  if (!ambientNodes) return;
+  try {
+    ambientNodes.forEach(node => {
+      if (node.stop) node.stop();
+      if (node.disconnect) node.disconnect();
+    });
+  } catch(e) {}
+  ambientNodes = null;
+  const btn = document.getElementById('ambient-toggle');
+  if (btn) btn.textContent = 'Play';
+}
+
+function makeNoiseBuffer(context, seconds = 2, filter = 'white') {
+  const length = context.sampleRate * seconds;
+  const buffer = context.createBuffer(1, length, context.sampleRate);
+  const data = buffer.getChannelData(0);
+  let last = 0;
+  for (let i = 0; i < length; i++) {
+    const white = Math.random() * 2 - 1;
+    last = filter === 'brown' ? (last + 0.02 * white) / 1.02 : white;
+    data[i] = filter === 'brown' ? last * 3.5 : white;
+  }
+  return buffer;
+}
+
+function startAmbient(type) {
+  stopAmbient();
+  if (!type || type === 'off') return;
+  try {
+    uiAudioContext = uiAudioContext || new (window.AudioContext || window.webkitAudioContext)();
+    const context = uiAudioContext;
+    const source = context.createBufferSource();
+    const gain = context.createGain();
+    const filter = context.createBiquadFilter();
+    source.buffer = makeNoiseBuffer(context, 3, type === 'brown' ? 'brown' : 'white');
+    source.loop = true;
+    filter.type = type === 'rain' ? 'bandpass' : 'lowpass';
+    filter.frequency.value = type === 'rain' ? 950 : type === 'library' ? 180 : 120;
+    filter.Q.value = type === 'rain' ? 0.9 : 0.35;
+    gain.gain.value = type === 'rain' ? 0.028 : type === 'library' ? 0.018 : 0.024;
+    source.connect(filter).connect(gain).connect(context.destination);
+    source.start();
+    ambientNodes = [source, filter, gain];
+    const btn = document.getElementById('ambient-toggle');
+    if (btn) btn.textContent = 'Stop';
+  } catch(e) {
+    showToast('Ambience could not start in this browser', 'error');
+  }
+}
+
+function toggleAmbient() {
+  const select = document.getElementById('ambient-select');
+  if (!select) return;
+  if (ambientNodes) {
+    stopAmbient();
+    return;
+  }
+  startAmbient(select.value);
 }
 
 function bindPremiumInteractions() {
@@ -8670,6 +8859,84 @@ if ('serviceWorker' in navigator && location.protocol === 'https:') {
       });
     }).catch(() => {});
   });
+}
+</script>
+<script type="module">
+import * as THREE from 'https://unpkg.com/three@0.160.0/build/three.module.js';
+
+const canvas = document.getElementById('mission-3d');
+if (canvas) {
+  const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 100);
+  camera.position.set(0, 0, 6.2);
+
+  const group = new THREE.Group();
+  scene.add(group);
+
+  const core = new THREE.Mesh(
+    new THREE.IcosahedronGeometry(1.05, 2),
+    new THREE.MeshStandardMaterial({
+      color: 0x5b9ef9,
+      roughness: 0.42,
+      metalness: 0.08,
+      emissive: 0x132240,
+      emissiveIntensity: 0.35
+    })
+  );
+  group.add(core);
+
+  const ringMaterial = new THREE.MeshBasicMaterial({ color: 0x34d399, transparent: true, opacity: 0.45 });
+  const ringA = new THREE.Mesh(new THREE.TorusGeometry(1.85, 0.012, 16, 140), ringMaterial);
+  const ringB = new THREE.Mesh(new THREE.TorusGeometry(2.18, 0.01, 16, 140), new THREE.MeshBasicMaterial({ color: 0xa78bfa, transparent: true, opacity: 0.35 }));
+  ringA.rotation.x = Math.PI * 0.58;
+  ringB.rotation.x = Math.PI * 0.42;
+  ringB.rotation.y = Math.PI * 0.18;
+  group.add(ringA, ringB);
+
+  const dotGeometry = new THREE.SphereGeometry(0.055, 16, 16);
+  const dotMaterial = new THREE.MeshBasicMaterial({ color: 0xfbbf24 });
+  const dots = [];
+  for (let i = 0; i < 18; i++) {
+    const dot = new THREE.Mesh(dotGeometry, dotMaterial);
+    dot.userData = { angle: i / 18 * Math.PI * 2, radius: 1.72 + (i % 3) * 0.24, speed: 0.35 + (i % 5) * 0.045 };
+    dots.push(dot);
+    group.add(dot);
+  }
+
+  scene.add(new THREE.AmbientLight(0xffffff, 1.4));
+  const key = new THREE.DirectionalLight(0xffffff, 1.8);
+  key.position.set(2.4, 3.2, 5);
+  scene.add(key);
+
+  function resizeMission() {
+    const rect = canvas.getBoundingClientRect();
+    const width = Math.max(220, Math.round(rect.width));
+    const height = Math.max(220, Math.round(rect.height));
+    renderer.setSize(width, height, false);
+    camera.aspect = width / height;
+    camera.updateProjectionMatrix();
+  }
+
+  function animateMission(time = 0) {
+    resizeMission();
+    const t = time * 0.001;
+    core.rotation.x = t * 0.28;
+    core.rotation.y = t * 0.42;
+    ringA.rotation.z = t * 0.24;
+    ringB.rotation.z = -t * 0.19;
+    dots.forEach(dot => {
+      const a = dot.userData.angle + t * dot.userData.speed;
+      dot.position.set(Math.cos(a) * dot.userData.radius, Math.sin(a * 1.12) * 0.42, Math.sin(a) * dot.userData.radius * 0.38);
+    });
+    group.rotation.y = Math.sin(t * 0.34) * 0.16;
+    renderer.render(scene, camera);
+    requestAnimationFrame(animateMission);
+  }
+
+  window.addEventListener('resize', resizeMission);
+  requestAnimationFrame(animateMission);
 }
 </script>
 </body>
