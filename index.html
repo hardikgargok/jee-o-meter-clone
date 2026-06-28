@@ -3929,6 +3929,101 @@
     color: #f4f7fb;
   }
 
+  .friendly-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin: 0 0 14px;
+    padding: 10px;
+    border: 1px solid var(--hairline);
+    border-radius: 8px;
+    background: var(--surface);
+    box-shadow: var(--shadow-soft);
+  }
+
+  .friendly-toolbar-title { color: var(--ink); font-size: 13px; font-weight: 900; }
+  .friendly-toolbar-copy { color: var(--ink-muted); font-size: 11px; }
+  .friendly-actions { display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+
+  .friendly-guide {
+    display: none;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+    margin: 0 0 16px;
+  }
+
+  .friendly-guide.open { display: grid; }
+
+  .guide-card {
+    padding: 14px;
+    border: 1px solid var(--hairline);
+    border-radius: 8px;
+    background: var(--surface);
+    box-shadow: var(--shadow-soft);
+  }
+
+  .guide-card strong { display: block; color: var(--ink); font-size: 13px; margin-bottom: 4px; }
+  .guide-card span { display: block; color: var(--ink-muted); font-size: 11px; line-height: 1.45; }
+
+  body.dashboard-simple .dashboard-hero,
+  body.dashboard-simple .ai-orbit-card,
+  body.dashboard-simple .performance-grid,
+  body.dashboard-simple .dash-grid {
+    display: none;
+  }
+
+  .mobile-quickbar {
+    display: none;
+    position: fixed;
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
+    z-index: 900;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 7px;
+    padding: 8px;
+    border: 1px solid var(--hairline);
+    border-radius: 8px;
+    background: color-mix(in srgb, var(--surface-strong) 90%, transparent);
+    box-shadow: 0 18px 44px rgba(15,23,42,.18);
+    backdrop-filter: blur(18px);
+  }
+
+  .mobile-quickbar button {
+    min-height: 42px;
+    border: 1px solid var(--hairline);
+    border-radius: 8px;
+    background: var(--surface);
+    color: var(--ink);
+    font: inherit;
+    font-size: 11px;
+    font-weight: 850;
+  }
+
+  body.theme-dark .friendly-toolbar,
+  body.theme-dark .guide-card {
+    background: rgba(16,24,38,.94);
+    border-color: rgba(255,255,255,.09);
+  }
+
+  body.theme-dark .friendly-toolbar-title,
+  body.theme-dark .guide-card strong,
+  body.theme-dark .mobile-quickbar button { color: #f4f7fb; }
+
+  body.theme-dark .friendly-toolbar-copy,
+  body.theme-dark .guide-card span { color: #aab6c9; }
+
+  body.theme-dark .mobile-quickbar {
+    background: rgba(7,11,19,.88);
+    border-color: rgba(255,255,255,.09);
+  }
+
+  body.theme-dark .mobile-quickbar button {
+    background: rgba(16,24,38,.94);
+    border-color: rgba(255,255,255,.09);
+  }
+
   @media (max-width: 900px) {
     .customize-hero,
     .customize-grid,
@@ -3971,6 +4066,11 @@
     .doubt-capture {
       grid-template-columns: 1fr;
     }
+    .friendly-toolbar { align-items: flex-start; flex-direction: column; }
+    .friendly-actions { width: 100%; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .friendly-guide { grid-template-columns: 1fr; }
+    .mobile-quickbar { display: grid; }
+    .main { padding-bottom: 86px; }
   }
 
   .launch-splash {
@@ -4468,6 +4568,24 @@
       </div>
       <button class="btn-primary" onclick="openLogModal()">+ Log Today</button>
     </div>
+
+    <section class="friendly-toolbar" aria-label="Dashboard friendliness controls">
+      <div class="friendly-toolbar-main">
+        <div class="friendly-toolbar-title" id="dashboard-mode-title">Friendly dashboard</div>
+        <div class="friendly-toolbar-copy" id="dashboard-mode-copy">Keep the first screen simple, then open deeper tools when you need them.</div>
+      </div>
+      <div class="friendly-actions">
+        <button class="btn-sm" onclick="setDashboardMode('simple')">Simple</button>
+        <button class="btn-sm" onclick="setDashboardMode('full')">Full</button>
+        <button class="btn-sm" onclick="toggleFriendlyGuide()">Guide</button>
+      </div>
+    </section>
+
+    <section class="friendly-guide" id="friendly-guide" aria-label="Beginner guide">
+      <div class="guide-card"><strong>1. Pick a state</strong><span>Use the Pulse Coach so the app adapts to your real energy.</span></div>
+      <div class="guide-card"><strong>2. Create a mode plan</strong><span>Choose Quick Win, Revision Sprint, Mock Repair, Backlog Burn, or Calm Study.</span></div>
+      <div class="guide-card"><strong>3. Close the loop</strong><span>Start focus, park doubts, and log what you finished.</span></div>
+    </section>
 
     <section class="student-launch" aria-label="Today command strip">
       <div class="student-launch-main">
@@ -5414,6 +5532,12 @@
   </div>
 
 </main>
+<div class="mobile-quickbar" aria-label="Mobile quick actions">
+  <button type="button" onclick="openLogModal()">Log</button>
+  <button type="button" onclick="startSuggestedFocus()">Focus</button>
+  <button type="button" onclick="generateTodaysPlan()">Plan</button>
+  <button type="button" onclick="openCommandPalette()">Search</button>
+</div>
 </div>
 
 <!-- Add planner task -->
@@ -5887,6 +6011,8 @@ function normalizeStore(raw = {}) {
   if (normalized.settings.autoLogFocus === undefined) normalized.settings.autoLogFocus = true;
   if (!normalized.settings.theme) normalized.settings.theme = localStorage.getItem(THEME_KEY) || 'light';
   if (!['focused','tired','stuck','stressed'].includes(normalized.settings.studentPulse)) normalized.settings.studentPulse = 'focused';
+  if (!['simple','full'].includes(normalized.settings.dashboardMode)) normalized.settings.dashboardMode = 'simple';
+  normalized.settings.showFriendlyGuide = Boolean(normalized.settings.showFriendlyGuide);
   normalized.settings.personalization = normalizePersonalization(normalized.settings.personalization);
 
   getAllChapters().forEach(chapter => {
@@ -6219,6 +6345,33 @@ function applyPersonalization() {
   });
   const active = document.querySelector('.page.active');
   if (active?.classList.contains('module-disabled')) showPage('dashboard');
+}
+
+function applyDashboardMode() {
+  const mode = store.settings?.dashboardMode || 'simple';
+  document.body.classList.toggle('dashboard-simple', mode === 'simple');
+  const title = document.getElementById('dashboard-mode-title');
+  const copy = document.getElementById('dashboard-mode-copy');
+  if (title) title.textContent = mode === 'simple' ? 'Friendly dashboard' : 'Full dashboard';
+  if (copy) copy.textContent = mode === 'simple'
+    ? 'Simple mode keeps the first screen focused. Full mode brings back analytics and visuals.'
+    : 'Full mode shows the full command center with analytics, orbit visual, and performance panels.';
+  document.getElementById('friendly-guide')?.classList.toggle('open', Boolean(store.settings?.showFriendlyGuide));
+}
+
+function setDashboardMode(mode) {
+  if (!store.settings) return;
+  store.settings.dashboardMode = mode === 'full' ? 'full' : 'simple';
+  saveAll();
+  applyDashboardMode();
+  showToast(store.settings.dashboardMode === 'full' ? 'Full dashboard enabled' : 'Simple dashboard enabled');
+}
+
+function toggleFriendlyGuide() {
+  if (!store.settings) return;
+  store.settings.showFriendlyGuide = !store.settings.showFriendlyGuide;
+  saveAll();
+  applyDashboardMode();
 }
 
 function updatePersonalization(key, value) {
@@ -6731,6 +6884,7 @@ function loginAs(name) {
   updateUserUI();
   applyTheme(store.settings.theme || localStorage.getItem(THEME_KEY) || 'light');
   applyPersonalization();
+  applyDashboardMode();
   document.getElementById('login-screen').classList.add('hidden');
   document.getElementById('main-shell').style.display = 'flex';
   const savedExam = store.settings?.exam;
@@ -6826,6 +6980,7 @@ function importUserData(event) {
       saveAll();
       applyTheme(store.settings.theme || localStorage.getItem(THEME_KEY) || 'light');
       applyPersonalization();
+      applyDashboardMode();
       renderDashboard();
       showToast('Backup restored');
     } catch (error) {
@@ -6965,6 +7120,7 @@ function showPage(name) {
 // ════════════════════════════════════════
 
 function renderDashboard() {
+  applyDashboardMode();
   const subjects = ['physics','chemistry','mathematics'];
   const ids = { physics: SYLLABUS.physics.map(c=>c.id), chemistry: SYLLABUS.chemistry.map(c=>c.id), mathematics: SYLLABUS.mathematics.map(c=>c.id) };
   const colors = { physics: 'phy', chemistry: 'chem', mathematics: 'math' };
