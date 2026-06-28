@@ -3486,6 +3486,96 @@
     --hairline: rgba(255,255,255,.09);
   }
 
+  .student-launch {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 14px;
+    align-items: center;
+    margin: 0 0 16px;
+    padding: 14px;
+    border: 1px solid var(--hairline);
+    border-radius: 8px;
+    background: var(--surface);
+    box-shadow: var(--shadow-soft);
+  }
+
+  .student-launch-main {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 12px;
+    align-items: center;
+    min-width: 0;
+  }
+
+  .student-launch-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 8px;
+    display: grid;
+    place-items: center;
+    background: color-mix(in srgb, var(--accent) 14%, transparent);
+    color: var(--accent2);
+    font-weight: 900;
+  }
+
+  .student-launch-title {
+    color: var(--ink);
+    font-size: 15px;
+    font-weight: 850;
+    line-height: 1.25;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .student-launch-copy {
+    color: var(--ink-muted);
+    font-size: 12px;
+    line-height: 1.35;
+    margin-top: 3px;
+  }
+
+  .student-launch-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+    margin-top: 8px;
+  }
+
+  .student-chip {
+    display: inline-flex;
+    align-items: center;
+    min-height: 26px;
+    padding: 4px 8px;
+    border: 1px solid var(--hairline);
+    border-radius: 999px;
+    background: rgba(255,255,255,.56);
+    color: var(--ink-muted);
+    font-size: 11px;
+    font-weight: 750;
+  }
+
+  .student-launch-actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+
+  body.theme-dark .student-launch {
+    background: rgba(16,24,38,.94);
+    border-color: rgba(255,255,255,.09);
+  }
+
+  body.theme-dark .student-launch-title { color: #f4f7fb; }
+  body.theme-dark .student-launch-copy,
+  body.theme-dark .student-chip { color: #aab6c9; }
+  body.theme-dark .student-chip {
+    background: rgba(17,26,42,.78);
+    border-color: rgba(255,255,255,.08);
+  }
+
   @media (max-width: 900px) {
     .customize-hero,
     .customize-grid,
@@ -3497,6 +3587,21 @@
     .module-grid,
     .custom-field-grid {
       grid-template-columns: 1fr;
+    }
+    .student-launch {
+      grid-template-columns: 1fr;
+      position: sticky;
+      top: 66px;
+      z-index: 20;
+    }
+    .student-launch-actions {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      width: 100%;
+    }
+    .student-launch-actions button {
+      width: 100%;
+      padding-inline: 8px;
     }
   }
 
@@ -3995,6 +4100,26 @@
       </div>
       <button class="btn-primary" onclick="openLogModal()">+ Log Today</button>
     </div>
+
+    <section class="student-launch" aria-label="Today command strip">
+      <div class="student-launch-main">
+        <div class="student-launch-icon" id="student-launch-icon">GO</div>
+        <div>
+          <div class="student-launch-title" id="student-launch-title">Choose one clear study win.</div>
+          <div class="student-launch-copy" id="student-launch-copy">Generate a plan, start focus, or log the work you already finished.</div>
+          <div class="student-launch-meta">
+            <span class="student-chip" id="student-launch-hours">0 / 6h</span>
+            <span class="student-chip" id="student-launch-revisions">0 revisions</span>
+            <span class="student-chip" id="student-launch-tasks">0 open tasks</span>
+          </div>
+        </div>
+      </div>
+      <div class="student-launch-actions">
+        <button class="btn-primary" onclick="startSuggestedFocus()">Focus</button>
+        <button class="btn-sm" onclick="openCommandPalette()">Search</button>
+        <button class="btn-sm" onclick="openLogModal()">Log</button>
+      </div>
+    </section>
 
     <section class="dashboard-hero">
       <div>
@@ -6379,7 +6504,57 @@ function renderDashboard() {
   renderPerformanceIntelligence({ totalDone, totalChapters, ids });
   renderDashboardIntelligence();
   renderDashboardAiCoach();
+  renderStudentLaunch();
   updatePlannerBadge();
+}
+
+function renderStudentLaunch() {
+  const title = document.getElementById('student-launch-title');
+  if (!title) return;
+  const today = localDateKey();
+  const goals = store.settings?.goals || { hours: 6, questions: 60 };
+  const todayHours = (store.logs || []).filter(log => log.date === today).reduce((sum, log) => sum + Number(log.hours || 0), 0);
+  const openTasks = [...(store.tasks || [])].filter(task => !task.done);
+  const overdue = openTasks.filter(task => task.due && task.due < today);
+  const todayTasks = openTasks.filter(task => task.due === today);
+  const revisions = getRevisionQueue();
+  const priorityRank = { high: 0, medium: 1, low: 2 };
+  const nextTask = [...overdue, ...todayTasks, ...openTasks].sort((a, b) =>
+    (a.due || '9999').localeCompare(b.due || '9999') ||
+    priorityRank[a.priority || 'medium'] - priorityRank[b.priority || 'medium']
+  )[0];
+  let icon = 'GO';
+  let headline = 'Choose one clear study win.';
+  let copy = 'Generate a plan, start focus, or log the work you already finished.';
+
+  if (nextTask) {
+    icon = overdue.includes(nextTask) ? '!' : '1';
+    headline = nextTask.title;
+    copy = `${nextTask.subject || 'Mixed'} · ${nextTask.minutes || 30} min · ${nextTask.priority || 'medium'} priority${nextTask.due ? ` · due ${nextTask.due}` : ''}`;
+  } else if (revisions.length) {
+    icon = 'R';
+    headline = `Revise ${revisions[0].name}`;
+    copy = `${revisions.length} revision item${revisions.length === 1 ? '' : 's'} waiting. Clearing one now protects memory later.`;
+  } else if (!todayHours) {
+    icon = '0';
+    headline = 'Log your first focused block today.';
+    copy = 'Even 25 minutes makes the dashboard smarter and keeps momentum visible.';
+  } else if (todayHours < Number(goals.hours || 6)) {
+    icon = 'UP';
+    headline = `${Math.max(0, Number(goals.hours || 6) - todayHours).toFixed(1)}h left for today's goal.`;
+    copy = 'Start one more focused block or update the plan if today is a recovery day.';
+  } else {
+    icon = 'OK';
+    headline = 'Daily study goal reached.';
+    copy = 'Great. Use the next block for light revision, mistakes, or rest.';
+  }
+
+  document.getElementById('student-launch-icon').textContent = icon;
+  title.textContent = headline;
+  document.getElementById('student-launch-copy').textContent = copy;
+  document.getElementById('student-launch-hours').textContent = `${todayHours.toFixed(1)} / ${goals.hours}h`;
+  document.getElementById('student-launch-revisions').textContent = `${revisions.length} revision${revisions.length === 1 ? '' : 's'}`;
+  document.getElementById('student-launch-tasks').textContent = `${openTasks.length} open task${openTasks.length === 1 ? '' : 's'}`;
 }
 
 function getStudyStreak(logs = store.logs || []) {
