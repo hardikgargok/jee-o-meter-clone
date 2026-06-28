@@ -3677,6 +3677,129 @@
     color: #f4f7fb;
   }
 
+  .pulse-coach {
+    display: grid;
+    grid-template-columns: minmax(0, .92fr) minmax(280px, 1.08fr);
+    gap: 14px;
+    margin: 0 0 16px;
+  }
+
+  .pulse-panel {
+    padding: 16px;
+    border: 1px solid var(--hairline);
+    border-radius: 8px;
+    background: var(--surface);
+    box-shadow: var(--shadow-soft);
+  }
+
+  .pulse-title {
+    color: var(--ink);
+    font-size: 14px;
+    font-weight: 850;
+    margin-bottom: 4px;
+  }
+
+  .pulse-copy {
+    color: var(--ink-muted);
+    font-size: 12px;
+    line-height: 1.45;
+  }
+
+  .pulse-options {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 8px;
+    margin-top: 12px;
+  }
+
+  .pulse-option {
+    min-height: 62px;
+    border: 1px solid var(--hairline);
+    border-radius: 8px;
+    background: rgba(255,255,255,.58);
+    color: var(--ink);
+    font: inherit;
+    cursor: pointer;
+    padding: 9px;
+    text-align: left;
+  }
+
+  .pulse-option strong {
+    display: block;
+    font-size: 12px;
+    font-weight: 850;
+  }
+
+  .pulse-option span {
+    display: block;
+    color: var(--ink-muted);
+    font-size: 10px;
+    margin-top: 2px;
+  }
+
+  .pulse-option.active {
+    border-color: color-mix(in srgb, var(--accent) 44%, transparent);
+    background: color-mix(in srgb, var(--accent) 10%, #fff);
+    box-shadow: 0 10px 24px color-mix(in srgb, var(--accent) 12%, transparent);
+  }
+
+  .coach-plan {
+    display: grid;
+    gap: 9px;
+  }
+
+  .coach-line {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 9px;
+    align-items: start;
+    padding: 10px;
+    border: 1px solid var(--hairline);
+    border-radius: 8px;
+    background: rgba(255,255,255,.56);
+  }
+
+  .coach-num {
+    width: 24px;
+    height: 24px;
+    border-radius: 8px;
+    display: grid;
+    place-items: center;
+    background: color-mix(in srgb, var(--accent) 14%, transparent);
+    color: var(--accent2);
+    font-size: 11px;
+    font-weight: 900;
+  }
+
+  .coach-line strong {
+    display: block;
+    color: var(--ink);
+    font-size: 12px;
+  }
+
+  .coach-line span {
+    display: block;
+    color: var(--ink-muted);
+    font-size: 11px;
+    line-height: 1.4;
+    margin-top: 2px;
+  }
+
+  body.theme-dark .pulse-panel,
+  body.theme-dark .pulse-option,
+  body.theme-dark .coach-line {
+    background: rgba(16,24,38,.94);
+    border-color: rgba(255,255,255,.09);
+  }
+
+  body.theme-dark .pulse-title,
+  body.theme-dark .pulse-option,
+  body.theme-dark .coach-line strong { color: #f4f7fb; }
+
+  body.theme-dark .pulse-copy,
+  body.theme-dark .pulse-option span,
+  body.theme-dark .coach-line span { color: #aab6c9; }
+
   @media (max-width: 900px) {
     .customize-hero,
     .customize-grid,
@@ -3708,6 +3831,10 @@
       width: min(100%, 280px);
     }
     .ambient-row {
+      grid-template-columns: 1fr;
+    }
+    .pulse-coach,
+    .pulse-options {
       grid-template-columns: 1fr;
     }
   }
@@ -4225,6 +4352,28 @@
         <button class="btn-primary" onclick="startSuggestedFocus()">Focus</button>
         <button class="btn-sm" onclick="openCommandPalette()">Search</button>
         <button class="btn-sm" onclick="openLogModal()">Log</button>
+      </div>
+    </section>
+
+    <section class="pulse-coach" aria-label="Student pulse coach">
+      <div class="pulse-panel">
+        <div class="pulse-title">How are you entering this session?</div>
+        <div class="pulse-copy">StudyMeter adapts the next move to your actual state, not an imaginary perfect day.</div>
+        <div class="pulse-options" id="pulse-options">
+          <button class="pulse-option" type="button" onclick="setStudentPulse('focused')"><strong>Focused</strong><span>Push hard</span></button>
+          <button class="pulse-option" type="button" onclick="setStudentPulse('tired')"><strong>Tired</strong><span>Low energy</span></button>
+          <button class="pulse-option" type="button" onclick="setStudentPulse('stuck')"><strong>Stuck</strong><span>Need clarity</span></button>
+          <button class="pulse-option" type="button" onclick="setStudentPulse('stressed')"><strong>Stressed</strong><span>Calm plan</span></button>
+        </div>
+      </div>
+      <div class="pulse-panel">
+        <div class="pulse-title" id="pulse-coach-title">Coach mode ready</div>
+        <div class="pulse-copy" id="pulse-coach-copy">Pick your current state and StudyMeter will shape the next 30-60 minutes.</div>
+        <div class="coach-plan" id="pulse-coach-plan"></div>
+        <div class="action-row" style="margin-top:12px">
+          <button class="btn-primary" onclick="createPulseTask()">Add this plan</button>
+          <button class="btn-sm" onclick="startSuggestedFocus()">Start now</button>
+        </div>
       </div>
     </section>
 
@@ -5573,6 +5722,7 @@ function normalizeStore(raw = {}) {
   };
   if (normalized.settings.autoLogFocus === undefined) normalized.settings.autoLogFocus = true;
   if (!normalized.settings.theme) normalized.settings.theme = localStorage.getItem(THEME_KEY) || 'light';
+  if (!['focused','tired','stuck','stressed'].includes(normalized.settings.studentPulse)) normalized.settings.studentPulse = 'focused';
   normalized.settings.personalization = normalizePersonalization(normalized.settings.personalization);
 
   getAllChapters().forEach(chapter => {
@@ -6694,6 +6844,7 @@ function renderDashboard() {
   renderDashboardIntelligence();
   renderDashboardAiCoach();
   renderStudentLaunch();
+  renderPulseCoach();
   updatePlannerBadge();
 }
 
@@ -6744,6 +6895,103 @@ function renderStudentLaunch() {
   document.getElementById('student-launch-hours').textContent = `${todayHours.toFixed(1)} / ${goals.hours}h`;
   document.getElementById('student-launch-revisions').textContent = `${revisions.length} revision${revisions.length === 1 ? '' : 's'}`;
   document.getElementById('student-launch-tasks').textContent = `${openTasks.length} open task${openTasks.length === 1 ? '' : 's'}`;
+}
+
+const PULSE_COACH = {
+  focused: {
+    title: 'High-output mode',
+    copy: 'Use this energy on the hardest high-return thing, not admin work.',
+    task: '90-minute high-leverage problem block',
+    minutes: 90,
+    priority: 'high',
+    steps: [
+      ['Pick', 'Choose one weak or high-weight chapter.'],
+      ['Solve', 'Do timed questions before opening theory.'],
+      ['Review', 'Write the exact mistake pattern after the block.']
+    ]
+  },
+  tired: {
+    title: 'Recovery study mode',
+    copy: 'Keep the streak alive without pretending you have full energy.',
+    task: '25-minute light revision and formula cleanup',
+    minutes: 25,
+    priority: 'medium',
+    steps: [
+      ['Reset', 'Drink water, clear the desk, and open only one chapter.'],
+      ['Revise', 'Review formulas or marked mistakes for 20-25 minutes.'],
+      ['Stop cleanly', 'Log it and avoid guilt scrolling.']
+    ]
+  },
+  stuck: {
+    title: 'Unblock mode',
+    copy: 'The goal is not more effort. It is finding the exact point of confusion.',
+    task: '45-minute concept unblock session',
+    minutes: 45,
+    priority: 'high',
+    steps: [
+      ['Locate', 'Write the smallest subtopic that is blocking you.'],
+      ['Example', 'Study one solved example slowly.'],
+      ['Test', 'Solve two similar questions without notes.']
+    ]
+  },
+  stressed: {
+    title: 'Calm control mode',
+    copy: 'Reduce pressure by making the next step small, visible, and finishable.',
+    task: '30-minute calm priority reset',
+    minutes: 30,
+    priority: 'medium',
+    steps: [
+      ['Breathe', 'Take two minutes and name the worry.'],
+      ['Choose', 'Pick one task that can finish today.'],
+      ['Close loop', 'Finish it or schedule the next exact block.']
+    ]
+  }
+};
+
+function setStudentPulse(value) {
+  if (!PULSE_COACH[value]) return;
+  store.settings.studentPulse = value;
+  saveAll();
+  renderPulseCoach();
+  showToast('Coach mode updated');
+}
+
+function renderPulseCoach() {
+  const box = document.getElementById('pulse-coach-plan');
+  if (!box) return;
+  const pulse = PULSE_COACH[store.settings?.studentPulse || 'focused'] || PULSE_COACH.focused;
+  document.querySelectorAll('.pulse-option').forEach(button => {
+    const key = button.getAttribute('onclick')?.match(/'([^']+)'/)?.[1];
+    button.classList.toggle('active', key === (store.settings?.studentPulse || 'focused'));
+  });
+  document.getElementById('pulse-coach-title').textContent = pulse.title;
+  document.getElementById('pulse-coach-copy').textContent = pulse.copy;
+  box.innerHTML = pulse.steps.map((step, index) => `
+    <div class="coach-line">
+      <div class="coach-num">${index + 1}</div>
+      <div><strong>${escapeHtml(step[0])}</strong><span>${escapeHtml(step[1])}</span></div>
+    </div>
+  `).join('');
+}
+
+function createPulseTask() {
+  const key = store.settings?.studentPulse || 'focused';
+  const pulse = PULSE_COACH[key] || PULSE_COACH.focused;
+  store.tasks.push({
+    id: Date.now(),
+    title: pulse.task,
+    subject: 'Mixed',
+    due: localDateKey(),
+    priority: pulse.priority,
+    minutes: pulse.minutes,
+    notes: `${pulse.title}: ${pulse.copy}`,
+    done: false,
+    createdAt: new Date().toISOString()
+  });
+  saveAll();
+  renderPlanner();
+  renderDashboard();
+  showToast('Pulse plan added to today');
 }
 
 function getStudyStreak(logs = store.logs || []) {
