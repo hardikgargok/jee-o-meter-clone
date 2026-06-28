@@ -4024,6 +4024,187 @@
     border-color: rgba(255,255,255,.09);
   }
 
+  .momentum-game {
+    display: grid;
+    grid-template-columns: minmax(260px, .7fr) minmax(0, 1fr);
+    gap: 14px;
+    margin: 0 0 16px;
+  }
+
+  .level-card,
+  .quest-card {
+    position: relative;
+    overflow: hidden;
+    padding: 16px;
+    border: 1px solid var(--hairline);
+    border-radius: 8px;
+    background: var(--surface);
+    box-shadow: var(--shadow-soft);
+  }
+
+  .level-card::after {
+    content: '';
+    position: absolute;
+    width: 180px;
+    height: 180px;
+    right: -80px;
+    top: -90px;
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--accent) 18%, transparent);
+    pointer-events: none;
+  }
+
+  .level-kicker,
+  .quest-kicker {
+    color: var(--ink-muted);
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: .45px;
+    text-transform: uppercase;
+  }
+
+  .level-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 10px;
+  }
+
+  .level-orb {
+    width: 58px;
+    height: 58px;
+    border-radius: 18px;
+    display: grid;
+    place-items: center;
+    background: linear-gradient(135deg, var(--phy), var(--accent), var(--success));
+    color: #fff;
+    font-size: 22px;
+    font-weight: 950;
+    box-shadow: 0 14px 30px color-mix(in srgb, var(--accent) 25%, transparent);
+  }
+
+  .level-title {
+    color: var(--ink);
+    font-size: 18px;
+    font-weight: 900;
+    line-height: 1.15;
+  }
+
+  .level-copy {
+    color: var(--ink-muted);
+    font-size: 11px;
+    margin-top: 3px;
+  }
+
+  .xp-track {
+    height: 9px;
+    overflow: hidden;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--ink-muted) 16%, transparent);
+    margin-top: 14px;
+  }
+
+  .xp-fill {
+    height: 100%;
+    width: 0%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, var(--phy), var(--accent), var(--success));
+    transition: width .45s var(--ease-native);
+  }
+
+  .quest-list {
+    display: grid;
+    gap: 8px;
+    margin-top: 10px;
+  }
+
+  .quest-item {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    gap: 9px;
+    align-items: center;
+    padding: 9px;
+    border: 1px solid var(--hairline);
+    border-radius: 8px;
+    background: rgba(255,255,255,.52);
+  }
+
+  .quest-check {
+    width: 24px;
+    height: 24px;
+    display: grid;
+    place-items: center;
+    border-radius: 8px;
+    background: color-mix(in srgb, var(--ink-muted) 13%, transparent);
+    color: var(--ink-muted);
+    font-size: 12px;
+    font-weight: 950;
+  }
+
+  .quest-item.done .quest-check {
+    background: color-mix(in srgb, var(--success) 22%, transparent);
+    color: var(--success);
+  }
+
+  .quest-title {
+    color: var(--ink);
+    font-size: 12px;
+    font-weight: 850;
+  }
+
+  .quest-copy {
+    color: var(--ink-muted);
+    font-size: 10px;
+    margin-top: 1px;
+  }
+
+  .quest-xp {
+    color: var(--accent2);
+    font-size: 11px;
+    font-weight: 900;
+  }
+
+  .celebration-burst {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 2200;
+    overflow: hidden;
+  }
+
+  .celebration-burst span {
+    position: absolute;
+    left: 50%;
+    top: 48%;
+    width: 7px;
+    height: 14px;
+    border-radius: 3px;
+    background: var(--accent);
+    animation: burstOut .72s var(--ease-native) forwards;
+  }
+
+  @keyframes burstOut {
+    to {
+      transform: translate(var(--x), var(--y)) rotate(240deg);
+      opacity: 0;
+    }
+  }
+
+  body.theme-dark .level-card,
+  body.theme-dark .quest-card,
+  body.theme-dark .quest-item {
+    background: rgba(16,24,38,.94);
+    border-color: rgba(255,255,255,.09);
+  }
+
+  body.theme-dark .level-title,
+  body.theme-dark .quest-title { color: #f4f7fb; }
+
+  body.theme-dark .level-copy,
+  body.theme-dark .level-kicker,
+  body.theme-dark .quest-kicker,
+  body.theme-dark .quest-copy { color: #aab6c9; }
+
   @media (max-width: 900px) {
     .customize-hero,
     .customize-grid,
@@ -4069,6 +4250,7 @@
     .friendly-toolbar { align-items: flex-start; flex-direction: column; }
     .friendly-actions { width: 100%; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
     .friendly-guide { grid-template-columns: 1fr; }
+    .momentum-game { grid-template-columns: 1fr; }
     .mobile-quickbar { display: grid; }
     .main { padding-bottom: 86px; }
   }
@@ -4604,6 +4786,25 @@
         <button class="btn-primary" onclick="startSuggestedFocus()">Focus</button>
         <button class="btn-sm" onclick="openCommandPalette()">Search</button>
         <button class="btn-sm" onclick="openLogModal()">Log</button>
+      </div>
+    </section>
+
+    <section class="momentum-game" aria-label="Momentum level and daily quests">
+      <div class="level-card">
+        <div class="level-kicker">Momentum Level</div>
+        <div class="level-row">
+          <div class="level-orb" id="level-orb">1</div>
+          <div>
+            <div class="level-title" id="level-title">Level 1 Scholar</div>
+            <div class="level-copy" id="level-copy">Start today's loop to build XP.</div>
+          </div>
+        </div>
+        <div class="xp-track"><div class="xp-fill" id="xp-fill"></div></div>
+        <div class="level-copy" id="xp-label">0 / 100 XP to next level</div>
+      </div>
+      <div class="quest-card">
+        <div class="quest-kicker">Daily Quests</div>
+        <div class="quest-list" id="daily-quest-list"></div>
       </div>
     </section>
 
@@ -7174,6 +7375,7 @@ function renderDashboard() {
   renderDashboardIntelligence();
   renderDashboardAiCoach();
   renderStudentLaunch();
+  renderMomentumGame();
   renderPulseCoach();
   renderDoubtParking();
   renderMentorSnapshot();
@@ -7227,6 +7429,65 @@ function renderStudentLaunch() {
   document.getElementById('student-launch-hours').textContent = `${todayHours.toFixed(1)} / ${goals.hours}h`;
   document.getElementById('student-launch-revisions').textContent = `${revisions.length} revision${revisions.length === 1 ? '' : 's'}`;
   document.getElementById('student-launch-tasks').textContent = `${openTasks.length} open task${openTasks.length === 1 ? '' : 's'}`;
+}
+
+function getMomentumXP() {
+  const totalHours = (store.logs || []).reduce((sum, log) => sum + Number(log.hours || 0), 0);
+  const totalQs = (store.logs || []).reduce((sum, log) => sum + Number(log.qs || 0), 0);
+  const doneTasks = (store.tasks || []).filter(task => task.done).length;
+  const focusMin = (store.focusSessions || []).reduce((sum, session) => sum + Number(session.minutes || 0), 0);
+  const solvedDoubts = (store.doubts || []).filter(doubt => doubt.solved).length;
+  const revised = getAllChapters().filter(chapter => store.chapters[chapter.id]?.lastRevised).length;
+  return Math.round(totalHours * 18 + totalQs * 0.35 + doneTasks * 22 + focusMin * 0.45 + solvedDoubts * 18 + revised * 12 + (store.mocks || []).length * 45);
+}
+
+function renderMomentumGame() {
+  const list = document.getElementById('daily-quest-list');
+  if (!list) return;
+  const xp = getMomentumXP();
+  const level = Math.max(1, Math.floor(xp / 100) + 1);
+  const within = xp % 100;
+  const today = localDateKey();
+  const todayHours = (store.logs || []).filter(log => log.date === today).reduce((sum, log) => sum + Number(log.hours || 0), 0);
+  const focusToday = (store.focusSessions || []).filter(session => session.date === today).reduce((sum, session) => sum + Number(session.minutes || 0), 0);
+  const completedToday = (store.tasks || []).filter(task => task.done && task.completedAt?.slice(0, 10) === today).length;
+  const doubtsCapturedToday = (store.doubts || []).filter(doubt => doubt.createdAt?.slice(0, 10) === today).length;
+  const revisions = getRevisionQueue();
+  const quests = [
+    ['First Spark', todayHours > 0 || focusToday > 0, 'Log or focus once today', '+20 XP'],
+    ['Close One Loop', completedToday > 0, 'Finish one planner task', '+25 XP'],
+    ['Memory Shield', revisions.length === 0, revisions.length ? `Clear ${revisions.length} revision reminder${revisions.length === 1 ? '' : 's'}` : 'Revision queue clear', '+30 XP'],
+    ['Trap Capture', doubtsCapturedToday > 0, 'Park one doubt or mistake', '+15 XP']
+  ];
+  document.getElementById('level-orb').textContent = level;
+  document.getElementById('level-title').textContent = `Level ${level} Scholar`;
+  document.getElementById('level-copy').textContent = level >= 10 ? 'Serious momentum. Keep the loop clean.' : 'Small loops compound into serious preparation.';
+  document.getElementById('xp-fill').style.width = `${within}%`;
+  document.getElementById('xp-label').textContent = `${within} / 100 XP to next level · ${xp} total XP`;
+  list.innerHTML = quests.map(quest => `
+    <div class="quest-item ${quest[1] ? 'done' : ''}">
+      <div class="quest-check">${quest[1] ? '✓' : ''}</div>
+      <div><div class="quest-title">${escapeHtml(quest[0])}</div><div class="quest-copy">${escapeHtml(quest[2])}</div></div>
+      <div class="quest-xp">${escapeHtml(quest[3])}</div>
+    </div>
+  `).join('');
+}
+
+function celebrateMoment() {
+  if (store.settings?.personalization?.motion === 'reduced') return;
+  const burst = document.createElement('div');
+  burst.className = 'celebration-burst';
+  for (let i = 0; i < 18; i++) {
+    const piece = document.createElement('span');
+    const angle = (Math.PI * 2 * i) / 18;
+    const distance = 90 + (i % 5) * 14;
+    piece.style.setProperty('--x', `${Math.cos(angle) * distance}px`);
+    piece.style.setProperty('--y', `${Math.sin(angle) * distance}px`);
+    piece.style.background = ['var(--phy)','var(--success)','var(--accent)','var(--warn)'][i % 4];
+    burst.appendChild(piece);
+  }
+  document.body.appendChild(burst);
+  setTimeout(() => burst.remove(), 900);
 }
 
 const PULSE_COACH = {
@@ -8087,6 +8348,7 @@ function saveLogEntry() {
   document.getElementById('log-topics').value = '';
   document.getElementById('log-reflection').value = '';
   renderDashboard();
+  celebrateMoment();
   showToast('Study session logged');
 }
 
@@ -8442,6 +8704,7 @@ function toggleTask(id) {
   renderPlanner();
   renderDashboardIntelligence();
   refreshDashboardIfVisible();
+  if (task.done) celebrateMoment();
   showToast(task.done ? 'Task completed' : 'Task reopened');
 }
 
@@ -8929,6 +9192,7 @@ function recordFocusSession(minutes) {
   renderFocusStats();
   renderDashboardIntelligence();
   refreshDashboardIfVisible();
+  celebrateMoment();
 }
 
 function renderFocusHistory() {
