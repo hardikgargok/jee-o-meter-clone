@@ -5998,7 +5998,7 @@
     <span class="nav-dot" style="background:var(--warn)"></span> Mock Tests
   </a>
   <a class="nav-item" onclick="showPage('test-log')" style="">
-    <span class="nav-dot" style="background:var(--danger)"></span> Test Log
+    <span class="nav-dot" style="background:var(--danger)"></span> Mistake Repair
   </a>
   <a class="nav-item" onclick="showPage('study-log')">
     <span class="nav-dot" style="background:var(--accent)"></span> Study Log
@@ -6573,11 +6573,11 @@
     <div class="page-header">
       <div>
         <div class="page-title" style="display:flex;align-items:center;gap:10px">
-          <span style="background:rgba(248,113,113,0.15);color:var(--danger);border-radius:8px;padding:2px 10px;font-size:14px;font-weight:600">📋 Test Log</span>
+          <span style="background:rgba(248,113,113,0.15);color:var(--danger);border-radius:8px;padding:2px 10px;font-size:14px;font-weight:600">Mistake Repair</span>
         </div>
-        <div class="page-subtitle">Post-test analysis — correct, wrong, left, mistakes, and patterns</div>
+        <div class="page-subtitle">After every test, capture what broke and turn it into the next repair task.</div>
       </div>
-      <button class="btn-primary" onclick="openTestLogModal()" style="background:var(--danger)">+ Add Test Entry</button>
+      <button class="btn-primary" onclick="openTestLogModal()" style="background:var(--danger)">Add test result</button>
     </div>
 
     <!-- Summary stats -->
@@ -6633,7 +6633,7 @@
       </div>
     </div>
 
-    <div class="section-title">All Test Entries <span class="section-line"></span></div>
+    <div class="section-title">Repair History <span class="section-line"></span></div>
     <div id="test-log-list" class="chapter-list"></div>
   </div>
 
@@ -7189,8 +7189,8 @@
 <div class="modal-overlay" id="test-log-modal">
   <div class="modal" style="width:620px">
     <div class="modal-title" style="display:flex;align-items:center;gap:10px">
-      <span style="background:rgba(248,113,113,0.12);color:var(--danger);border-radius:8px;padding:3px 12px;font-size:13px">📋</span>
-      Add Test Entry
+      <span style="background:rgba(248,113,113,0.12);color:var(--danger);border-radius:8px;padding:3px 12px;font-size:13px">Fix</span>
+      Add test result
     </div>
 
     <!-- Basic info -->
@@ -10383,7 +10383,7 @@ function renderTestLog() {
     document.getElementById('tl-left').textContent = '0';
     document.getElementById('tl-mistake-bars').innerHTML = '<div style="color:var(--text3);font-size:13px;text-align:center;padding:20px 0">Log tests to see your mistake patterns</div>';
     document.getElementById('tl-accuracy-bars').innerHTML = '<div style="color:var(--text3);font-size:13px;text-align:center;padding:20px 0">—</div>';
-    document.getElementById('test-log-list').innerHTML = '<div style="color:var(--text3);font-size:13px;text-align:center;padding:32px 0">No test entries yet. Click "+ Add Test Entry" to start.</div>';
+    document.getElementById('test-log-list').innerHTML = '<div class="empty-state"><div class="empty-icon">Fix</div><div>No test repair saved yet. Add one result after your next mock.</div></div>';
     return;
   }
   
@@ -11132,7 +11132,7 @@ function buildCommandItems() {
     ['Dashboard', 'Open preparation overview', 'D', () => showPage('dashboard')],
     ['Planner', 'Manage tasks, targets, and revision queue', 'P', () => showPage('planner')],
     ['Focus Timer', 'Start a focused study block', 'F', () => showPage('focus')],
-    ['Test Log', 'Analyze correct, wrong, left, and mistakes', 'T', () => showPage('test-log')],
+    ['Mistake Repair', 'Analyze test mistakes and create repair tasks', 'MR', () => showPage('test-log')],
     ['Mock Tests', 'Track full-length mock scores', 'M', () => showPage('mock-tests')],
     ['Study Log', 'Review day-by-day study sessions', 'S', () => showPage('study-log')],
     ['Formula Bank', 'Open personal notes and formulae', 'N', () => showPage('formula-bank')],
@@ -11159,7 +11159,7 @@ function buildCommandItems() {
     { title: 'Create AI mentor tasks', copy: 'Add the full 48-hour attack plan to planner', icon: 'AI', action: createAiMentorTasks, keywords: 'ai generate mentor tasks attack plan' },
     { title: 'Make AI flashcards', copy: 'Generate recall cards from highest-risk chapters', icon: 'FC', action: generateMentorFlashcards, keywords: 'ai flashcards recall weak chapters' },
     { title: 'Add planner task', copy: 'Create the next concrete study task', icon: '+', action: openTaskModal, keywords: 'task planner todo add' },
-    { title: 'Add test analysis', copy: 'Save mistakes and subject accuracy', icon: '+', action: openTestLogModal, keywords: 'test analysis mistakes correct wrong left' },
+    { title: 'Add test repair', copy: 'Save score, mistakes, and subject accuracy', icon: '+', action: openTestLogModal, keywords: 'test repair analysis mistakes correct wrong left' },
     { title: 'Add mock test', copy: 'Save Physics, Chemistry, and Maths scores', icon: '+', action: openMockModal, keywords: 'mock test score add' },
     { title: 'Build weak flashcards', copy: 'Create review cards from low-readiness chapters', icon: 'FC', action: () => { showPage('toolkit'); setTimeout(seedWeakFlashcards, 80); }, keywords: 'flashcards weak review spaced repetition' },
     { title: 'Generate recall quiz', copy: 'Create a quick active-recall test from weak areas', icon: 'Q', action: () => { showPage('toolkit'); setTimeout(generateQuizPrompt, 80); }, keywords: 'quiz active recall test practice weak doubts' },

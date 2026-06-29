@@ -250,6 +250,12 @@ Optimize: renamed the page to "Log Study", simplified the modal to "Log today", 
 Benchmark: matched Strava-style habit logging: save the completed effort quickly, then review history later.
 Reflect: next friction is Test Log, where analysis copy still feels heavy for first-time students.
 
+### Loop 12
+Audit: Test Log sounded like spreadsheet data entry even though the real student need is repairing mistakes.
+Optimize: renamed the surface to "Mistake Repair", changed the primary action to "Add test result", rewrote the subtitle and empty state, and updated command search labels.
+Benchmark: matched Khan Academy and Todoist by framing errors as actionable repair work instead of passive analytics.
+Reflect: next friction is the command palette, which still exposes too many advanced actions in simple mode.
+
 ## Next Engineering Priorities
 1. Make next-action recommendations more specific from onboarding choices.
 2. Pin the selected study time on the dashboard.
@@ -260,3 +266,4 @@ Reflect: next friction is Test Log, where analysis copy still feels heavy for fi
 7. Simplify Planner into "Today", "Upcoming", and "Done" after validating the new Focus start path.
 8. Reduce Study Log to a fast post-focus save screen in simple mode.
 9. Make Test Log feel like "repair mistakes" instead of a data-entry spreadsheet.
+10. Filter command palette results by simple/full mode so new students do not see every advanced action at once.
