@@ -262,6 +262,12 @@ Optimize: simple mode now filters commands to core pages and actions: Dashboard,
 Benchmark: matched Raycast and Spotlight by keeping search powerful but context-aware.
 Reflect: next friction is copy consistency across nav, command search, and page titles after renaming Test Log.
 
+### Loop 14
+Audit: The service worker cache version had not changed during the UI excellence work, so installed PWA/APK users could keep stale screens.
+Optimize: bumped the StudyMeter service-worker cache version so the updated app shell can install and trigger the existing Restart update banner.
+Benchmark: matched production PWA practice: ship UI changes with a fresh cache version and a clear reload path.
+Reflect: next friction is user education around refreshing installed APK/WebView copies after GitHub Pages deploys.
+
 ## Next Engineering Priorities
 1. Make next-action recommendations more specific from onboarding choices.
 2. Pin the selected study time on the dashboard.
@@ -274,3 +280,4 @@ Reflect: next friction is copy consistency across nav, command search, and page 
 9. Make Test Log feel like "repair mistakes" instead of a data-entry spreadsheet.
 10. Filter command palette results by simple/full mode so new students do not see every advanced action at once.
 11. Audit every command/search/nav label after future page renames.
+12. Keep bumping the service-worker cache name on every major UI release.
