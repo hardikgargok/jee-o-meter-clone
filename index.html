@@ -4742,6 +4742,15 @@
     display: none;
   }
 
+  body.dashboard-simple .momentum-game,
+  body.dashboard-simple .pulse-coach,
+  body.dashboard-simple .student-upgrade-grid,
+  body.dashboard-simple .upgrade-panel,
+  body.dashboard-simple .subject-overview,
+  body.dashboard-simple .dashboard-intelligence {
+    display: none;
+  }
+
   .mobile-quickbar {
     display: none;
     position: fixed;
@@ -5821,6 +5830,33 @@
     max-width: 560px;
     font-size: 14px;
   }
+
+  body.dashboard-simple .nav-subjects,
+  body.dashboard-simple .nav-data,
+  body.dashboard-simple .nav-item[onclick*="'test-log'"],
+  body.dashboard-simple .nav-item[onclick*="'formula-bank'"],
+  body.dashboard-simple .nav-item[onclick*="'toolkit'"],
+  body.dashboard-simple .nav-item[onclick*="'ai-mentor'"],
+  body.dashboard-simple .nav-item[onclick*="'personalize'"],
+  body.dashboard-simple .nav-item[onclick*="'physics'"],
+  body.dashboard-simple .nav-item[onclick*="'chemistry'"],
+  body.dashboard-simple .nav-item[onclick*="'mathematics'"],
+  body.dashboard-simple .sidebar-tools .appearance-toggle,
+  body.dashboard-simple .sidebar-tools .tool-btn:not([onclick*="openCommandPalette"]) {
+    display: none;
+  }
+
+  body.dashboard-simple .page-header .page-title::after {
+    content: 'Today';
+    display: inline-flex;
+    margin-left: 10px;
+    padding: 4px 8px;
+    border-radius: 999px;
+    background: rgba(34,197,94,.12);
+    color: var(--success);
+    font-size: 11px;
+    vertical-align: middle;
+  }
 </style>
 </head>
 <body>
@@ -5923,7 +5959,7 @@
     </div>
   </div>
 
-  <div class="nav-section">Overview</div>
+  <div class="nav-section nav-start">Start</div>
   <a class="nav-item active" onclick="showPage('dashboard')">
     <span class="nav-dot dot-dash"></span> Dashboard
   </a>
@@ -5956,7 +5992,7 @@
     <span class="nav-dot" style="background:var(--accent2)"></span> Personalize
   </a>
 
-  <div class="nav-section">Subjects</div>
+  <div class="nav-section nav-subjects">Subjects</div>
   <a class="nav-item" onclick="showPage('physics')">
     <span class="nav-dot dot-phy"></span> Physics
   </a>
@@ -5967,7 +6003,7 @@
     <span class="nav-dot dot-math"></span> Mathematics
   </a>
 
-  <div class="nav-section">Your Data</div>
+  <div class="nav-section nav-data">More tools</div>
   <div class="sidebar-tools">
     <div class="appearance-toggle" aria-label="Appearance">
       <button class="appearance-option active" id="theme-light-btn" type="button">Light</button>
@@ -6048,8 +6084,8 @@
       <div class="student-launch-main">
         <div class="student-launch-icon" id="student-launch-icon">GO</div>
         <div>
-          <div class="student-launch-title" id="student-launch-title">Choose one clear study win.</div>
-          <div class="student-launch-copy" id="student-launch-copy">Generate a plan, start focus, or log the work you already finished.</div>
+          <div class="student-launch-title" id="student-launch-title">Start one clear study win.</div>
+          <div class="student-launch-copy" id="student-launch-copy">StudyMeter picks the next task. You only need to start, search, or log.</div>
           <div class="student-launch-meta">
             <span class="student-chip" id="student-launch-hours">0 / 6h</span>
             <span class="student-chip" id="student-launch-revisions">0 revisions</span>
@@ -6058,9 +6094,9 @@
         </div>
       </div>
       <div class="student-launch-actions">
-        <button class="btn-primary" onclick="startSuggestedFocus()">Focus</button>
-        <button class="btn-sm" onclick="openCommandPalette()">Search</button>
-        <button class="btn-sm" onclick="openLogModal()">Log</button>
+        <button class="btn-primary" onclick="startSuggestedFocus()">Start 25 min</button>
+        <button class="btn-sm" onclick="openCommandPalette()">Find tool</button>
+        <button class="btn-sm" onclick="openLogModal()">Log study</button>
       </div>
     </section>
 
@@ -8923,13 +8959,13 @@ function renderStudentLaunch() {
     priorityRank[a.priority || 'medium'] - priorityRank[b.priority || 'medium']
   )[0];
   let icon = 'GO';
-  let headline = 'Choose one clear study win.';
-  let copy = 'Generate a plan, start focus, or log the work you already finished.';
+  let headline = 'Start one clear study win.';
+  let copy = 'StudyMeter picks the next task. You only need to start, find a tool, or log study.';
 
   if (nextTask) {
     icon = overdue.includes(nextTask) ? '!' : '1';
     headline = nextTask.title;
-    copy = `${nextTask.subject || 'Mixed'} · ${nextTask.minutes || 30} min · ${nextTask.priority || 'medium'} priority${nextTask.due ? ` · due ${nextTask.due}` : ''}`;
+    copy = `${nextTask.subject || 'Mixed'} - ${nextTask.minutes || 30} min - ${nextTask.priority || 'medium'} priority${nextTask.due ? ` - due ${nextTask.due}` : ''}`;
   } else if (revisions.length) {
     icon = 'R';
     headline = `Revise ${revisions[0].name}`;

@@ -208,9 +208,28 @@ Optimize: simple dashboard hides friendly toolbar, guide, and voice coach by def
 Benchmark: matched Notion's power-under-the-surface approach.
 Reflect: next friction is improving the generated next-action quality and focus timer start speed.
 
+### Loop 5
+Audit: simple dashboard still showed too many competing panels after onboarding: quests, pulse coach, study modes, doubts, mentor snapshot, audit, subject cards, and analytics.
+Optimize: simple mode now keeps the home experience focused on the main study action and hides advanced panels until the student chooses deeper tools.
+Benchmark: matched Forest and Todoist by making the first screen about action, not exploration.
+Reflect: the next friction was the primary card copy and button labels.
+
+### Loop 6
+Audit: the main action card still used vague language like "Generate a plan" and a generic "Focus" button.
+Optimize: rewrote it to "Start one clear study win" with explicit buttons: "Start 25 min", "Find tool", and "Log study".
+Benchmark: matched Duolingo's single obvious next action and Todoist's concrete task metadata.
+Reflect: the next friction was navigation overload.
+
+### Loop 7
+Audit: the sidebar grouped too many tools under "Overview", making the app feel larger than the student's immediate need.
+Optimize: renamed the primary section to "Start", renamed data utilities to "More tools", and hides advanced sidebar items in simple mode.
+Benchmark: matched Notion's progressive disclosure: essentials first, power tools nearby but not dominant.
+Reflect: next friction is validating with real students and tuning the next-action engine from their behavior.
+
 ## Next Engineering Priorities
 1. Make next-action recommendations more specific from onboarding choices.
 2. Pin the selected study time on the dashboard.
 3. Add a "Start 25 min" one-tap focus button.
 4. Move groups and permissions out of onboarding entirely unless a real Android permission flow exists.
 5. Add a small "What's new" update message after GitHub Pages deploys.
+6. Watch first-session behavior: if students do not tap "Start 25 min", the dashboard copy still needs simplification.
