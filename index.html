@@ -2139,6 +2139,15 @@
     width: 100%; background: var(--bg3); color: var(--text); border: 1px solid var(--border);
     border-radius: 10px; padding: 10px; font: inherit;
   }
+  .focus-complete {
+    display: none; margin: 16px auto 0; max-width: 520px; padding: 14px;
+    border: 1px solid rgba(34,197,94,.26); border-radius: 14px;
+    background: rgba(34,197,94,.08); text-align: left;
+  }
+  .focus-complete.show { display: block; }
+  .focus-complete-title { color: var(--text); font-size: 14px; font-weight: 800; }
+  .focus-complete-copy { color: var(--text3); font-size: 12px; margin-top: 3px; }
+  .focus-complete-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
   .session-history { margin-top: 20px; text-align: left; }
   .empty-state {
     color: var(--text3); font-size: 13px; text-align: center; padding: 34px 18px;
@@ -6724,6 +6733,14 @@
           <button class="btn-sm" onclick="resetTimer()">Reset</button>
           <button class="btn-sm" onclick="completeFocusEarly()">Finish now</button>
         </div>
+        <div class="focus-complete" id="focus-complete">
+          <div class="focus-complete-title" id="focus-complete-title">Focus saved.</div>
+          <div class="focus-complete-copy" id="focus-complete-copy">Log today or start another protected block.</div>
+          <div class="focus-complete-actions">
+            <button class="btn-primary" onclick="openLogModal()">Log today</button>
+            <button class="btn-sm" onclick="startAnotherFocus()">Start another 25 min</button>
+          </div>
+        </div>
         <div class="ambient-panel">
           <div class="ambient-row">
             <div>
@@ -7517,7 +7534,7 @@ let store = {};
 const USER_REGISTRY_KEY = 'studymeter_users_registry';
 const LAST_USER_KEY = 'studymeter_last_user';
 const THEME_KEY = 'studymeter_theme';
-const APP_RELEASE = 'excellence-v3';
+const APP_RELEASE = 'excellence-v4';
 const USER_COLORS = ['#5b9ef9','#34d399','#fb923c','#a78bfa','#fb7185','#fbbf24','#e879f9','#22d3ee'];
 const subjectSearch = { physics: '', chemistry: '', mathematics: '' };
 let notesSaveTimer = null;
@@ -11006,6 +11023,18 @@ function updateTimerDisplay() {
   document.title = timerRunning ? `${display.textContent} · StudyMeter` : 'StudyMeter | JEE Study Companion';
 }
 
+function setFocusComplete(visible, minutes = 0) {
+  const panel = document.getElementById('focus-complete');
+  if (!panel) return;
+  panel.classList.toggle('show', Boolean(visible));
+  if (visible) {
+    document.getElementById('focus-complete-title').textContent = `${minutes} focused minute${minutes === 1 ? '' : 's'} saved.`;
+    document.getElementById('focus-complete-copy').textContent = store.settings?.autoLogFocus === false
+      ? 'Add a quick log now so today stays accurate.'
+      : 'Auto-log saved it. Review the log or start another protected block.';
+  }
+}
+
 function toggleTimer() {
   if (timerRunning) {
     clearInterval(timerInterval);
@@ -11013,6 +11042,7 @@ function toggleTimer() {
     updateTimerDisplay();
     return;
   }
+  setFocusComplete(false);
   timerRunning = true;
   updateTimerDisplay();
   timerInterval = setInterval(() => {
@@ -11023,6 +11053,7 @@ function toggleTimer() {
       timerRemaining = 0;
       updateTimerDisplay();
       if (!timerMode.toLowerCase().includes('break')) recordFocusSession(Math.round(timerDuration / 60));
+      if (!timerMode.toLowerCase().includes('break')) setFocusComplete(true, Math.round(timerDuration / 60));
       showToast(timerMode.toLowerCase().includes('break') ? 'Break complete. Ready to focus?' : 'Focus session complete');
       return;
     }
@@ -11034,6 +11065,7 @@ function resetTimer() {
   clearInterval(timerInterval);
   timerRunning = false;
   timerRemaining = timerDuration;
+  setFocusComplete(false);
   updateTimerDisplay();
 }
 
@@ -11042,7 +11074,22 @@ function completeFocusEarly() {
   if (elapsed < 1) return showToast('Study for at least one minute before finishing', 'error');
   if (!timerMode.toLowerCase().includes('break')) recordFocusSession(elapsed);
   resetTimer();
+  if (!timerMode.toLowerCase().includes('break')) setFocusComplete(true, elapsed);
   showToast(`${elapsed} focused minute${elapsed === 1 ? '' : 's'} recorded`);
+}
+
+function startAnotherFocus() {
+  const activePreset = [...document.querySelectorAll('#page-focus .timer-presets .filter-pill')]
+    .find(button => button.textContent.includes('25'));
+  if (activePreset) setTimerPreset(25, 'Focus session', activePreset);
+  else {
+    timerDuration = 25 * 60;
+    timerRemaining = timerDuration;
+    timerMode = 'Focus session';
+    updateTimerDisplay();
+  }
+  setFocusComplete(false);
+  toggleTimer();
 }
 
 function recordFocusSession(minutes) {
