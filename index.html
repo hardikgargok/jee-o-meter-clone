@@ -8311,20 +8311,6 @@ function renderOnboardingStep() {
       </div>
     </div>
   `;
-  if (step.kind === 'schedulePromo') return `
-    <div class="rega-scene">
-      <div class="phone-preview">
-        <div class="timer-orb">25:00</div>
-        <div class="schedule-card-grid">
-          <div class="mini-schedule">☀️ Afternoon<br><small>2:00 PM - 4:00 PM</small></div>
-          <div class="mini-schedule">🌥️ Evening<br><small>6:00 PM - 8:00 PM</small></div>
-          <div class="mini-schedule">🧪 Chemistry<br><small>11:00 PM - 7:00 PM</small></div>
-          <div class="mini-schedule">📚 Physics<br><small>8:00 AM - 10:00 AM</small></div>
-        </div>
-      </div>
-      <div class="rega-feature-title">Schedule focus sessions to beat procrastination and stay consistent</div>
-    </div>
-  `;
   if (step.kind === 'time') return `
     <div class="rega-scene">
       ${regaHeader(step.bubble)}
@@ -8335,27 +8321,6 @@ function renderOnboardingStep() {
         ${timeChoice('night', '🌙', 'Night', '8PM - 10PM')}
       </div>
       <div class="rega-note">You can edit the time later</div>
-    </div>
-  `;
-  if (step.kind === 'timeConfirm') return `
-    <div class="rega-scene">
-      <div class="setup-preview">
-        <div>
-          <div style="font-size:42px">${timeSlotMeta().icon}</div>
-          <strong>${escapeHtml(timeSlotMeta().title)} Study set up!</strong>
-          <span>${escapeHtml(timeSlotMeta().time)}</span>
-        </div>
-      </div>
-      <div class="rega-note">You can edit the time later</div>
-    </div>
-  `;
-  if (step.kind === 'examQuestion') return `
-    <div class="rega-scene">
-      ${regaHeader(step.bubble)}
-      <div class="rega-options">
-        ${onboardingChoice('examPrep', 'yes', '', 'Yes', '', false, true)}
-        ${onboardingChoice('examPrep', 'no', '', 'No', '', false, true)}
-      </div>
     </div>
   `;
   if (step.kind === 'examSelect') return `
@@ -8382,35 +8347,7 @@ function renderOnboardingStep() {
       <div class="rega-note">You can edit everything later.</div>
     </div>
   `;
-  if (step.kind === 'groupPromo') return `
-    <div class="rega-scene">
-      <div class="orbit-preview"><span>${escapeHtml(examGroupName())}</span></div>
-      <div class="rega-feature-title">Join a <span style="color:#7ded5e">${escapeHtml(examGroupName())} Focus Group</span> to study together and stay accountable</div>
-    </div>
-  `;
-  if (step.kind === 'groups') return `
-    <div class="rega-scene">
-      ${regaHeader(step.bubble)}
-      <div class="rega-options">
-        ${groupChoice('100 Hours Challenge 🏆📚', '791 members', '🏫')}
-        ${groupChoice('IITians’ Hub 💞', '3.8k+ members', '⌛')}
-        ${groupChoice('Prayas 1.0 2026 JEE Drop...', '2.5k+ members', '📖')}
-      </div>
-    </div>
-  `;
-  return `
-    <div class="rega-scene">
-      ${regaHeader(step.bubble)}
-      <div class="permission-list">
-        <div class="permission-row"><div><div class="permission-title">Usage permission</div><div class="permission-copy">This allows us to track your app usage.</div></div><button class="allow-btn" type="button">Allow</button></div>
-        <div class="permission-row disabled"><div><div class="permission-title">Allow Notifications</div></div></div>
-        <div class="permission-row disabled"><div><div class="permission-title">Background permission</div></div></div>
-        <div class="permission-row disabled"><div><div class="permission-title">Display over other apps</div></div></div>
-      </div>
-      <button class="permission-help" type="button">? &nbsp; Why should I give this permission? <span style="float:right">›</span></button>
-      <div style="text-align:center;color:rgba(255,255,255,.55);font-size:10px">Trusted by 2M+ students 💗</div>
-    </div>
-  `;
+  return '';
 }
 
 function regaHeader(text) {
@@ -8467,7 +8404,6 @@ function examGroupName() {
 function isOnboardingNextDisabled() {
   const kind = ONBOARDING_STEPS[onboardingStep]?.kind;
   if (kind === 'time') return !onboardingState.timeSlot;
-  if (kind === 'examQuestion') return !onboardingState.examPrep;
   if (kind === 'examSelect') return !onboardingState.exam;
   return false;
 }
