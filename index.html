@@ -5493,6 +5493,310 @@
     background: linear-gradient(180deg, #101010, #061006 58%, #001906);
     box-shadow: none;
   }
+
+  /* StudyMeter mobile welcome and Rega onboarding polish */
+  #login-screen {
+    background:
+      linear-gradient(180deg, rgba(2,7,8,.04), rgba(2,7,8,.16) 42%, rgba(2,7,8,.78)),
+      linear-gradient(155deg, #062315 0%, #0e5d36 36%, #4ad66d 58%, #08150e 100%);
+  }
+
+  #login-screen .login-box {
+    position: relative;
+    min-height: min(720px, 100dvh);
+    isolation: isolate;
+    overflow: hidden;
+    background:
+      linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,0) 38%),
+      linear-gradient(180deg, rgba(2,9,8,0) 12%, rgba(2,9,8,.28) 56%, rgba(2,9,8,.9));
+  }
+
+  #login-screen .login-box::before {
+    content: '';
+    display: block;
+    position: absolute;
+    inset: 90px 22px 172px;
+    border-radius: 26px;
+    background:
+      linear-gradient(180deg, rgba(255,255,255,.12), rgba(255,255,255,0)),
+      repeating-linear-gradient(105deg, rgba(255,255,255,.16) 0 1px, transparent 1px 12px);
+    opacity: .28;
+    transform: skewY(-7deg);
+    z-index: -1;
+  }
+
+  #login-screen .login-logo {
+    top: 48px;
+    font-size: 26px;
+    font-weight: 800;
+    color: #cbff77;
+    text-shadow: 0 10px 24px rgba(0,0,0,.25);
+  }
+
+  #login-screen .login-logo::before,
+  .rega-logo::before {
+    filter: drop-shadow(0 8px 16px rgba(0,0,0,.22));
+  }
+
+  #login-screen .login-tagline {
+    max-width: 286px;
+    padding-top: min(30vh, 205px);
+    font-size: 28px;
+    line-height: 1.13;
+    text-wrap: balance;
+    text-shadow: 0 12px 26px rgba(0,0,0,.28);
+  }
+
+  #login-screen .login-tagline::before {
+    margin-bottom: 12px;
+    color: #c9ff64;
+    text-shadow: 0 10px 22px rgba(0,0,0,.26);
+  }
+
+  #login-screen .login-field {
+    padding: 12px 14px 14px;
+    border: 1px solid rgba(255,255,255,.14);
+    border-radius: 18px;
+    background: rgba(2,10,8,.38);
+    backdrop-filter: blur(18px);
+  }
+
+  #login-screen .login-field label {
+    margin-bottom: 9px;
+    color: rgba(255,255,255,.72);
+    text-transform: none;
+    letter-spacing: 0;
+    font-size: 12px;
+  }
+
+  #login-screen .login-field label::after {
+    content: ' optional';
+    color: rgba(255,255,255,.46);
+    font-weight: 600;
+  }
+
+  #login-screen .login-input {
+    margin: 0;
+    background: rgba(255,255,255,.96);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.9);
+  }
+
+  #login-screen .login-btn,
+  #onboarding-overlay .onboarding-next {
+    min-height: 54px;
+    background: #fffdf5;
+    color: #09110b;
+    font-size: 13px;
+    font-weight: 900;
+    box-shadow: 0 16px 28px rgba(0,0,0,.18);
+  }
+
+  #onboarding-overlay {
+    background:
+      linear-gradient(180deg, #101313 0%, #06130c 52%, #031908 100%);
+  }
+
+  #onboarding-overlay::before {
+    background:
+      linear-gradient(180deg, rgba(255,255,255,.035), rgba(255,255,255,0) 26%),
+      linear-gradient(135deg, rgba(96,214,113,.22), transparent 38%),
+      linear-gradient(315deg, rgba(47,139,147,.16), transparent 36%);
+  }
+
+  #onboarding-overlay .onboarding-card {
+    padding: 26px 22px 18px;
+    background:
+      linear-gradient(180deg, rgba(255,255,255,.035), rgba(255,255,255,0) 26%),
+      linear-gradient(180deg, #111414 0%, #07110a 58%, #031908 100%);
+  }
+
+  #onboarding-overlay .onboarding-top {
+    height: 22px;
+    margin-bottom: 18px;
+  }
+
+  #onboarding-overlay .onboarding-dots {
+    height: 4px;
+    border-radius: 999px;
+    background: rgba(255,255,255,.18);
+  }
+
+  #onboarding-overlay .onboarding-dot {
+    height: 4px;
+  }
+
+  .rega-scene {
+    gap: 16px;
+  }
+
+  .rega-logo {
+    margin-top: 20px;
+    color: #cbff77;
+    font-size: 26px;
+    font-weight: 900;
+  }
+
+  .rega-hero-rank {
+    margin-top: auto;
+    color: #c9ff64;
+    font-size: 34px;
+  }
+
+  .rega-hero-title {
+    max-width: 290px;
+    font-size: 28px;
+    line-height: 1.12;
+    text-wrap: balance;
+  }
+
+  .rega-proof {
+    gap: 10px;
+  }
+
+  .rega-proof-item {
+    padding: 13px 10px;
+    border: 1px solid rgba(255,255,255,.12);
+    border-radius: 16px;
+    background: rgba(255,255,255,.07);
+    backdrop-filter: blur(16px);
+  }
+
+  .rega-proof-item strong {
+    margin: 2px 0;
+    color: #fff;
+    font-size: 20px;
+  }
+
+  .rega-centered {
+    padding-bottom: 84px;
+  }
+
+  .rega-avatar {
+    width: 68px;
+    height: 68px;
+    border: 2px solid rgba(255,255,255,.26);
+    background:
+      radial-gradient(circle at 36% 39%, #fffbd7 0 5px, transparent 6px),
+      radial-gradient(circle at 64% 39%, #fffbd7 0 5px, transparent 6px),
+      radial-gradient(circle at 37% 41%, #111 0 2px, transparent 3px),
+      radial-gradient(circle at 63% 41%, #111 0 2px, transparent 3px),
+      radial-gradient(circle at 50% 66%, #355019 0 9px, transparent 10px),
+      linear-gradient(180deg, #dfff87 0 28%, #8fdf42 29% 72%, #d2ff98 73%);
+    box-shadow: inset 0 -12px 24px rgba(36,93,16,.34), 0 14px 28px rgba(0,0,0,.22);
+  }
+
+  .rega-avatar::before {
+    top: 10px;
+    left: 12px;
+    right: 12px;
+    height: 15px;
+    border-radius: 50% 50% 36% 36%;
+  }
+
+  .rega-avatar::after {
+    left: 24px;
+    top: 48px;
+  }
+
+  .rega-row {
+    gap: 12px;
+    align-items: center;
+  }
+
+  .rega-bubble {
+    max-width: 230px;
+    padding: 15px 17px;
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 12px;
+    background: linear-gradient(180deg, rgba(43,48,40,.96), rgba(28,34,29,.96));
+    box-shadow: 0 16px 30px rgba(0,0,0,.18);
+  }
+
+  .rega-choice,
+  .time-card,
+  .group-card {
+    border-color: rgba(255,255,255,.08);
+    border-radius: 14px;
+    background: rgba(255,255,255,.075);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.045);
+  }
+
+  .rega-choice.active,
+  .time-card.active,
+  .group-card.active {
+    border-color: rgba(139,239,99,.78);
+    background: linear-gradient(180deg, rgba(47,99,34,.58), rgba(20,42,18,.78));
+    box-shadow: 0 0 0 1px rgba(139,239,99,.18), 0 14px 28px rgba(0,0,0,.16);
+  }
+
+  .choice-check {
+    border-color: rgba(255,255,255,.5);
+  }
+
+  .phone-preview,
+  .setup-preview,
+  .orbit-preview {
+    border: 1px solid rgba(255,255,255,.13);
+    border-radius: 32px;
+    box-shadow: 0 22px 44px rgba(0,0,0,.26), inset 0 0 0 6px rgba(0,0,0,.34);
+  }
+
+  .phone-preview {
+    width: min(250px, 82vw);
+    background:
+      linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,0) 30%),
+      linear-gradient(155deg, #183a2a, #4aae65 54%, #0b1511);
+  }
+
+  .timer-orb {
+    inset: 56px 46px auto;
+    background: linear-gradient(180deg, #254f32, #173620);
+    box-shadow: 0 16px 30px rgba(0,0,0,.2);
+  }
+
+  .mini-schedule {
+    border-radius: 12px;
+    box-shadow: 0 10px 20px rgba(0,0,0,.14);
+  }
+
+  .rega-feature-title {
+    max-width: 310px;
+    font-size: 21px;
+    line-height: 1.24;
+    text-wrap: balance;
+  }
+
+  .setup-preview {
+    background:
+      linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,0) 32%),
+      linear-gradient(155deg, #152b1c, #294f2c, #142018);
+  }
+
+  .orbit-preview {
+    background:
+      linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,0) 32%),
+      linear-gradient(155deg, #142318, #33552f, #101814);
+  }
+
+  .orbit-preview::before {
+    border-color: rgba(255,255,255,.22);
+  }
+
+  .permission-row {
+    padding-bottom: 15px;
+  }
+
+  .permission-help {
+    border: 1px solid rgba(139,239,99,.16);
+    background: rgba(53,105,33,.26);
+  }
+
+  @media (min-width: 760px) {
+    #onboarding-overlay .onboarding-shell,
+    #login-screen .login-box {
+      width: min(420px, 100%);
+    }
+  }
 </style>
 </head>
 <body>
@@ -5561,8 +5865,8 @@
     <div class="login-tagline">Study App for students to focus</div>
 
     <div class="login-field">
-      <label>Your name / username</label>
-      <input class="login-input" type="text" id="login-name" placeholder="Enter your name to begin..." maxlength="30"
+      <label>Your name</label>
+      <input class="login-input" type="text" id="login-name" placeholder="Student" maxlength="30"
         onkeydown="if(event.key==='Enter') doLogin()">
     </div>
     <button class="login-btn" onclick="doLogin()">Get Started</button>
@@ -8316,8 +8620,7 @@ function addToRegistry(username) {
 }
 
 function doLogin() {
-  const name = document.getElementById('login-name').value.trim();
-  if (!name) { document.getElementById('login-name').focus(); return; }
+  const name = document.getElementById('login-name').value.trim() || 'Student';
   loginAs(name);
 }
 
