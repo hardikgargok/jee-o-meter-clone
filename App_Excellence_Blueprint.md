@@ -268,6 +268,12 @@ Optimize: bumped the StudyMeter service-worker cache version so the updated app 
 Benchmark: matched production PWA practice: ship UI changes with a fresh cache version and a clear reload path.
 Reflect: next friction is user education around refreshing installed APK/WebView copies after GitHub Pages deploys.
 
+### Loop 15
+Audit: Update communication still used generic wording and did not tell students that the simpler design was ready.
+Optimize: update banner now says "New simpler design is ready" and explains the cache refresh; the app also stores an `excellence-v2` release marker and shows a one-time toast after login.
+Benchmark: matched modern release communication in apps like Notion and Linear: short, specific, and tied to the user-visible improvement.
+Reflect: next friction is reducing the remaining advanced pages over time without deleting power features.
+
 ## Next Engineering Priorities
 1. Make next-action recommendations more specific from onboarding choices.
 2. Pin the selected study time on the dashboard.
@@ -281,3 +287,4 @@ Reflect: next friction is user education around refreshing installed APK/WebView
 10. Filter command palette results by simple/full mode so new students do not see every advanced action at once.
 11. Audit every command/search/nav label after future page renames.
 12. Keep bumping the service-worker cache name on every major UI release.
+13. Keep release messages short and tied to the visible student benefit.
