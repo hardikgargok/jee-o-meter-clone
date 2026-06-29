@@ -5857,6 +5857,22 @@
     font-size: 11px;
     vertical-align: middle;
   }
+
+  body.dashboard-simple #page-focus .ambient-panel,
+  body.dashboard-simple #page-focus .session-history {
+    display: none;
+  }
+
+  body.dashboard-simple #page-focus .timer-shell {
+    grid-template-columns: minmax(0, 640px);
+    justify-content: center;
+  }
+
+  body.dashboard-simple #page-focus .timer-card {
+    min-height: 520px;
+    display: grid;
+    align-content: center;
+  }
 </style>
 </head>
 <body>
@@ -6094,7 +6110,7 @@
         </div>
       </div>
       <div class="student-launch-actions">
-        <button class="btn-primary" onclick="startSuggestedFocus()">Start 25 min</button>
+        <button class="btn-primary" onclick="startSuggestedFocus(true)">Start 25 min</button>
         <button class="btn-sm" onclick="openCommandPalette()">Find tool</button>
         <button class="btn-sm" onclick="openLogModal()">Log study</button>
       </div>
@@ -6665,8 +6681,8 @@
   <div class="page" id="page-focus">
     <div class="page-header">
       <div>
-        <div class="page-title">Focus Timer</div>
-        <div class="page-subtitle">A distraction-light timer for deep study blocks and intentional breaks.</div>
+        <div class="page-title">Start Focus</div>
+        <div class="page-subtitle">Pick a task, press start, and protect the next 25 minutes.</div>
       </div>
     </div>
     <div class="timer-shell">
@@ -6688,7 +6704,7 @@
         </div>
         <div class="timer-display" id="timer-display">25:00</div>
         <div class="timer-controls">
-          <button class="btn-primary" id="timer-start-btn" onclick="toggleTimer()">Start</button>
+          <button class="btn-primary" id="timer-start-btn" onclick="toggleTimer()">Start focus</button>
           <button class="btn-sm" onclick="resetTimer()">Reset</button>
           <button class="btn-sm" onclick="completeFocusEarly()">Finish now</button>
         </div>
@@ -10952,7 +10968,7 @@ function updateTimerDisplay() {
   const seconds = timerRemaining % 60;
   display.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
   document.getElementById('timer-mode-label').textContent = timerMode;
-  document.getElementById('timer-start-btn').textContent = timerRunning ? 'Pause' : (timerRemaining < timerDuration ? 'Resume' : 'Start');
+  document.getElementById('timer-start-btn').textContent = timerRunning ? 'Pause' : (timerRemaining < timerDuration ? 'Resume' : 'Start focus');
   document.title = timerRunning ? `${display.textContent} · StudyMeter` : 'StudyMeter | JEE Study Companion';
 }
 
@@ -11077,11 +11093,16 @@ function inferTaskSubject(task) {
   return ['Physics', 'Chemistry', 'Mathematics', 'Mixed'].includes(subject) ? subject : 'Mixed';
 }
 
-function startSuggestedFocus() {
+function startSuggestedFocus(autoStart = false) {
   const priorityRank = { high: 0, medium: 1, low: 2 };
   const next = store.tasks.filter(task => !task.done).sort((a, b) => priorityRank[a.priority] - priorityRank[b.priority])[0];
   showPage('focus');
   if (next) document.getElementById('focus-task-select').value = String(next.id);
+  if (autoStart) {
+    const preset = document.querySelector('#page-focus .timer-presets .filter-pill');
+    setTimerPreset(25, 'Focus session', preset);
+    if (!timerRunning) toggleTimer();
+  }
 }
 
 function buildCommandItems() {

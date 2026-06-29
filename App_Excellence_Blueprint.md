@@ -226,6 +226,18 @@ Optimize: renamed the primary section to "Start", renamed data utilities to "Mor
 Benchmark: matched Notion's progressive disclosure: essentials first, power tools nearby but not dominant.
 Reflect: next friction is validating with real students and tuning the next-action engine from their behavior.
 
+### Loop 8
+Audit: the dashboard promised "Start 25 min" but the action only opened the timer page.
+Optimize: the dashboard primary button now opens the Focus screen, selects the next task, resets to a 25-minute focus session, and starts the timer immediately.
+Benchmark: matched Forest's immediate focus-start behavior and Duolingo's promise-then-action consistency.
+Reflect: next friction is making the focus screen itself feel minimal after the timer starts.
+
+### Loop 9
+Audit: the Focus screen included optional ambience and history immediately beside the timer, which could distract a first-time user.
+Optimize: simple mode hides ambience/history on Focus and centers the timer card with direct copy: "Pick a task, press start, and protect the next 25 minutes."
+Benchmark: matched Forest and Headspace by keeping the active session screen calm and single-purpose.
+Reflect: next friction is the Planner page, which still exposes generator, filters, targets, and revision queue together.
+
 ## Next Engineering Priorities
 1. Make next-action recommendations more specific from onboarding choices.
 2. Pin the selected study time on the dashboard.
@@ -233,3 +245,4 @@ Reflect: next friction is validating with real students and tuning the next-acti
 4. Move groups and permissions out of onboarding entirely unless a real Android permission flow exists.
 5. Add a small "What's new" update message after GitHub Pages deploys.
 6. Watch first-session behavior: if students do not tap "Start 25 min", the dashboard copy still needs simplification.
+7. Simplify Planner into "Today", "Upcoming", and "Done" after validating the new Focus start path.
