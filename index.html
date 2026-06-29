@@ -6001,14 +6001,14 @@
     <span class="nav-dot" style="background:var(--danger)"></span> Mistake Repair
   </a>
   <a class="nav-item" onclick="showPage('study-log')">
-    <span class="nav-dot" style="background:var(--accent)"></span> Study Log
+    <span class="nav-dot" style="background:var(--accent)"></span> Log Study
   </a>
   <a class="nav-item" onclick="showPage('planner')">
-    <span class="nav-dot" style="background:var(--success)"></span> Planner
+    <span class="nav-dot" style="background:var(--success)"></span> Today's Plan
     <span class="nav-badge" id="planner-nav-count">0</span>
   </a>
   <a class="nav-item" onclick="showPage('focus')">
-    <span class="nav-dot" style="background:var(--phy)"></span> Focus Timer
+    <span class="nav-dot" style="background:var(--phy)"></span> Start Focus
   </a>
   <a class="nav-item" onclick="showPage('formula-bank')">
     <span class="nav-dot" style="background:var(--text3)"></span> Formula Bank
@@ -6077,7 +6077,7 @@
         <div class="page-title">Dashboard</div>
         <div class="page-subtitle" id="dashboard-subtitle">JEE Main S1 2027 — Your complete preparation overview</div>
       </div>
-      <button class="btn-primary" onclick="openLogModal()">+ Log Today</button>
+      <button class="btn-primary" onclick="openLogModal()">+ Log today</button>
     </div>
 
     <section class="friendly-toolbar" aria-label="Dashboard friendliness controls">
@@ -6119,6 +6119,7 @@
           <div class="student-launch-copy" id="student-launch-copy">StudyMeter picks the next task. You only need to start, search, or log.</div>
           <div class="student-launch-meta">
             <span class="student-chip" id="student-launch-hours">0 / 6h</span>
+            <span class="student-chip" id="student-launch-time">Morning 6AM - 8AM</span>
             <span class="student-chip" id="student-launch-revisions">0 revisions</span>
             <span class="student-chip" id="student-launch-tasks">0 open tasks</span>
           </div>
@@ -6126,8 +6127,8 @@
       </div>
       <div class="student-launch-actions">
         <button class="btn-primary" onclick="startSuggestedFocus(true)">Start 25 min</button>
-        <button class="btn-sm" onclick="openCommandPalette()">Find tool</button>
-        <button class="btn-sm" onclick="openLogModal()">Log study</button>
+        <button class="btn-sm" onclick="openCommandPalette()">Search</button>
+        <button class="btn-sm" onclick="openLogModal()">Log today</button>
       </div>
     </section>
 
@@ -6227,8 +6228,8 @@
         <h1 class="hero-title" id="hero-greeting">The motivating StudyMeter app.</h1>
         <p class="hero-copy" id="hero-copy">Track time, build momentum, review smarter, and walk into mocks with a clear picture of what is improving.</p>
         <div class="quick-actions">
-          <button class="quick-action" onclick="openLogModal()">＋ Log study</button>
-          <button class="quick-action" onclick="showPage('test-log')">⌁ Analyze test</button>
+          <button class="quick-action" onclick="openLogModal()">＋ Log today</button>
+          <button class="quick-action" onclick="showPage('test-log')">⌁ Repair mistakes</button>
           <button class="quick-action" onclick="showPage('formula-bank')">✦ Open notes</button>
         </div>
       </div>
@@ -6277,7 +6278,7 @@
         <div class="focus-now-copy" id="next-action-copy">Choose a priority task, start a focus session, and make the next hour count.</div>
         <div class="focus-now-actions">
           <button class="btn-primary" onclick="startSuggestedFocus()">Start focus</button>
-          <button class="btn-sm" onclick="showPage('planner')">Open planner</button>
+          <button class="btn-sm" onclick="showPage('planner')">Today's Plan</button>
           <button class="btn-sm" onclick="openTaskModal()">+ Add task</button>
         </div>
       </div>
@@ -6330,7 +6331,7 @@
         <div class="battle-plan" id="battle-plan"></div>
         <div class="action-row">
           <button class="btn-primary" onclick="generateTodaysPlan()">Generate tasks</button>
-          <button class="btn-sm" onclick="showPage('planner')">Open planner</button>
+          <button class="btn-sm" onclick="showPage('planner')">Today's Plan</button>
         </div>
       </div>
     </section>
@@ -7516,7 +7517,7 @@ let store = {};
 const USER_REGISTRY_KEY = 'studymeter_users_registry';
 const LAST_USER_KEY = 'studymeter_last_user';
 const THEME_KEY = 'studymeter_theme';
-const APP_RELEASE = 'excellence-v2';
+const APP_RELEASE = 'excellence-v3';
 const USER_COLORS = ['#5b9ef9','#34d399','#fb923c','#a78bfa','#fb7185','#fbbf24','#e879f9','#22d3ee'];
 const subjectSearch = { physics: '', chemistry: '', mathematics: '' };
 let notesSaveTimer = null;
@@ -8027,7 +8028,7 @@ function runVoiceCommand(command) {
   if (text.includes('dashboard') || text.includes('home')) return showPage('dashboard');
   if (text.includes('dark')) return setTheme('dark');
   if (text.includes('light')) return setTheme('light');
-  showToast('Try: open planner, start focus, log study, generate quiz', 'error');
+  showToast("Try: today's plan, start focus, log today, generate quiz", 'error');
 }
 
 function startVoiceCommand() {
@@ -8041,7 +8042,7 @@ function startVoiceCommand() {
   activeRecognition.lang = 'en-IN';
   activeRecognition.interimResults = false;
   activeRecognition.maxAlternatives = 1;
-  activeRecognition.onstart = () => setVoiceStatus('Listening. Try: open planner, start focus, log study, generate quiz.');
+  activeRecognition.onstart = () => setVoiceStatus("Listening. Try: today's plan, start focus, log today, generate quiz.");
   activeRecognition.onerror = () => setVoiceStatus('Could not hear a command. Try again.', true);
   activeRecognition.onend = () => { activeRecognition = null; };
   activeRecognition.onresult = event => {
@@ -8443,14 +8444,14 @@ function timeChoice(value, icon, title, time) {
   `;
 }
 
-function timeSlotMeta() {
+function timeSlotMeta(slot = onboardingState.timeSlot) {
   const slots = {
     morning: { icon: '🌤️', title: 'Morning', time: '6AM - 8AM' },
     afternoon: { icon: '☀️', title: 'Afternoon', time: '2PM - 4PM' },
     evening: { icon: '🌥️', title: 'Evening', time: '6PM - 8PM' },
     night: { icon: '🌙', title: 'Night', time: '8PM - 10PM' }
   };
-  return slots[onboardingState.timeSlot] || slots.morning;
+  return slots[slot] || slots.morning;
 }
 
 function groupChoice(title, members, icon) {
@@ -8698,7 +8699,7 @@ function announceReleaseUpdate() {
   if (!store.settings || store.settings.lastSeenRelease === APP_RELEASE) return;
   store.settings.lastSeenRelease = APP_RELEASE;
   saveAll();
-  setTimeout(() => showToast('New simpler StudyMeter is ready: Start, Focus, Plan, Log.'), 900);
+  setTimeout(() => showToast("New simpler StudyMeter is ready: Start Focus, Today's Plan, Log today, Mistake Repair."), 900);
 }
 
 function switchUser() {
@@ -8993,6 +8994,7 @@ function renderStudentLaunch() {
   const overdue = openTasks.filter(task => task.due && task.due < today);
   const todayTasks = openTasks.filter(task => task.due === today);
   const revisions = getRevisionQueue();
+  const studyWindow = timeSlotMeta(store.settings?.onboarding?.timeSlot);
   const priorityRank = { high: 0, medium: 1, low: 2 };
   const nextTask = [...overdue, ...todayTasks, ...openTasks].sort((a, b) =>
     (a.due || '9999').localeCompare(b.due || '9999') ||
@@ -9000,7 +9002,7 @@ function renderStudentLaunch() {
   )[0];
   let icon = 'GO';
   let headline = 'Start one clear study win.';
-  let copy = 'StudyMeter picks the next task. You only need to start, find a tool, or log study.';
+  let copy = 'StudyMeter picks the next task. You only need to start, search, or log today.';
 
   if (nextTask) {
     icon = overdue.includes(nextTask) ? '!' : '1';
@@ -9028,6 +9030,7 @@ function renderStudentLaunch() {
   title.textContent = headline;
   document.getElementById('student-launch-copy').textContent = copy;
   document.getElementById('student-launch-hours').textContent = `${todayHours.toFixed(1)} / ${goals.hours}h`;
+  document.getElementById('student-launch-time').textContent = `${studyWindow.title} ${studyWindow.time}`;
   document.getElementById('student-launch-revisions').textContent = `${revisions.length} revision${revisions.length === 1 ? '' : 's'}`;
   document.getElementById('student-launch-tasks').textContent = `${openTasks.length} open task${openTasks.length === 1 ? '' : 's'}`;
 }
@@ -10853,7 +10856,7 @@ function buildMentorBrief(model = getAiMentorModel()) {
     mockLine,
     mistakeLine,
     `Next chapter to attack: ${topChapter ? `${topChapter.name} (${topChapter.risk}/100 risk)` : 'log more chapter data first'}.`,
-    `Next 24 hours: ${buildAiMentorPlan(model).slice(0, 3).map(item => item.title).join(' | ') || 'create one concrete planner task and start focus timer'}.`
+    `Next 24 hours: ${buildAiMentorPlan(model).slice(0, 3).map(item => item.title).join(' | ') || 'create one concrete task and start focus'}.`
   ].join('\n');
 }
 
@@ -11138,12 +11141,12 @@ function startSuggestedFocus(autoStart = false) {
 
 function buildCommandItems() {
   const pages = [
-    ['Dashboard', 'Open preparation overview', 'D', () => showPage('dashboard')],
-    ['Planner', 'Manage tasks, targets, and revision queue', 'P', () => showPage('planner')],
-    ['Focus Timer', 'Start a focused study block', 'F', () => showPage('focus')],
-    ['Mistake Repair', 'Analyze test mistakes and create repair tasks', 'MR', () => showPage('test-log')],
+    ['Dashboard', 'See the next study action', 'D', () => showPage('dashboard')],
+    ["Today's Plan", 'Manage the tasks that matter today', 'P', () => showPage('planner')],
+    ['Start Focus', 'Protect the next study block', 'F', () => showPage('focus')],
+    ['Mistake Repair', 'Turn test mistakes into repair tasks', 'MR', () => showPage('test-log')],
     ['Mock Tests', 'Track full-length mock scores', 'M', () => showPage('mock-tests')],
-    ['Study Log', 'Review day-by-day study sessions', 'S', () => showPage('study-log')],
+    ['Log Study', 'Save what you finished today', 'S', () => showPage('study-log')],
     ['Formula Bank', 'Open personal notes and formulae', 'N', () => showPage('formula-bank')],
     ['Toolkit', 'Open flashcards, reports, reminders, and achievements', 'TK', () => showPage('toolkit')],
     ['AI Mentor', 'Open adaptive plan, risk matrix, and mentor brief', 'AI', () => showPage('ai-mentor')],
@@ -11158,12 +11161,12 @@ function buildCommandItems() {
   });
 
   const actions = [
-    { title: 'Log study session', copy: 'Record hours, questions, topics, and reflection', icon: '+', action: openLogModal, keywords: 'log study session hours questions' },
+    { title: 'Log today', copy: 'Save hours, questions, topics, and reflection', icon: '+', action: openLogModal, keywords: 'log study session hours questions today' },
     { title: "Generate today's plan", copy: 'Create smart tasks from weak chapters and revision due', icon: 'AI', action: generateTodaysPlan, keywords: 'generate plan smart tasks battle' },
     { title: 'Open AI Mentor', copy: 'See readiness, weak chapters, micro-lessons, and next moves', icon: 'AI', action: () => showPage('ai-mentor'), keywords: 'ai mentor coach intelligence weakness risk readiness' },
     { title: 'Open Personalize', copy: 'Tune themes, modules, density, layout, and reminders', icon: 'PZ', action: () => showPage('personalize'), keywords: 'personalize customize settings theme layout modules reminders' },
     { title: 'Speak dashboard plan', copy: 'Read your next action and mentor snapshot aloud', icon: 'VO', action: speakDashboardBrief, keywords: 'voice speak read aloud dashboard mentor audio' },
-    { title: 'Start voice command', copy: 'Say open planner, start focus, log study, or generate quiz', icon: 'MIC', action: startVoiceCommand, keywords: 'voice command microphone speech recognition' },
+    { title: 'Start voice command', copy: "Say today's plan, start focus, log today, or generate quiz", icon: 'MIC', action: startVoiceCommand, keywords: 'voice command microphone speech recognition' },
     { title: 'Run 100x audit', copy: 'Score 100 student-experience checks and show top fixes', icon: '100', action: () => { showPage('dashboard'); setTimeout(renderHundredAudit, 80); }, keywords: '100 audit improve app checks recommendations fixes student experience' },
     { title: 'Create AI mentor tasks', copy: 'Add the full 48-hour attack plan to planner', icon: 'AI', action: createAiMentorTasks, keywords: 'ai generate mentor tasks attack plan' },
     { title: 'Make AI flashcards', copy: 'Generate recall cards from highest-risk chapters', icon: 'FC', action: generateMentorFlashcards, keywords: 'ai flashcards recall weak chapters' },
@@ -11200,7 +11203,7 @@ function buildCommandItems() {
   const simpleMode = store.settings?.dashboardMode !== 'full';
   const simplePages = new Set(['dashboard', 'planner', 'focus', 'study-log', 'mock-tests', 'test-log']);
   const simpleActions = new Set([
-    'Log study session',
+    'Log today',
     "Generate today's plan",
     'Add planner task',
     'Add test repair',
