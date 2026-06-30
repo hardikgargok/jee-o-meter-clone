@@ -246,7 +246,7 @@
   }
 
   .login-tagline::before {
-    content: '#1';
+    content: 'Today';
     display: block;
     color: #7be95d;
     font-size: 32px;
@@ -4181,9 +4181,8 @@
     font-size: 15px;
     font-weight: 850;
     line-height: 1.25;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    white-space: normal;
+    overflow-wrap: anywhere;
   }
 
   .student-launch-copy {
@@ -5351,6 +5350,12 @@
     100% { opacity: 0; visibility: hidden; pointer-events: none; }
   }
 
+  body.launching #login-screen,
+  body.launching .update-banner {
+    opacity: 0;
+    pointer-events: none;
+  }
+
   @media (max-width: 760px) {
     .launch-stage {
       min-height: min(68vh, 520px);
@@ -5461,7 +5466,7 @@
   }
 
   #login-screen .login-tagline::before {
-    content: '#1';
+    content: 'Today';
     display: block;
     color: #7be95d;
     font-size: 32px;
@@ -5899,7 +5904,7 @@
   }
 </style>
 </head>
-<body>
+<body class="launching">
 <div class="launch-splash" id="launch-splash" aria-label="Opening StudyMeter" role="status">
   <div class="launch-stage">
     <div class="launch-logo-card">
@@ -5909,7 +5914,7 @@
         <div class="launch-logo-text">STUDY<span>METER</span></div>
       </div>
     </div>
-    <div class="launch-title">Study Meter</div>
+    <div class="launch-title">StudyMeter</div>
   </div>
 </div>
 <div class="mobile-topbar" id="mobile-topbar">
@@ -5962,7 +5967,7 @@
 <div id="login-screen">
   <div class="login-box">
     <div class="login-logo">StudyMeter</div>
-    <div class="login-tagline">Study App for students to focus</div>
+    <div class="login-tagline">One clear study plan for today</div>
 
     <div class="login-field">
       <label>Your name</label>
@@ -6000,46 +6005,46 @@
   </div>
 
   <div class="nav-section nav-start">Start</div>
-  <a class="nav-item active" onclick="showPage('dashboard')">
+  <a class="nav-item active" role="button" tabindex="0" data-page="dashboard" data-testid="nav-dashboard" aria-label="Open Dashboard" onclick="showPage('dashboard')">
     <span class="nav-dot dot-dash"></span> Dashboard
   </a>
-  <a class="nav-item" onclick="showPage('mock-tests')">
+  <a class="nav-item" role="button" tabindex="0" data-page="mock-tests" data-testid="nav-mock-tests" aria-label="Open Mock Tests" onclick="showPage('mock-tests')">
     <span class="nav-dot" style="background:var(--warn)"></span> Mock Tests
   </a>
-  <a class="nav-item" onclick="showPage('test-log')" style="">
+  <a class="nav-item" role="button" tabindex="0" data-page="test-log" data-testid="nav-mistake-repair" aria-label="Open Mistake Repair" onclick="showPage('test-log')" style="">
     <span class="nav-dot" style="background:var(--danger)"></span> Mistake Repair
   </a>
-  <a class="nav-item" onclick="showPage('study-log')">
+  <a class="nav-item" role="button" tabindex="0" data-page="study-log" data-testid="nav-log-study" aria-label="Open Log Study" onclick="showPage('study-log')">
     <span class="nav-dot" style="background:var(--accent)"></span> Log Study
   </a>
-  <a class="nav-item" onclick="showPage('planner')">
+  <a class="nav-item" role="button" tabindex="0" data-page="planner" data-testid="nav-todays-plan" aria-label="Open Today's Plan" onclick="showPage('planner')">
     <span class="nav-dot" style="background:var(--success)"></span> Today's Plan
     <span class="nav-badge" id="planner-nav-count">0</span>
   </a>
-  <a class="nav-item" onclick="showPage('focus')">
+  <a class="nav-item" role="button" tabindex="0" data-page="focus" data-testid="nav-start-focus" aria-label="Open Start Focus" onclick="showPage('focus')">
     <span class="nav-dot" style="background:var(--phy)"></span> Start Focus
   </a>
-  <a class="nav-item" onclick="showPage('formula-bank')">
+  <a class="nav-item" role="button" tabindex="0" data-page="formula-bank" data-testid="nav-formula-bank" aria-label="Open Formula Bank" onclick="showPage('formula-bank')">
     <span class="nav-dot" style="background:var(--text3)"></span> Formula Bank
   </a>
-  <a class="nav-item" onclick="showPage('toolkit')">
+  <a class="nav-item" role="button" tabindex="0" data-page="toolkit" data-testid="nav-toolkit" aria-label="Open Toolkit" onclick="showPage('toolkit')">
     <span class="nav-dot" style="background:var(--gold)"></span> Toolkit
   </a>
-  <a class="nav-item" onclick="showPage('ai-mentor')">
+  <a class="nav-item" role="button" tabindex="0" data-page="ai-mentor" data-testid="nav-ai-mentor" aria-label="Open AI Mentor" onclick="showPage('ai-mentor')">
     <span class="nav-dot" style="background:linear-gradient(135deg,var(--phy),var(--success))"></span> AI Mentor
   </a>
-  <a class="nav-item" onclick="showPage('personalize')">
+  <a class="nav-item" role="button" tabindex="0" data-page="personalize" data-testid="nav-personalize" aria-label="Open Personalize" onclick="showPage('personalize')">
     <span class="nav-dot" style="background:var(--accent2)"></span> Personalize
   </a>
 
   <div class="nav-section nav-subjects">Subjects</div>
-  <a class="nav-item" onclick="showPage('physics')">
+  <a class="nav-item" role="button" tabindex="0" data-page="physics" data-testid="nav-physics" aria-label="Open Physics" onclick="showPage('physics')">
     <span class="nav-dot dot-phy"></span> Physics
   </a>
-  <a class="nav-item" onclick="showPage('chemistry')">
+  <a class="nav-item" role="button" tabindex="0" data-page="chemistry" data-testid="nav-chemistry" aria-label="Open Chemistry" onclick="showPage('chemistry')">
     <span class="nav-dot dot-chem"></span> Chemistry
   </a>
-  <a class="nav-item" onclick="showPage('mathematics')">
+  <a class="nav-item" role="button" tabindex="0" data-page="mathematics" data-testid="nav-mathematics" aria-label="Open Mathematics" onclick="showPage('mathematics')">
     <span class="nav-dot dot-math"></span> Mathematics
   </a>
 
@@ -6233,7 +6238,7 @@
 
     <section class="dashboard-hero">
       <div>
-        <div class="hero-eyebrow">#1 JEE preparation dashboard</div>
+        <div class="hero-eyebrow">JEE preparation dashboard</div>
         <h1 class="hero-title" id="hero-greeting">The motivating StudyMeter app.</h1>
         <p class="hero-copy" id="hero-copy">Track time, build momentum, review smarter, and walk into mocks with a clear picture of what is improving.</p>
         <div class="quick-actions">
@@ -7534,7 +7539,7 @@ let store = {};
 const USER_REGISTRY_KEY = 'studymeter_users_registry';
 const LAST_USER_KEY = 'studymeter_last_user';
 const THEME_KEY = 'studymeter_theme';
-const APP_RELEASE = 'excellence-v5';
+const APP_RELEASE = 'excellence-v6';
 const USER_COLORS = ['#5b9ef9','#34d399','#fb923c','#a78bfa','#fb7185','#fbbf24','#e879f9','#22d3ee'];
 const subjectSearch = { physics: '', chemistry: '', mathematics: '' };
 let notesSaveTimer = null;
@@ -7574,15 +7579,35 @@ function showToast(message, type = 'success') {
 
 function initializeLaunchSplash() {
   const splash = document.getElementById('launch-splash');
-  if (!splash) return;
+  if (!splash) {
+    document.body.classList.remove('launching');
+    maybeShowDeferredUpdateBanner();
+    return;
+  }
   const finishDelay = 6400;
-  window.setTimeout(() => splash.classList.add('done'), finishDelay);
+  window.setTimeout(() => {
+    splash.classList.add('done');
+    document.body.classList.remove('launching');
+    maybeShowDeferredUpdateBanner();
+  }, finishDelay);
   window.setTimeout(() => splash.remove(), finishDelay + 900);
+}
+
+function canShowUpdateBannerNow() {
+  const loginVisible = !document.getElementById('login-screen')?.classList.contains('hidden');
+  const onboardingOpen = document.getElementById('onboarding-overlay')?.classList.contains('open');
+  const mainVisible = document.getElementById('main-shell')?.style.display !== 'none';
+  return !document.body.classList.contains('launching') && !loginVisible && !onboardingOpen && mainVisible;
+}
+
+function maybeShowDeferredUpdateBanner() {
+  if (!waitingServiceWorker || !canShowUpdateBannerNow()) return;
+  document.getElementById('update-banner')?.classList.add('open');
 }
 
 function showUpdateBanner(worker) {
   waitingServiceWorker = worker;
-  document.getElementById('update-banner')?.classList.add('open');
+  maybeShowDeferredUpdateBanner();
 }
 
 function restartForUpdate() {
@@ -7825,10 +7850,10 @@ const PERSONALIZATION_DEFAULTS = {
 const PERSONALIZATION_MODULES = [
   ['dashboard', 'Dashboard', 'overview, progress, insights'],
   ['mock-tests', 'Mock Tests', 'full mock score tracking'],
-  ['test-log', 'Test Log', 'mistakes and attempt analysis'],
-  ['study-log', 'Study Log', 'daily hours and questions'],
+  ['test-log', 'Mistake Repair', 'test mistakes and repair tasks'],
+  ['study-log', 'Log Study', 'daily hours and questions'],
   ['planner', 'Planner', 'tasks, targets, revision'],
-  ['focus', 'Focus Timer', 'deep work sessions'],
+  ['focus', 'Start Focus', 'deep work sessions'],
   ['formula-bank', 'Formula Bank', 'notes and formulae'],
   ['toolkit', 'Toolkit', 'flashcards, reports, reminders'],
   ['ai-mentor', 'AI Mentor', 'adaptive private guidance'],
@@ -8333,6 +8358,7 @@ function closeOnboarding(markDone = false) {
   document.getElementById('onboarding-overlay')?.classList.remove('open');
   document.body.style.overflow = '';
   document.getElementById('onboarding-confetti').innerHTML = '';
+  maybeShowDeferredUpdateBanner();
 }
 
 function renderOnboarding() {
@@ -8362,7 +8388,7 @@ function renderOnboardingStep() {
   if (step.kind === 'welcome') return `
     <div class="rega-scene">
       <div class="rega-logo">StudyMeter</div>
-      <div class="rega-hero-rank">#1</div>
+      <div class="rega-hero-rank">Today</div>
       <div class="rega-hero-title">One clear study plan for today.</div>
       <div class="rega-proof">
         <div class="rega-proof-item">Built for<strong>Focus</strong>sessions</div>
@@ -8707,7 +8733,11 @@ function loginAs(name) {
   }
   updateDaysRemaining();
   renderDashboard();
-  if (!store.settings?.onboardingDone) setTimeout(() => openOnboarding(false), 250);
+  if (!store.settings?.onboardingDone) {
+    setTimeout(() => openOnboarding(false), 250);
+  } else {
+    maybeShowDeferredUpdateBanner();
+  }
   announceReleaseUpdate();
   showToast(`Welcome, ${name}`);
 }
